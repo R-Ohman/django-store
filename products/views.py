@@ -5,14 +5,14 @@ from products.models import ProductCategory, Product
 
 def index(request):
     context = {
-        'title': 'Store',
+        'title': 'Главная',
         'is_promotion': False,
     }
     return render(request, 'products/index.html', context)
 
 def products(request):
     context = {
-        'title': 'Store',
+        'title': 'Каталог',
         'products' : Product.objects.all(),
         'categories' : ProductCategory.objects.all(),
     }

@@ -1,6 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from users.models import User
+
+
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -44,7 +46,6 @@ class UserRegistrationForm(UserCreationForm):
         'placeholder': 'Введите адрес эл. почты',
     }))
 
-
     class Meta:
         model = User
         fields = (
@@ -54,4 +55,32 @@ class UserRegistrationForm(UserCreationForm):
             'email',
             'first_name',
             'last_name'
+        )
+
+class UserProfileForm(UserChangeForm):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4',
+    }))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4',
+    }))
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control py-4',
+        'aria-describedby': 'usernameHelp',
+    }), disabled=True)
+    email = forms.CharField(widget=forms.EmailInput(attrs={
+        'class': 'form-control py-4',
+        'aria-describedby': 'emailHelp',
+    }), disabled=True)
+    image = forms.ImageField(widget=forms.FileInput(attrs={
+        'class': 'custom-file-input',
+    }), required=False)
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'image'
         )
