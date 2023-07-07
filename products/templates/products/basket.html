@@ -13,7 +13,7 @@
                     <div class="row text-center">
                         <div class="col-lg-4">
                             <input name="basketID" type="number" class="form-control basket-quantity"
-                                   value="{{ basket.quantity }}" min="1" data-basket-id="{{ basket.id }}">
+                                   value="{{ basket.quantity|addslashes }}" min="1" data-basket-id="{{ basket.id }}">
                         </div>
                         <div class="col-lg-4" id="product-{{ basket.id }}">{{ basket.sum }} грн.</div>
                         <div class="col-lg-4">

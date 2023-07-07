@@ -65,6 +65,9 @@ def profile(request):
         'total_sum': baskets.total_sum(),
         'total_quantity': baskets.total_quantity(),
     }
+    for basket in baskets:
+        print(basket.quantity)
+
     return render(request, 'users/profile.html', context)
 
 

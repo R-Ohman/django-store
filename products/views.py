@@ -2,7 +2,6 @@ import json
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
 
 from products.models import ProductCategory, Product, Basket
 from django.http import JsonResponse
@@ -47,26 +46,33 @@ def basket_update(request, id):
     if request.method == 'POST':
         basket = Basket.objects.get(id=id)
         json_data = json.loads(request.body.decode('utf-8'))
-        quantity = int(json_data['quantity'])
+        quantity = int(json_data['quantity']) if json_data['quantity'] else 0
+        baskets = Basket.objects.filter(user=request.user)
+        quantity_magazine = Product.objects.get(id=basket.product_id).quantity
 
-        if quantity <= 0:
+        if 0 < quantity <= quantity_magazine:
+            # Обновить значение quantity и сохранить корзину
+            basket.quantity = quantity
+            basket.save()
+            response_data = {
+                'success': True,
+            }
+        else:
             # Если новое значение quantity меньше или равно 0, вернуть предыдущее значение
             response_data = {
                 'success': False,
                 'message': 'Недопустимое значение количества',
-                'quantity': basket.quantity,
             }
-        else:
-            # Обновить значение quantity и сохранить корзину
-            basket.quantity = quantity
-            basket.save()
-            baskets = Basket.objects.filter(user=request.user)
-            response_data = {
-                'success': True,
-                'total_sum': float(baskets.total_sum()),
-                'total_quantity': baskets.total_quantity(),
-                'product_sum': float(basket.sum()),
-            }
+
+        #basket.refresh_from_db()
+
+        response_data.update({
+            'total_sum': float(baskets.total_sum()),
+            'total_quantity': baskets.total_quantity(),
+            'product_sum': float(basket.sum()),
+            'quantity': basket.quantity,
+        })
+
         return JsonResponse(response_data)
     else:
         return JsonResponse({'success': False, 'message': 'Недопустимый запрос'})
