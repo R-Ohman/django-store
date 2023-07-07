@@ -21,7 +21,7 @@ def index(request):
 def products(request, category_id=None, page=1):
     products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
     page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
-    per_page = 1  # Количество продуктов на странице
+    per_page = 3  # Количество продуктов на странице
     # Разбиваем продукты на страницы
     paginator = Paginator(products, per_page)
 

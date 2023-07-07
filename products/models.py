@@ -10,6 +10,10 @@ class ProductCategory(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
+
 
 class BasketQuerySet(models.QuerySet):
     def total_sum(self):
@@ -29,6 +33,10 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.category.name} | {self.name}'
+
+    class Meta:
+        verbose_name = 'product'
+        verbose_name_plural = 'products'
 
 class Basket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
