@@ -1,8 +1,9 @@
 import json
+from django.template.loader import render_to_string
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
 from products.models import ProductCategory, Product, Basket
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -16,14 +17,42 @@ def index(request):
     }
     return render(request, 'products/index.html', context)
 
-def products(request):
+
+def products(request, category_id=None, page=1):
+    products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+    page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
+    per_page = 1  # Количество продуктов на странице
+    # Разбиваем продукты на страницы
+    paginator = Paginator(products, per_page)
+
+    try:
+        page_number = int(page)
+        page_products = paginator.page(page_number)
+    except (PageNotAnInteger, EmptyPage):
+        page_products = paginator.page(1)
+
+    # Если это AJAX-запрос, возвращаем фрагмент HTML
+    if request.is_ajax():
+        context = {
+            'products': page_products,
+            'current_page': int(page),
+        }
+        product_list_html = render_to_string('products/product_cards.html', context)
+        page_list_html = render_to_string('products/pagination.html', context)
+        return JsonResponse({
+            'product_list_html': product_list_html,
+            'page_list_html': page_list_html
+            })
+
+    # Возвращаем полный HTML для обычного запроса
     context = {
         'title': 'Каталог',
-        'products' : Product.objects.all(),
-        'categories' : ProductCategory.objects.all(),
+        'products': page_products,
+        'categories': ProductCategory.objects.all(),
+        'current_page': int(page),  # Добавляем текущую страницу в контекст
     }
-
     return render(request, 'products/products.html', context)
+
 
 @login_required(login_url=LOGIN_URL)
 def add_product(request, product_id):
@@ -35,11 +64,13 @@ def add_product(request, product_id):
         Basket.objects.create(user=request.user, product_id=product_id, quantity=1)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 @login_required
 def delete_busket(request, id):
     basket = Basket.objects.get(id=id)
     basket.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 @login_required
 def basket_update(request, id):
@@ -64,7 +95,7 @@ def basket_update(request, id):
                 'message': 'Недопустимое значение количества',
             }
 
-        #basket.refresh_from_db()
+        # basket.refresh_from_db()
 
         response_data.update({
             'total_sum': float(baskets.total_sum()),
