@@ -49,18 +49,24 @@ def basket_update(request, id):
         json_data = json.loads(request.body.decode('utf-8'))
         quantity = int(json_data['quantity'])
 
-        if quantity > 0:
+        if quantity <= 0:
+            # Если новое значение quantity меньше или равно 0, вернуть предыдущее значение
+            response_data = {
+                'success': False,
+                'message': 'Недопустимое значение количества',
+                'quantity': basket.quantity,
+            }
+        else:
+            # Обновить значение quantity и сохранить корзину
             basket.quantity = quantity
             basket.save()
             baskets = Basket.objects.filter(user=request.user)
-
             response_data = {
-                'total_sum': baskets.total_sum(),
+                'success': True,
+                'total_sum': float(baskets.total_sum()),
                 'total_quantity': baskets.total_quantity(),
-                'product_sum': basket.sum(),
+                'product_sum': float(basket.sum()),
             }
-            return JsonResponse(response_data)
-        else:
-            return JsonResponse({'success': False, 'message': 'Недопустимое значение количества'})
+        return JsonResponse(response_data)
     else:
         return JsonResponse({'success': False, 'message': 'Недопустимый запрос'})
