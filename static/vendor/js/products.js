@@ -31,29 +31,40 @@ $(document).ready(function() {
   }
 
   function addToBasket(productId) {
-    fetch('/products/basket/add/' + productId + '/')
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          showNotification(data.product_name + ' успешно добавлен в корзину');
-        } else {
-          showNotification('Ошибка при добавлении товара в корзину');
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        showNotification('Произошла ошибка');
-      });
-  }
+      fetch('/products/basket/add/' + productId + '/')
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Ошибка при добавлении товара в корзину');
+          }
+        })
+        .then(data => {
+          if (data.success) {
+            showNotification(data.product_name + ' успешно добавлен в корзину');
+          } else {
+            showNotification('Ошибка при добавлении товара в корзину', success=false);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          showNotification('Необходима авторизация', success=false);
+          window.location.href = '/user/login/'; // Перенаправляем пользователя на страницу входа
+        });
+    }
 
-  function showNotification(message) {
+
+  function showNotification(message, success=true) {
     toastr.options = {
       "progressBar": true,
       "positionClass": "toast-bottom-left",
       "timeOut": "2000",
     }
-
-    toastr.success(message);
+    if (success) {
+        toastr.success(message);
+        } else {
+            toastr.warning(message);
+        }
   }
 
   // При первоначальной загрузке страницы также привязываем событие click для кнопок добавления в корзину

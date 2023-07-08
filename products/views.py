@@ -2,7 +2,7 @@ import json
 from django.template.loader import render_to_string
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from products.models import ProductCategory, Product, Basket
 from django.http import JsonResponse
@@ -70,10 +70,20 @@ def add_product(request, product_id):
 
 
 @login_required
-def delete_busket(request, id):
-    basket = Basket.objects.get(id=id)
+def delete_basket(request, basket_id):
+    basket = Basket.objects.get(id=basket_id)
     basket.delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    baskets = Basket.objects.filter(user=request.user)
+    context = {
+        'baskets': baskets,
+        'total_sum': baskets.total_sum(),
+        'total_quantity': baskets.total_quantity(),
+    }
+
+    basket_list_html = render_to_string('products/basket.html', context)
+
+    return JsonResponse({'success': True, 'basket_list_html': basket_list_html})
+
 
 
 @login_required

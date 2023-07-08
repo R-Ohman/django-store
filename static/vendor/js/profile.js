@@ -1,3 +1,4 @@
+function addListenersToInputs() {
 const fileInput = document.querySelector('.custom-file-input');
 const label = document.querySelector('.custom-file-label');
 
@@ -5,6 +6,7 @@ fileInput.addEventListener('change', (event) => {
     const fileName = event.target.files[0].name;
     label.textContent = fileName;
 });
+
 
 const quantityInputs = document.querySelectorAll('.basket-quantity');
 quantityInputs.forEach((input) => {
@@ -47,3 +49,39 @@ quantityInputs.forEach((input) => {
         });
     });
 });
+}
+
+// Вызываем функцию добавления листенеров при загрузке страницы
+document.addEventListener('DOMContentLoaded', addListenersToInputs);
+
+
+
+
+$(document).on('click', '.delete-basket', function(e) {
+  e.preventDefault();
+  var basketId = $(this).data('basket-id');
+  deleteBasket(basketId);
+});
+
+function deleteBasket(basketId) {
+  var csrfToken = document.querySelector('[data-csrf-token]').dataset.csrfToken;
+  fetch('/products/basket/delete/' + basketId + '/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrfToken
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        $('#basket-list').html(data.basket_list_html);
+        addListenersToInputs(); // Пересоздаем листенеры после обновления HTML-шаблона
+      } else {
+        console.error('Ошибка при удалении предмета из корзины');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при удалении предмета из корзины:', error);
+    });
+}
