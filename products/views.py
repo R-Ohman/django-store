@@ -50,7 +50,9 @@ def products(request, category_id=None, page=1):
         'products': page_products,
         'categories': ProductCategory.objects.all(),
         'current_page': int(page),  # Добавляем текущую страницу в контекст
+        'category': ProductCategory.objects.get(id=category_id) if category_id else None,
     }
+
     return render(request, 'products/products.html', context)
 
 
@@ -62,7 +64,9 @@ def add_product(request, product_id):
         basket.save()
     else:
         Basket.objects.create(user=request.user, product_id=product_id, quantity=1)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return JsonResponse({'success': True,
+                         'product_name': Product.objects.get(id=product_id).name,}
+                        )
 
 
 @login_required
