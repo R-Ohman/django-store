@@ -59,14 +59,22 @@ def products(request, category_id=None, page=1):
 @login_required(login_url=LOGIN_URL)
 def add_product(request, product_id):
     basket = Basket.objects.filter(user=request.user, product_id=product_id).first()
-    if basket:
+
+    response = {
+        'success': True,
+        'product_name': Product.objects.get(id=product_id).name,
+    }
+
+    if basket and basket.quantity < basket.product.quantity:
         basket.quantity += 1
         basket.save()
-    else:
+    elif not basket and Product.objects.get(id=product_id).quantity > 0:
         Basket.objects.create(user=request.user, product_id=product_id, quantity=1)
-    return JsonResponse({'success': True,
-                         'product_name': Product.objects.get(id=product_id).name,}
-                        )
+    else:
+        response['success'] = False
+        response['message'] = 'Недостаточно товара на складе =('
+
+    return JsonResponse(response)
 
 
 @login_required

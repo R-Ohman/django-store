@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from users.models import User
-
+from users.models import User, Order
 
 
 class UserLoginForm(AuthenticationForm):
@@ -83,4 +82,33 @@ class UserProfileForm(UserChangeForm):
             'first_name',
             'last_name',
             'image'
+        )
+
+
+class OrderForm(forms.ModelForm):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Іван',
+    }), required=True)
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Прізвиськовий',
+    }), required=True)
+    email = forms.CharField(widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'aria-describedby': 'emailHelp',
+        'placeholder': 'your_email@example.com',
+    }), required=True)
+    address = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Україна, м. Київ, вул. Хрещатик, буд. 1, кв. 1',
+    }), required=True)
+
+    class Meta:
+        model = Order
+        fields = (
+            'first_name',
+            'last_name',
+            'email',
+            'address'
         )

@@ -2,8 +2,6 @@ from django.contrib import admin
 
 from products.models import ProductCategory, Product, Basket
 
-# Register your models here.
-admin.site.register(ProductCategory)
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'quantity', 'category')
@@ -18,3 +16,9 @@ class BasketAdmin(admin.TabularInline):
     fields = ('product', 'quantity', 'add_datetime')
     readonly_fields = ('add_datetime',)
     extra = 0
+
+@admin.register(ProductCategory)
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    ordering = ('name',)
+    search_fields = ('name',)

@@ -33,7 +33,7 @@
         <h4 class="float-right total_sum">{{ total_sum }} грн.</h4>
     </div>
 </div>
-<a class="btn btn-success btn-lg float-right" href="../orders/order-create.html">
+<a class="btn btn-success btn-lg float-right" href="{% url 'user:place_order' %}">
     Оформить заказ
 </a>
 {% else %}
