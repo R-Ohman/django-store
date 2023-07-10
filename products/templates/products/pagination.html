@@ -1,9 +1,11 @@
+{% load i18n %}
+
 <nav id="page-list" aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
             <a class="page-link" data-page="{% if products.has_previous %}
             {{ products.previous_page_number }} {% else %} 1 {% endif %}" href="#">
-                Previous
+                {% trans 'Previous' %}
             </a>
         </li>
         {% for page in products.paginator.page_range %}
@@ -17,7 +19,7 @@
         <li class=" page-item {% if not products.has_next %} disabled {% endif %}">
             <a class="page-link" data-page="{% if products.has_next %}
             {{ products.next_page_number }} {% else %} {{ products.paginator.num_pages }} {% endif %}" href="#">
-                Next
+                {% trans 'Next' %}
             </a>
         </li>
 

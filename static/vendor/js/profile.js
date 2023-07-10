@@ -44,7 +44,7 @@ quantityInputs.forEach((input) => {
             }
         })
         .catch(error => {
-            console.error('Ошибка при обновлении количества в корзине:', error);
+            console.error('Error when updating the quantity in the cart: ', error);
             inputElement.value = inputElement.defaultValue; // Используем сохраненную ссылку для изменения значения
         });
     });
@@ -78,10 +78,10 @@ function deleteBasket(basketId) {
         $('#basket-list').html(data.basket_list_html);
         addListenersToInputs(); // Пересоздаем листенеры после обновления HTML-шаблона
       } else {
-        console.error('Ошибка при удалении предмета из корзины');
+        console.error('Error when deleting an item from the cart');
       }
     })
     .catch(error => {
-      console.error('Ошибка при удалении предмета из корзины:', error);
+      console.error('Error when deleting an item from the cart:', error);
     });
 }

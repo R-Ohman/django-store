@@ -1,25 +1,50 @@
 import json
-from django.template.loader import render_to_string
+from decimal import Decimal
 
+from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from products.models import ProductCategory, Product, Basket
+from products.models import ProductCategory, Product, Basket, ExchangeRate, Currency
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from store.settings import LOGIN_URL
+from store.translator import translate_text_to_user_language
+from django.db import models
 
 
 def index(request):
     context = {
-        'title': 'Главная',
+        'title': translate_text_to_user_language('Homepage', request),
         'is_promotion': False,
     }
+
     return render(request, 'products/index.html', context)
 
 
 def products(request, category_id=None, page=1):
+    language_currency_dictionary = {
+        'en': ('$', 'USD'),
+        'uk': ('₴', 'UAH'),
+        'pl': ('zł', 'PLN'),
+    }
+    user_currency = language_currency_dictionary[request.LANGUAGE_CODE]
+    user_currency_id = Currency.objects.get(code=user_currency[1])
+    default_currency_id = Currency.objects.get(code='USD')
+    exchange_rate = ExchangeRate.objects.filter(base_currency=user_currency_id, target_currency=default_currency_id).first()
+
     products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+
+    if exchange_rate:
+        # Конвертируем цены товаров в выбранную валюту
+        products = [
+            {
+                'product': product,
+                'price': '{:.2f}'.format(round(Decimal(product.price) * Decimal(exchange_rate.rate) / Decimal('0.5')) * Decimal('0.5')),
+                'currency': user_currency[0],
+            }
+            for product in products
+        ]
+
     page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
     per_page = 3  # Количество продуктов на странице
     # Разбиваем продукты на страницы
@@ -46,7 +71,7 @@ def products(request, category_id=None, page=1):
 
     # Возвращаем полный HTML для обычного запроса
     context = {
-        'title': 'Каталог',
+        'title': translate_text_to_user_language('Catalog', request),
         'products': page_products,
         'categories': ProductCategory.objects.all(),
         'current_page': int(page),  # Добавляем текущую страницу в контекст
@@ -72,7 +97,7 @@ def add_product(request, product_id):
         Basket.objects.create(user=request.user, product_id=product_id, quantity=1)
     else:
         response['success'] = False
-        response['message'] = 'Недостаточно товара на складе =('
+        response['message'] = translate_text_to_user_language('Not enough goods in stock =(', request)
 
     return JsonResponse(response)
 
@@ -114,7 +139,7 @@ def basket_update(request, id):
             # Если новое значение quantity меньше или равно 0, вернуть предыдущее значение
             response_data = {
                 'success': False,
-                'message': 'Недопустимое значение количества',
+                'message': translate_text_to_user_language('Unacceptable quantity value', request),
             }
 
         # basket.refresh_from_db()
@@ -128,4 +153,7 @@ def basket_update(request, id):
 
         return JsonResponse(response_data)
     else:
-        return JsonResponse({'success': False, 'message': 'Недопустимый запрос'})
+        return JsonResponse({
+            'success': False,
+            'message': translate_text_to_user_language('Invalid request', request)
+            })

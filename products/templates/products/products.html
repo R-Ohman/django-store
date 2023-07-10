@@ -1,5 +1,6 @@
 {% extends 'products/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block css %}
 <link href="{% static 'vendor/css/products.css' %}" rel="stylesheet">
@@ -52,11 +53,11 @@
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
+                    <span class="sr-only">{% trans 'Previous' %}</span>
                 </a>
                 <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
+                    <span class="sr-only">{% trans 'Next' %}</span>
                 </a>
             </div>
 
@@ -80,3 +81,6 @@
     <!-- /.container -->
 </footer>
 {% endblock %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

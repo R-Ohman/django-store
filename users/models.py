@@ -4,6 +4,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 import products
+from store.translator import translate_text_to_user_language
 
 
 class User(AbstractUser):
@@ -37,7 +38,6 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=3, choices=STATUSES, default=FORMING)
-
 
     def __str__(self):
         return f'{self.id} | {self.user.username}'

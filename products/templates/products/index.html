@@ -1,5 +1,6 @@
 {% extends 'products/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block css %}
     <link href="{% static 'vendor/css/index.css' %}" rel="stylesheet">
@@ -15,12 +16,12 @@
             <div class="col-lg-6">
                 <h1 class="mt-5">Store</h1>
                 <p>
-                    Новые образы и лучшие бренды на Store.
-                    Бесплатная доставка по всему миру! {% if is_promotion %} Аутлет: до -70% Собственный бренд. -20% новым покупателям. {% endif %}
+                    {% trans 'New looks and top brands in ' %} Store.
+                    {% trans 'Free shipping worldwide!' %} {% if is_promotion %} {% trans 'Outlet: up to -70% Own brand. -20% to new customers.'%} {% endif %}
                 </p>
                 <button id="start-purchase-btn" type="button" class="btn btn-lg">
                     <a id="start-purchase-link" href="{% url 'products:index' %}">
-                        Начать покупки
+                        {% trans 'Start shopping' %}
                     </a>
                 </button>
             </div>

@@ -1,6 +1,9 @@
+from decimal import Decimal
+
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator
 
 from users.models import User, Order
 
@@ -25,6 +28,7 @@ class BasketQuerySet(models.QuerySet):
 
     def total_quantity(self):
         return sum(basket.quantity for basket in self)
+
 
 
 class Product(models.Model):
@@ -78,3 +82,28 @@ def update_product_quantity(sender, instance, **kwargs):
     product = instance.product
     product.quantity += instance.quantity
     product.save()
+
+class Currency(models.Model):
+    code = models.CharField(max_length=3, unique=True)
+    name = models.CharField(max_length=100)
+
+    @staticmethod
+    def get_currency_by_language(request):
+        language_currency_dictionary = {
+            'en': ('$', 'USD'),
+            'uk': ('₴', 'UAH'),
+            'pl': ('zł', 'PLN'),
+        }
+        user_currency = language_currency_dictionary[request.LANGUAGE_CODE]
+        return user_currency
+
+    def __str__(self):
+        return self.code
+
+class ExchangeRate(models.Model):
+    base_currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name='base_rates')
+    target_currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name='target_rates')
+    rate = models.DecimalField(max_digits=10, decimal_places=4, validators=[MinValueValidator(0)])
+
+    def __str__(self):
+        return f'{self.base_currency} to {self.target_currency}: {self.rate}'

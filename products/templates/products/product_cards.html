@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+{% load static %}
+{% load i18n %}
 
 <div id="product-list" class="row">
     {% for product in products %}
@@ -7,19 +7,20 @@
         <div class="card h-100">
             <a href="#">
                 <img class="card-img-top"
-                     src="{{ product.image.url }}"
+                     src="{% if product.product.image %}{{ product.product.image.url }}
+                        {% else %}{% static '/vendor/img/products/default-product-image.png' %}{% endif %}"
                      alt="">
             </a>
             <div class="card-body">
                 <h4 class="card-title">
-                    <a href="#">{{ product.name }}</a>
+                    <a href="#">{{ product.product.name }}</a>
                 </h4>
-                <h5>{{ product.price }} грн.</h5>
-                <p class="card-text">{{ product.description }}</p>
+                <h5>{{ product.price }} {{ product.currency }}.</h5>
+                <p class="card-text">{{ product.product.description }}</p>
             </div>
             <div class="card-footer text-center">
                 <a href="#" class="btn btn-outline-success add-to-basket" data-product-id="{{ product.id }}">
-                    Отправить в корзину
+                    {% trans 'Add to cart' %}
                 </a>
             </div>
         </div>

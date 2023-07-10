@@ -1,6 +1,6 @@
 from django.contrib import admin
 from users.models import User, Order
-from products.models import Product, OrderItem
+from products.models import OrderItem
 
 class OrderInline(admin.StackedInline):
     model = Order

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
 from store.settings import LOGIN_URL
+from store.translator import translate_text_to_user_language
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, OrderForm
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
@@ -24,7 +24,7 @@ def login(request):
     else:
         form = UserLoginForm()
     context = {
-        'title': 'Авторизация',
+        'title': translate_text_to_user_language('Authorization', request),
         'form': form,
     }
     return render(request, 'users/login.html', context)
@@ -35,13 +35,13 @@ def registration(request):
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Вы успешно зарегистрировались!')
+            messages.success(request, translate_text_to_user_language('You have successfully registered!', request))
             return HttpResponseRedirect(reverse('user:login'))
     else:
         form = UserRegistrationForm()
 
     context = {
-        'title': 'Регистрация',
+        'title': translate_text_to_user_language('Registration', request),
         'form': form,
         'errors': [error for field, error in form.errors.items()],
     }
@@ -54,14 +54,14 @@ def profile(request):
         form = UserProfileForm(instance=request.user, files=request.FILES, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Данные успешно изменены!')
+            messages.success(request, translate_text_to_user_language('The data has been successfully changed!', request))
             return HttpResponseRedirect(reverse('user:profile'))
     else:
         form = UserProfileForm(instance=request.user)
 
     baskets = Basket.objects.filter(user=request.user)
     context = {
-        'title': 'Профиль',
+        'title': translate_text_to_user_language('Profile', request),
         'form': form,
         'baskets': baskets,
         'total_sum': baskets.total_sum(),
@@ -79,18 +79,6 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-from django.shortcuts import render, reverse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from users.models import Order
-from products.models import OrderItem, Basket
-from users.forms import OrderForm
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, HttpResponseRedirect, reverse
-#from users.models import Basket, OrderItem
-from users.forms import OrderForm
-
-
 @login_required(login_url=LOGIN_URL)
 def place_order(request):
     baskets = Basket.objects.filter(user=request.user)
@@ -102,11 +90,11 @@ def place_order(request):
         if form.is_valid():
             for basket in baskets:
                 if basket.product.quantity < basket.quantity:
-                    errors.append('На складе недостаточно товара.')
+                    errors.append(translate_text_to_user_language('There are not enough items in stock.', request))
                     break
 
             if not baskets or not form.is_valid():
-                errors.append('Ошибка при выполнении заказа.')
+                errors.append(translate_text_to_user_language('Error during order execution.', request))
             else:
                 order = form.save(commit=False)
                 order.user = request.user
@@ -126,8 +114,9 @@ def place_order(request):
 
                 return HttpResponseRedirect(reverse('user:orders_history'))
 
+
     context = {
-        'title': 'Оформление заказа',
+        'title': translate_text_to_user_language('Order placement', request),
         'baskets': baskets,
         'total_sum': baskets.total_sum(),
         'total_quantity': baskets.total_quantity(),
@@ -144,8 +133,9 @@ def place_order(request):
 
 def orders_list(request):
     orders = Order.objects.filter(user=request.user).order_by('-id')
+
     context = {
-        'title': 'История заказов',
+        'title': translate_text_to_user_language('Order history', request),
         'orders': orders,
     }
     return render(request, 'users/orders.html', context)
@@ -153,7 +143,7 @@ def orders_list(request):
 def order_view(request, pk):
     order = Order.objects.get(id=pk)
     context = {
-        'title': f'Заказ №{order.id}',
+        'title': translate_text_to_user_language(f'Order №{order.id}', request),
         'order': order,
         'product_baskets': OrderItem.objects.filter(order=order),
     }

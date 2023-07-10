@@ -36,19 +36,19 @@ $(document).ready(function() {
           if (response.ok) {
             return response.json();
           } else {
-            throw new Error('Ошибка при добавлении товара в корзину');
+            throw new Error('Error when adding an item to cart');
           }
         })
         .then(data => {
           if (data.success) {
-            showNotification(data.product_name + ' успешно добавлен в корзину');
+            showNotification(data.product_name + ' has been successfully added to your cart');
           } else {
-            showNotification('Ошибка при добавлении товара в корзину', success=false);
+            showNotification(data.message, success=false);
           }
         })
         .catch(error => {
           console.error(error);
-          showNotification('Необходима авторизация', success=false);
+          showNotification('Authorization required', success=false);
           window.location.href = '/user/login/'; // Перенаправляем пользователя на страницу входа
         });
     }
