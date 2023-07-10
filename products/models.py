@@ -28,9 +28,9 @@ class BasketQuerySet(models.QuerySet):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=256, unique=True, blank=True)
     image = models.ImageField(upload_to='products_images', blank=True)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)

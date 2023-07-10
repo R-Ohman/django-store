@@ -18,12 +18,12 @@ class Order(models.Model):
     CANCEL = 'CNC'
 
     STATUSES = (
-        (FORMING, 'Формируется'),
-        (SENT_TO_PROCEED, 'Отправлен в обработку'),
-        (PROCEEDED, 'Обработан'),
-        (PAID, 'Оплачен'),
-        (READY, 'Готов к выдаче'),
-        (CANCEL, 'Отменен'),
+        (FORMING, 'Forming'),
+        (SENT_TO_PROCEED, 'Sent to proceed'),
+        (PROCEEDED, 'Proceeded'),
+        (PAID, 'Paid'),
+        (READY, 'Ready'),
+        (CANCEL, 'Canceled'),
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

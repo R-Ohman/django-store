@@ -1,13 +1,24 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 
+from products.forms import ProductAdminForm
 from products.models import ProductCategory, Product, Basket
 
+
+
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'quantity', 'category')
+class ProductAdmin(TranslationAdmin):
+    list_display = ('id', 'name', 'price', 'quantity', 'category')
     fields = ('image', 'name', 'description', ('price', 'quantity'), 'category')
-    # readonly_fields = ('description',)
     ordering = ('name', 'price')
+    search_fields = ('name',)
+    form = ProductAdminForm
+
+
+@admin.register(ProductCategory)
+class ProductCategoryAdmin(TranslationAdmin):
+    list_display = ('name', 'description')
+    ordering = ('name',)
     search_fields = ('name',)
 
 
@@ -17,8 +28,3 @@ class BasketAdmin(admin.TabularInline):
     readonly_fields = ('add_datetime',)
     extra = 0
 
-@admin.register(ProductCategory)
-class ProductCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
-    ordering = ('name',)
-    search_fields = ('name',)
