@@ -33,10 +33,10 @@ def products(request, category_id=None, page=1):
     exchange_rate = ExchangeRate.objects.filter(base_currency=user_currency_id, target_currency=default_currency_id).first()
 
     products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
-
+    products_with_converted_price = None
     if exchange_rate:
         # Конвертируем цены товаров в выбранную валюту
-        products = [
+        products_with_converted_price = [
             {
                 'product': product,
                 'price': '{:.2f}'.format(round(Decimal(product.price) * Decimal(exchange_rate.rate) / Decimal('0.5')) * Decimal('0.5')),
@@ -48,7 +48,7 @@ def products(request, category_id=None, page=1):
     page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
     per_page = 3  # Количество продуктов на странице
     # Разбиваем продукты на страницы
-    paginator = Paginator(products, per_page)
+    paginator = Paginator(products_with_converted_price, per_page)
 
     try:
         page_number = int(page)
@@ -59,7 +59,7 @@ def products(request, category_id=None, page=1):
     # Если это AJAX-запрос, возвращаем фрагмент HTML
     if request.is_ajax():
         context = {
-            'products': page_products,
+            'products_with_converted_price': page_products,
             'current_page': int(page),
         }
         product_list_html = render_to_string('products/product_cards.html', context)
@@ -72,7 +72,7 @@ def products(request, category_id=None, page=1):
     # Возвращаем полный HTML для обычного запроса
     context = {
         'title': translate_text_to_user_language('Catalog', request),
-        'products': page_products,
+        'products_with_converted_price': page_products,
         'categories': ProductCategory.objects.all(),
         'current_page': int(page),  # Добавляем текущую страницу в контекст
         'category': ProductCategory.objects.get(id=category_id) if category_id else None,
@@ -157,3 +157,16 @@ def basket_update(request, id):
             'success': False,
             'message': translate_text_to_user_language('Invalid request', request)
             })
+
+
+def product_view(request, product_id):
+    product = Product.objects.get(id=product_id)
+    prev_page = request.META.get('HTTP_REFERER') if request.META.get('HTTP_REFERER') else '/'
+
+    context = {
+        'title': product.name,
+        'product': product,
+        'previous_page': prev_page,
+    }
+
+    return render(request, 'products/product-view.html', context)

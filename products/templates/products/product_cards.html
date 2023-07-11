@@ -2,24 +2,24 @@
 {% load i18n %}
 
 <div id="product-list" class="row">
-    {% for product in products %}
+    {% for product_with_converted_price in products_with_converted_price %}
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card h-100">
             <a href="#">
                 <img class="card-img-top"
-                     src="{% if product.product.image %}{{ product.product.image.url }}
+                     src="{% if product_with_converted_price.product.image %}{{ product_with_converted_price.product.image.url }}
                         {% else %}{% static '/vendor/img/products/default-product-image.png' %}{% endif %}"
                      alt="">
             </a>
             <div class="card-body">
                 <h4 class="card-title">
-                    <a href="#">{{ product.product.name }}</a>
+                    <a href="{% url 'products:product_view' product_with_converted_price.product.id %}">{{ product_with_converted_price.product.name }}</a>
                 </h4>
-                <h5>{{ product.price }} {{ product.currency }}.</h5>
-                <p class="card-text">{{ product.product.description }}</p>
+                <h5>{{ product_with_converted_price.price }} {{ product_with_converted_price.currency }}</h5>
+                <p class="card-text">{{ product_with_converted_price.product.description }}</p>
             </div>
             <div class="card-footer text-center">
-                <a href="#" class="btn btn-outline-success add-to-basket" data-product-id="{{ product.id }}">
+                <a href="#" class="btn btn-outline-success add-to-basket" data-product-id="{{ product_with_converted_price.product.id }}">
                     {% trans 'Add to cart' %}
                 </a>
             </div>

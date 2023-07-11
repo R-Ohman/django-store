@@ -2,13 +2,13 @@
 
 <nav id="page-list" aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-        <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
-            <a class="page-link" data-page="{% if products.has_previous %}
-            {{ products.previous_page_number }} {% else %} 1 {% endif %}" href="#">
+        <li class="page-item {% if not products_with_converted_price.has_previous %} disabled {% endif %}">
+            <a class="page-link" data-page="{% if products_with_converted_price.has_previous %}
+            {{ products_with_converted_price.previous_page_number }} {% else %} 1 {% endif %}" href="#">
                 {% trans 'Previous' %}
             </a>
         </li>
-        {% for page in products.paginator.page_range %}
+        {% for page in products_with_converted_price.paginator.page_range %}
         <li class="page-item {% if page == current_page %} active {% endif %}">
             <a class="page-link" data-page="{{ page }}" href="#">
                 {{ page }}
@@ -16,9 +16,9 @@
         </li>
         {% endfor %}
 
-        <li class=" page-item {% if not products.has_next %} disabled {% endif %}">
-            <a class="page-link" data-page="{% if products.has_next %}
-            {{ products.next_page_number }} {% else %} {{ products.paginator.num_pages }} {% endif %}" href="#">
+        <li class=" page-item {% if not products_with_converted_price.has_next %} disabled {% endif %}">
+            <a class="page-link" data-page="{% if products_with_converted_price.has_next %}
+            {{ products_with_converted_price.next_page_number }} {% else %} {{ products_with_converted_price.paginator.num_pages }} {% endif %}" href="#">
                 {% trans 'Next' %}
             </a>
         </li>

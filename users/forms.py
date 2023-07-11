@@ -6,11 +6,11 @@ from users.models import User, Order
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4',
-        'placeholder': 'Введите имя пользователя',
+        'placeholder': 'Enter your user name',
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4',
-        'placeholder': 'Введите пароль',
+        'placeholder': 'Enter your password',
     }))
 
     class Meta:
@@ -21,15 +21,15 @@ class UserLoginForm(AuthenticationForm):
 class UserRegistrationForm(UserCreationForm):
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4',
-        'placeholder': 'Введите имя',
+        'placeholder': 'Enter your name',
     }))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4',
-        'placeholder': 'Введите фамилию',
+        'placeholder': 'Enter your last name',
     }))
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4',
-        'placeholder': 'Введите имя пользователя',
+        'placeholder': 'Enter your user name',
     }))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4',
@@ -37,12 +37,12 @@ class UserRegistrationForm(UserCreationForm):
     }))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4',
-        'placeholder': 'Подтвердите пароль',
+        'placeholder': 'Enter your password',
     }))
     email = forms.CharField(widget=forms.EmailInput(attrs={
         'class': 'form-control py-4',
         'aria-describedby': 'emailHelp',
-        'placeholder': 'Введите адрес эл. почты',
+        'placeholder': 'Enter your e-mail address',
     }))
 
     class Meta:
@@ -88,11 +88,11 @@ class UserProfileForm(UserChangeForm):
 class OrderForm(forms.ModelForm):
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Іван',
+        'placeholder': 'George',
     }), required=True)
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Прізвиськовий',
+        'placeholder': 'Ohman',
     }), required=True)
     email = forms.CharField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
@@ -101,7 +101,7 @@ class OrderForm(forms.ModelForm):
     }), required=True)
     address = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Україна, м. Київ, вул. Хрещатик, буд. 1, кв. 1',
+        'placeholder': 'Ukraine, Kyiv, Khreschatyk street, 1',
     }), required=True)
 
     class Meta:
