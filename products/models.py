@@ -1,14 +1,13 @@
-from decimal import Decimal
-
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
-from django.core.validators import MinValueValidator
 
-from users.models import User, Order
-
+#from users.models import User
+#from payments.models import Currency
 
 # Create your models here.
+from payments.models import Currency
+from store.settings import BASE_CURRENCY
+from users.models import User
+
 
 class ProductCategory(models.Model):
     name = models.CharField(max_length=64, unique=True)
@@ -22,21 +21,24 @@ class ProductCategory(models.Model):
         verbose_name_plural = 'categories'
 
 
-class BasketQuerySet(models.QuerySet):
+class UserProductsQuerySet(models.QuerySet):
     def total_sum(self):
-        return sum(basket.sum() for basket in self)
+        return sum(item.sum() for item in self)
 
     def total_quantity(self):
-        return sum(basket.quantity for basket in self)
+        return sum(item.quantity for item in self)
 
+    def currency(self):
+        return self[0].currency
 
 
 class Product(models.Model):
     name = models.CharField(max_length=256, unique=True, blank=True)
     image = models.ImageField(upload_to='products_images', blank=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=7, decimal_places=2)             # price in default currency (USD)
+    quantity = models.PositiveIntegerField(default=0)                       # quantity in stock
+
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -46,64 +48,20 @@ class Product(models.Model):
         verbose_name = 'product'
         verbose_name_plural = 'products'
 
+
 class Basket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
-    add_datetime = models.DateTimeField(auto_now_add=True)
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE, default=1)
 
-    objects = BasketQuerySet.as_manager()
+    quantity = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)      # price in currency
+
+    add_datetime = models.DateTimeField(auto_now_add=True)
+    objects = UserProductsQuerySet.as_manager()
+
     def __str__(self):
         return f'{self.user.username} | {self.product.name}'
 
     def sum(self):
-        return self.quantity * self.product.price
-
-
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
-    quantity = models.PositiveIntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    objects = BasketQuerySet.as_manager()
-    def __str__(self):
-        return f'{self.id} | {self.product.name}'
-
-    class Meta:
-        verbose_name = 'order item'
-        verbose_name_plural = 'order items'
-
-    def sum(self):
-        return self.quantity * self.product.price
-
-@receiver(post_delete, sender=OrderItem)
-def update_product_quantity(sender, instance, **kwargs):
-    product = instance.product
-    product.quantity += instance.quantity
-    product.save()
-
-class Currency(models.Model):
-    code = models.CharField(max_length=3, unique=True)
-    name = models.CharField(max_length=100)
-
-    @staticmethod
-    def get_currency_by_language(request):
-        language_currency_dictionary = {
-            'en': ('$', 'USD'),
-            'uk': ('₴', 'UAH'),
-            'pl': ('zł', 'PLN'),
-        }
-        user_currency = language_currency_dictionary[request.LANGUAGE_CODE]
-        return user_currency
-
-    def __str__(self):
-        return self.code
-
-class ExchangeRate(models.Model):
-    base_currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name='base_rates')
-    target_currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name='target_rates')
-    rate = models.DecimalField(max_digits=10, decimal_places=4, validators=[MinValueValidator(0)])
-
-    def __str__(self):
-        return f'{self.base_currency} to {self.target_currency}: {self.rate}'
+        return self.quantity * self.price

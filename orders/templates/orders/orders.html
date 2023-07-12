@@ -1,0 +1,52 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+ <link href="{% static '/vendor/css/orders.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container pt-5">
+        <div class="text-center mt-5">
+            <h1>{{ title }}</h1>
+            <div class="orders mt-5">
+                <table class="table">
+                    <thead>
+                    <tr class="table-light">
+                        <th scope="col">#</th>
+                        <th scope="col">{% trans 'Status' %}</th>
+                        <th scope="col">{% trans 'Created' %}</th>
+                        <th scope="col">{% trans 'Total' %}</th>
+                        <th scope="col">{% trans 'Action' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if not orders %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <h4>
+                                {% trans "There's nothing here yet" %}
+                            </h4>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% for order in orders %}
+                    <tr>
+                        <th scope="row">{{ order.id }}</th>
+                        <td>{{ order.get_status_display }}</td>
+                        <td>{{ order.created }}</td>
+                        <td>{{ order.sum }} {{ order.currency.symbol }}</td>
+                        <td>
+                            <a href="{% url 'user:orders:order_view' order.id %}">{% trans 'view' %}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

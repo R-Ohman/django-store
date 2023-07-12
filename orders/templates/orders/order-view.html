@@ -1,0 +1,42 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+ <link href="{% static '/vendor/css/orders.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container pt-5">
+        <div class="text-center mt-5">
+            <h1>{{ title }}</h1>
+            <div class="orders mt-5">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{% trans 'Title' %}</th>
+                        <th scope="col">{% trans 'Quantity' %}</th>
+                        <th scope="col">{% trans 'Price' %}</th>
+                        <th scope="col">{% trans 'Sum' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for product_basket in product_baskets %}
+                    <tr>
+                        <th scope="row">
+                            {{ product_basket.product.name }}
+                        </th>
+                        <td>{{ product_basket.quantity }}</td>
+                        <td>{{ product_basket.price }} {{ order.currency.symbol }}</td>
+                        <td>{{ product_basket.sum }} {{ order.currency.symbol }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <p class="float-right h4 mt-3">{% trans 'Total' %} {{ product_baskets.total_sum }} {{ order.currency }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

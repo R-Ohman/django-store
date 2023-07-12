@@ -15,9 +15,15 @@
             <div class="row text-center">
                 <div class="col-lg-4">
                     <input name="basketID" type="number" class="form-control basket-quantity"
-                           value="{{ basket.quantity|addslashes }}" min="1" data-basket-id="{{ basket.id }}">
+                           value="{{ basket.quantity|addslashes }}" min="1"
+                           data-basket-id="{{ basket.id }}">
                 </div>
-                <div class="col-lg-4" id="product-{{ basket.id }}">{{ basket.sum }} грн.</div>
+                <div class="col-lg-4">
+                    <span id="product-{{ basket.id }}">
+                        {{ basket.sum }}
+                    </span>
+                    {{ baskets.currency.symbol }}
+                </div>
                 <div class="col-lg-4">
                     <a href="#" class="delete-basket" data-basket-id="{{ basket.id }}">
                         <i class="fas fa-trash"></i>
@@ -32,10 +38,14 @@
 <div class="card mb-3">
     <div class="card-footer">
         <p class="float-left">{% trans 'Total' %}</p>
-        <h4 class="float-right total_sum">{{ total_sum }} грн.</h4>
+        <h4 class="float-right">
+            <span class="total_sum">
+                {{ total_sum }}
+            </span>
+            {{ baskets.currency.symbol }}</h4>
     </div>
 </div>
-<a class="btn btn-success btn-lg float-right" href="{% url 'user:place_order' %}">
+<a class="btn btn-success btn-lg float-right" href="{% url 'user:orders:place_order' %}">
     {% trans 'Place an order' %}
 </a>
 {% else %}

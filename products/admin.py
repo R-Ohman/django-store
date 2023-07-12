@@ -2,7 +2,7 @@ from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 
 from products.forms import ProductAdminForm
-from products.models import ProductCategory, Product, Basket, Currency, ExchangeRate
+from products.models import ProductCategory, Product
 from store import settings
 
 
@@ -36,7 +36,6 @@ class ProductCategoryAdmin(TranslationAdmin):
     name_fields = [f'name_{lang_code}' for lang_code in lang_codes]
     description_fields = [f'description_{lang_code}' for lang_code in lang_codes]
 
-
     list_display = ('name', 'description', 'id',)
     ordering = ('name',)
     search_fields = ('name',)
@@ -49,13 +48,3 @@ class ProductCategoryAdmin(TranslationAdmin):
         (*description_fields,),
     )
 
-
-
-class BasketAdmin(admin.TabularInline):
-    model = Basket
-    fields = ('product', 'quantity', 'add_datetime')
-    readonly_fields = ('add_datetime',)
-    extra = 0
-
-admin.site.register(Currency)
-admin.site.register(ExchangeRate)

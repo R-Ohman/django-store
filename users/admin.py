@@ -1,21 +1,7 @@
 from django.contrib import admin
-from users.models import User, Order
-from products.models import OrderItem
 
-class OrderInline(admin.StackedInline):
-    model = Order
-    fields = ('id', 'status', ('email', 'address'), ('created', 'updated'), 'products_info')
-    readonly_fields = ('id', 'email', 'created', 'address', 'updated', 'products_info')
-    extra = 0
-    ordering = ('-created',)
-
-
-    def products_info(self, instance):
-        order_items = OrderItem.objects.filter(order=instance)
-        products = [f"{order_item.quantity} | {order_item.product.name}" for order_item in order_items]
-        return '\n'.join(products)
-
-    products_info.short_description = 'Products'
+from orders.admin import OrderInline
+from users.models import User
 
 
 class UserAdmin(admin.ModelAdmin):

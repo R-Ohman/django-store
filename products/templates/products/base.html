@@ -51,7 +51,7 @@
                         <li>
                             <a class="dropdown-item" href="{% url 'user:profile' %}">{% trans 'Profile' %}</a>
                         </li>
-                        <li><a class="dropdown-item" href="{% url 'user:orders_history' %}">{% trans 'Orders' %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user:orders:orders_history' %}">{% trans 'Orders' %}</a></li>
                         {% if user.is_superuser or user.is_staff %}
                             <li><a class="dropdown-item" href="{% url 'admin:index' %}">{% trans 'Admin panel' %}</a></li>
                         {% endif %}

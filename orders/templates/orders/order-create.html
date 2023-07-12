@@ -1,0 +1,73 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block css %}
+ <link href="{% static '/vendor/css/orders.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section>
+    {% if errors %}
+    <div class="alert alert-warning text-center" role="alert">
+        {% for error in errors %}
+            <strong>{{ error }}</strong>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="py-5 text-center">
+            <h1>{{ title }}</h1>
+        </div>
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                {% include 'orders/order-products-list.html' %}
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">{% trans 'Shipping address' %}</h4>
+                <form action="{% url 'user:orders:place_order' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                {% trans 'Name' %}
+                            </label>
+                            {{ form.first_name }}
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                {% trans 'Surname' %}
+                            </label>
+                            {{ form.last_name }}
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">
+                                {% trans 'E-mail address' %}
+                            </label>
+                            {{ form.email }}
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <label for="{{ form.address.id_for_label }}" class="form-label">
+                                {% trans 'Address' %}
+                            </label>
+                            {{ form.address }}
+                        </div>
+
+                    </div>
+                    <input type="hidden" name="currency_id" value="{{ baskets.currency.id }}">{{baskets.currency.id}}
+
+                    <hr class="my-4">
+
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">
+                        {% trans 'Order up' %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

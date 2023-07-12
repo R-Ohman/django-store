@@ -1,15 +1,14 @@
 import json
-from decimal import Decimal
 
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
-from products.models import ProductCategory, Product, Basket, ExchangeRate, Currency
+from products.models import ProductCategory, Product, Basket
+from payments.models import ExchangeRate, Currency
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from store.settings import LOGIN_URL
-from store.translator import translate_text_to_user_language
-from django.db import models
+from users.utils import translate_text_to_user_language
 
 
 def index(request):
@@ -21,29 +20,17 @@ def index(request):
     return render(request, 'products/index.html', context)
 
 
-def products(request, category_id=None, page=1):
-    language_currency_dictionary = {
-        'en': ('$', 'USD'),
-        'uk': ('₴', 'UAH'),
-        'pl': ('zł', 'PLN'),
-    }
-    user_currency = language_currency_dictionary[request.LANGUAGE_CODE]
-    user_currency_id = Currency.objects.get(code=user_currency[1])
-    default_currency_id = Currency.objects.get(code='USD')
-    exchange_rate = ExchangeRate.objects.filter(base_currency=user_currency_id, target_currency=default_currency_id).first()
-
+def products(request, category_id=None):
     products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
-    products_with_converted_price = None
-    if exchange_rate:
-        # Конвертируем цены товаров в выбранную валюту
-        products_with_converted_price = [
-            {
-                'product': product,
-                'price': '{:.2f}'.format(round(Decimal(product.price) * Decimal(exchange_rate.rate) / Decimal('0.5')) * Decimal('0.5')),
-                'currency': user_currency[0],
-            }
-            for product in products
-        ]
+
+    currency = None
+    products_with_converted_price = []
+    for product in products:
+        currency, price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
+        products_with_converted_price.append({
+            'product': product,
+            'price': '{:,.2f}'.format(price).replace(',', ' '),
+        })
 
     page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
     per_page = 3  # Количество продуктов на странице
@@ -60,6 +47,7 @@ def products(request, category_id=None, page=1):
     if request.is_ajax():
         context = {
             'products_with_converted_price': page_products,
+            'currency': currency,
             'current_page': int(page),
         }
         product_list_html = render_to_string('products/product_cards.html', context)
@@ -76,6 +64,7 @@ def products(request, category_id=None, page=1):
         'categories': ProductCategory.objects.all(),
         'current_page': int(page),  # Добавляем текущую страницу в контекст
         'category': ProductCategory.objects.get(id=category_id) if category_id else None,
+        'currency': currency,
     }
 
     return render(request, 'products/products.html', context)
@@ -162,11 +151,14 @@ def basket_update(request, id):
 def product_view(request, product_id):
     product = Product.objects.get(id=product_id)
     prev_page = request.META.get('HTTP_REFERER') if request.META.get('HTTP_REFERER') else '/'
+    currency, price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
 
     context = {
         'title': product.name,
         'product': product,
         'previous_page': prev_page,
+        'currency': currency,
+        'price': '{:,.2f}'.format(price).replace(',', ' '),
     }
 
     return render(request, 'products/product-view.html', context)

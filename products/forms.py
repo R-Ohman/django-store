@@ -3,6 +3,7 @@ from django import forms
 from products.models import Product
 from store import settings
 
+
 class ProductAdminForm(forms.ModelForm):
     def clean(self):
         has_name = False

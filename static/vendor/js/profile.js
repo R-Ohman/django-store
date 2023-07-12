@@ -38,8 +38,8 @@ quantityInputs.forEach((input) => {
 
             if (totalQuantityElement && totalSumElement && productSumElement) {
                 totalQuantityElement.textContent = data.total_quantity.toLocaleString('ru-RU');
-                totalSumElement.textContent = data.total_sum.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' грн.';
-                productSumElement.textContent = data.product_sum.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' грн.';
+                totalSumElement.textContent = data.total_sum.toLocaleString('ru-RU', { minimumFractionDigits: 2 });
+                productSumElement.textContent = data.product_sum.toLocaleString('ru-RU', { minimumFractionDigits: 2 });
                 event.target.value = data.quantity;
             }
         })
