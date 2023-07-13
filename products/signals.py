@@ -7,6 +7,7 @@ from django.conf import settings
 from modeltranslation.translator import translator, NotRegistered
 from modeltranslation.utils import build_localized_fieldname
 
+
 def translate_fields(sender, instance, **kwargs):
     try:
         # Получаем список полей для перевода модели

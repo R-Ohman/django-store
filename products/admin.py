@@ -2,7 +2,7 @@ from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 
 from products.forms import ProductAdminForm
-from products.models import ProductCategory, Product
+from products.models import ProductCategory, Product, Basket
 from store import settings
 from store.admin import set_admin_settings
 
@@ -64,4 +64,11 @@ class ProductCategoryAdmin(TranslationAdmin):
             'classes': ('collapse',),
         }),
     )
+
+
+class BasketAdmin(admin.TabularInline):
+    model = Basket
+    fields = ('product', 'quantity', 'add_datetime')
+    readonly_fields = ('add_datetime',)
+    extra = 0
 
