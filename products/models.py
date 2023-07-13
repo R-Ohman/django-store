@@ -23,13 +23,13 @@ class ProductCategory(models.Model):
 
 class UserProductsQuerySet(models.QuerySet):
     def total_sum(self):
-        return sum(item.sum() for item in self)
+        return sum(item.sum for item in self)
 
     def total_quantity(self):
         return sum(item.quantity for item in self)
 
     def currency(self):
-        return self[0].currency
+        return self[0].currency if self else BASE_CURRENCY
 
 
 class Product(models.Model):
@@ -63,5 +63,6 @@ class Basket(models.Model):
     def __str__(self):
         return f'{self.user.username} | {self.product.name}'
 
+    @property
     def sum(self):
         return self.quantity * self.price

@@ -4,6 +4,10 @@ from modeltranslation.admin import TranslationAdmin
 from products.forms import ProductAdminForm
 from products.models import ProductCategory, Product
 from store import settings
+from store.admin import set_admin_settings
+
+
+set_admin_settings()
 
 
 @admin.register(Product)
@@ -15,12 +19,21 @@ class ProductAdmin(TranslationAdmin):
     description_fields = [f'description_{lang_code}' for lang_code in lang_codes]
 
     list_display = ('name', 'price', 'quantity', 'category', 'id',)
-    fields = (
-        'image',
-        'name_en', 'description_en',
-        ('price', 'quantity', 'category',),
-        (*name_fields,),
-        (*description_fields,),
+    fieldsets = (
+        (None, {
+            'fields': ('image',),
+        }),
+        ('English', {
+            'fields': ('name_en', 'description_en'),
+        }),
+        ('Details', {
+            'fields': ('price', 'quantity', 'category'),
+            'classes': ('wide',),
+        }),
+        ('Translations', {
+            'fields': ((*name_fields,), (*description_fields,)),
+            'classes': ('collapse',),
+        }),
     )
 
     ordering = ('name', 'price')
@@ -41,10 +54,14 @@ class ProductCategoryAdmin(TranslationAdmin):
     search_fields = ('name',)
     form = ProductAdminForm
 
-    fields = (
-        'name_en',
-        'description_en',
-        (*name_fields,),
-        (*description_fields,),
+    fieldsets = (
+        (None, {
+            'fields': (('name_en', 'description_en'),),
+            'classes': ('wide',),
+        }),
+        ('Translations', {
+            'fields': (tuple(name_fields), tuple(description_fields)),
+            'classes': ('collapse',),
+        }),
     )
 
