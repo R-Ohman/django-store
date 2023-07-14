@@ -1,18 +1,16 @@
-from __future__ import absolute_import, unicode_literals
-
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'store.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 django.setup()
 
+
 import requests
+
 from payments.models import Currency, ExchangeRate
 from store.settings import BASE_CURRENCY
-from celery import shared_task
 
 
-@shared_task
 def update_exchange_rates_task():
     print("Before import")
 
@@ -34,21 +32,4 @@ def update_exchange_rates_task():
             exchange_rate = ExchangeRate.objects.filter(base_currency=base_currency, target_currency=target_currency).first()
             exchange_rate.rate = rate
             exchange_rate.save()
-    return None
-
-
-"""
-@shared_task
-def update_exchange_rates_task():
-    print("Before import")
-    from payments.utils import update_exchange_rates
-    print("After import")
-    update_exchange_rates()
-    print("After update_exchange_rates")
-"""
-
-
-@shared_task
-def hello_world():
-    print("Hello world!")
     return None

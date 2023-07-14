@@ -1,10 +1,10 @@
 function addListenersToInputs() {
-const fileInput = document.querySelector('.custom-file-input');
-const label = document.querySelector('.custom-file-label');
+    const fileInput = document.querySelector('.custom-file-input');
+    const label = document.querySelector('.custom-file-label');
 
-fileInput.addEventListener('change', (event) => {
-    const fileName = event.target.files[0].name;
-    label.textContent = fileName;
+    fileInput.addEventListener('change', (event) => {
+        const fileName = event.target.files[0].name;
+        label.textContent = fileName;
 });
 
 
@@ -55,13 +55,12 @@ quantityInputs.forEach((input) => {
 document.addEventListener('DOMContentLoaded', addListenersToInputs);
 
 
-
-
 $(document).on('click', '.delete-basket', function(e) {
-  e.preventDefault();
-  var basketId = $(this).data('basket-id');
-  deleteBasket(basketId);
-});
+      e.preventDefault();
+      var basketId = $(this).data('basket-id');
+      deleteBasket(basketId);
+    });
+
 
 function deleteBasket(basketId) {
   var csrfToken = document.querySelector('[data-csrf-token]').dataset.csrfToken;

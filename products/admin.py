@@ -3,6 +3,7 @@ from modeltranslation.admin import TranslationAdmin
 
 from products.forms import ProductAdminForm
 from products.models import ProductCategory, Product, Basket
+from products.utils import change_product_visibility
 from store import settings
 from store.admin import set_admin_settings
 
@@ -18,10 +19,10 @@ class ProductAdmin(TranslationAdmin):
     name_fields = [f'name_{lang_code}' for lang_code in lang_codes]
     description_fields = [f'description_{lang_code}' for lang_code in lang_codes]
 
-    list_display = ('name', 'price', 'quantity', 'category', 'id',)
+    list_display = ('name', 'price', 'quantity', 'category', 'id' ,'is_visible',)
     fieldsets = (
         (None, {
-            'fields': ('image',),
+            'fields': (('image', 'is_visible'),),
         }),
         ('English', {
             'fields': ('name_en', 'description_en'),
@@ -39,6 +40,12 @@ class ProductAdmin(TranslationAdmin):
     ordering = ('name', 'price')
     search_fields = ('name',)
     form = ProductAdminForm
+
+    def change_visibility(modeladmin, request, queryset):
+        change_product_visibility(queryset)
+    change_visibility.short_description = "Change visibility"
+
+    actions = (change_visibility,)
 
 
 @admin.register(ProductCategory)

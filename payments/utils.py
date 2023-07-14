@@ -4,20 +4,47 @@ from payments.models import Currency, ExchangeRate
 from store.settings import BASE_CURRENCY
 
 
-def update_exchange_rates():
+def update_exchange_rates(exchange_rates_queryset=None):
+    url = "https://api.exchangerate.host/latest"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        rates = data.get('rates')
+
+    for exchange_rate in exchange_rates_queryset:
+        rate = rates[exchange_rate.target_currency.code] / rates[exchange_rate.base_currency.code]
+        exchange_rate.rate = rate
+        exchange_rate.save()
+
+
+def update_exchange_rate(targer_currency_code):
+    print("Inside update_exchange_rates")
     base_currency = Currency.objects.get(code=BASE_CURRENCY)
-    target_currencies = Currency.objects.exclude(code=BASE_CURRENCY)
 
-    for target_currency in target_currencies:
-        # Выполните запрос к веб-сервису, предоставляющему курсы валют
-        url = "https://api.exchangerate.host/latest"
-        response = requests.get(url)
+    # Выполните запрос к веб-сервису, предоставляющему курсы валют
+    url = "https://api.exchangerate.host/latest"
+    response = requests.get(url)
 
-        if response.status_code == 200:
-            data = response.json()
-            rates = data.get('rates')
-            rate = rates[target_currency.code] / rates[base_currency.code]
+    if response.status_code == 200:
+        data = response.json()
+        rates = data.get('rates')
+        rate = rates[targer_currency_code] / rates[base_currency.code]
 
-            exchange_rate = ExchangeRate.objects.filter(base_currency=base_currency, target_currency=target_currency).first()
-            exchange_rate.rate = rate
-            exchange_rate.save()
+        exchange_rate = ExchangeRate.objects.filter(base_currency=base_currency,
+                                                    target_currency_code=targer_currency_code).first()
+        exchange_rate.rate = rate
+        exchange_rate.save()
+
+
+def get_current_exchange_rate(targer_currency_code):
+    base_currency = Currency.objects.get(code=BASE_CURRENCY)
+    url = "https://api.exchangerate.host/latest"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        rates = data.get('rates')
+        rate = rates[targer_currency_code] / rates[base_currency.code]
+
+        return rate

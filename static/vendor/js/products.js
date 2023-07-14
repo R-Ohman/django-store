@@ -41,7 +41,7 @@ $(document).ready(function() {
         })
         .then(data => {
           if (data.success) {
-            showNotification(data.product_name + ' has been successfully added to your cart');
+            showNotification(data.product_name + data.message);
           } else {
             showNotification(data.message, success=false);
           }

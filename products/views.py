@@ -21,7 +21,7 @@ def index(request):
 
 
 def products(request, category_id=None):
-    products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+    products = Product.objects.filter(category_id=category_id, is_visible=True) if category_id else Product.objects.filter(is_visible=True)
 
     currency = None
     products_with_converted_price = []
@@ -77,6 +77,7 @@ def add_product(request, product_id):
     response = {
         'success': True,
         'product_name': Product.objects.get(id=product_id).name,
+        'message': translate_text_to_user_language('has been successfully added to your cart', request),
     }
 
     if basket and basket.quantity < basket.product.quantity:
@@ -85,8 +86,10 @@ def add_product(request, product_id):
     elif not basket and Product.objects.get(id=product_id).quantity > 0:
         Basket.objects.create(user=request.user, product_id=product_id, quantity=1)
     else:
-        response['success'] = False
-        response['message'] = translate_text_to_user_language('Not enough goods in stock =(', request)
+        response = {
+            'success': False,
+            'message': translate_text_to_user_language('Not enough goods in stock =(', request),
+        }
 
     return JsonResponse(response)
 
@@ -136,7 +139,7 @@ def basket_update(request, id):
         response_data.update({
             'total_sum': float(baskets.total_sum()),
             'total_quantity': baskets.total_quantity(),
-            'product_sum': float(basket.sum()),
+            'product_sum': float(basket.sum),
             'quantity': basket.quantity,
         })
 

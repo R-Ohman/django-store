@@ -21,6 +21,7 @@ class ProductCategory(models.Model):
         verbose_name_plural = 'categories'
 
 
+
 class UserProductsQuerySet(models.QuerySet):
     def total_sum(self):
         return sum(item.sum for item in self)
@@ -39,7 +40,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)             # price in default currency (USD)
     quantity = models.PositiveIntegerField(default=0)                       # quantity in stock
 
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
+    is_visible = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.category.name} | {self.name}'
