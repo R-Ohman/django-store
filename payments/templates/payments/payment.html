@@ -1,0 +1,59 @@
+{% load static %}
+{% load i18n %}
+
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title> {{ title }} | {{ order.id }} </title>
+</head>
+
+<body>
+<style>
+      .w3-container {
+          font-size: 14px;
+      }
+
+      .center {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+      }
+
+</style>
+
+<div class="center">
+    <h3 class="donate">
+        <div class="w3-card-4">
+
+            <header class="w3-container w3-blue">
+                <h1>{% trans 'Order' %} №{{ order.id }}</h1>
+            </header>
+
+            <div class="w3-container">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif%}
+                <p>
+                    {% trans 'Pay to complete your order' %}
+                </p>
+
+                {{ form.render }}
+
+            </div>
+
+            <footer class="w3-container w3-blue">
+                <h5>&copy Store 2023</h5>
+            </footer>
+
+        </div>
+    </h3>
+
+</div>
+
+</body>
