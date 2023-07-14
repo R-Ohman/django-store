@@ -163,5 +163,4 @@ def product_view(request, product_id):
         'currency': currency,
         'price': '{:,.2f}'.format(price).replace(',', ' '),
     }
-
     return render(request, 'products/product-view.html', context)

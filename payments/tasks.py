@@ -14,7 +14,6 @@ from celery import shared_task
 
 @shared_task
 def update_exchange_rates_task():
-    print("Before import")
 
     print("Inside update_exchange_rates")
     base_currency = Currency.objects.get(code=BASE_CURRENCY)

@@ -5,7 +5,6 @@ from products.views import add_product, delete_basket, basket_update, product_vi
 app_name = 'products'
 
 urlpatterns = [
-
     path('', products, name='index'),
     path('<int:product_id>/', product_view, name='product_view'),
     path('category/<int:category_id>/', products, name='category'),

@@ -1,6 +1,8 @@
 from django.urls import path, include
+from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 
 from orders.views import place_order, orders_list, order_view
+from payments.signals import valid_ipn_signal, invalid_ipn_signal
 
 app_name = 'orders'
 
