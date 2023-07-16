@@ -37,9 +37,9 @@ quantityInputs.forEach((input) => {
             const productSumElement = document.querySelector('#product-' + basketId);
 
             if (totalQuantityElement && totalSumElement && productSumElement) {
-                totalQuantityElement.textContent = data.total_quantity.toLocaleString('ru-RU');
-                totalSumElement.textContent = data.total_sum.toLocaleString('ru-RU', { minimumFractionDigits: 2 });
-                productSumElement.textContent = data.product_sum.toLocaleString('ru-RU', { minimumFractionDigits: 2 });
+                totalQuantityElement.textContent = data.total_quantity.toLocaleString('en-EN');
+                totalSumElement.textContent = data.total_sum.toLocaleString('en-EN', { minimumFractionDigits: 2 });
+                productSumElement.textContent = data.product_sum.toLocaleString('en-EN', { minimumFractionDigits: 2 });
                 event.target.value = data.quantity;
             }
         })

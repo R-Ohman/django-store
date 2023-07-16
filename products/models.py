@@ -24,7 +24,10 @@ class ProductCategory(models.Model):
 
 class UserProductsQuerySet(models.QuerySet):
     def total_sum(self):
-        return round_number(sum(float(item.sum.replace(' ', '').replace(',', '.'))
+        for item in self:
+            print(item.sum)
+
+        return round_number(sum(float(item.sum.replace(',', ''))
                             if isinstance(item.sum, str) else item.sum for item in self))
 
     def total_quantity(self):
@@ -69,3 +72,14 @@ class Basket(models.Model):
     @property
     def sum(self):
         return round_number(self.quantity * self.price)
+
+
+class Carousel(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+
+
+class CarouselImage(models.Model):
+    carousel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name='carousel_images')
+    image = models.ImageField(upload_to='carousel_images/')
+    caption = models.CharField(max_length=200, blank=True)

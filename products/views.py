@@ -1,9 +1,10 @@
 import json
+from random import shuffle
 
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
-from products.models import ProductCategory, Product, Basket
+from products.models import ProductCategory, Product, Basket, CarouselImage, Carousel
 from payments.models import ExchangeRate, Currency
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -24,6 +25,7 @@ def index(request):
 
 def products(request, category_id=None):
     products = Product.objects.filter(category_id=category_id, is_visible=True) if category_id else Product.objects.filter(is_visible=True)
+    products = products.order_by('-id')
 
     currency = None
     products_with_converted_price = []
@@ -67,6 +69,7 @@ def products(request, category_id=None):
         'current_page': int(page),  # Добавляем текущую страницу в контекст
         'category': ProductCategory.objects.get(id=category_id) if category_id else None,
         'currency': currency,
+        'carousel_images': CarouselImage.objects.filter(carousel=Carousel.objects.get(name="products_main_page")),
     }
 
     return render(request, 'products/products.html', context)
@@ -139,9 +142,9 @@ def basket_update(request, id):
         # basket.refresh_from_db()
 
         response_data.update({
-            'total_sum': float(baskets.total_sum()),
+            'total_sum': baskets.total_sum(),
             'total_quantity': baskets.total_quantity(),
-            'product_sum': float(basket.sum),
+            'product_sum': basket.sum,
             'quantity': basket.quantity,
         })
 
