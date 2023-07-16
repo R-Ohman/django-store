@@ -5,7 +5,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <title> {{ title }} | {{ order.id }} </title>
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <title>Store - {{ title }} | {{ order.id }} </title>
 </head>
 
 <body>
@@ -28,10 +29,10 @@
         <div class="w3-card-4">
 
             <header class="w3-container w3-blue">
-                <h1>{% trans 'Order' %} №{{ order.id }}</h1>
+                <h3>{% trans 'Order' %} № {{ order.id }}</h3>
             </header>
 
-            <div class="w3-container">
+            <div class="w3-container ml-4 justify-content-center">
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}" role="alert">

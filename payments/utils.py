@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import requests
 
 from orders.models import Order, OrderItem
@@ -34,7 +36,7 @@ def get_current_exchange_rate(targer_currency_code):
 
 
 def order_paid_update_stock(sender):
-    print('update_order_and_baskets')
+    print('order_paid_update_stock')
     order = Order.objects.get(id=sender.invoice)
     order.status = Order.PAID
     order.save()
@@ -44,3 +46,10 @@ def order_paid_update_stock(sender):
     for order_item in order_items:
         order_item.product.quantity -= order_item.quantity
         order_item.product.save()
+
+
+def is_within_range(num, range_base, range_delta):
+    range_delta = Decimal(str(range_delta))
+    lower_limit = range_base * (Decimal('1') - range_delta)
+    upper_limit = range_base * (Decimal('1') + range_delta)
+    return lower_limit <= num <= upper_limit

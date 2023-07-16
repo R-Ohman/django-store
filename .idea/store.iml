@@ -4,9 +4,24 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Python 3.10 (venv)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="font-awesome" level="application" />
+    <orderEntry type="library" name="jquery-3.5.1.slim" level="application" />
+    <orderEntry type="library" name="bootstrap" level="application" />
+    <orderEntry type="library" name="toastr.js" level="application" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="PLAIN" />
     <option name="myDocStringFormat" value="Plain" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/users/templates" />
+        <option value="$MODULE_DIR$/products/templates" />
+        <option value="$MODULE_DIR$/payments/templates" />
+        <option value="$MODULE_DIR$/orders/templates" />
+        <option value="$MODULE_DIR$/products/templates/products" />
+      </list>
+    </option>
   </component>
 </module>

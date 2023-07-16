@@ -7,6 +7,8 @@ from products.models import ProductCategory, Product, Basket
 from payments.models import ExchangeRate, Currency
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+
+from products.utils import round_number
 from store.settings import LOGIN_URL
 from users.utils import translate_text_to_user_language
 
@@ -29,7 +31,7 @@ def products(request, category_id=None):
         currency, price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
         products_with_converted_price.append({
             'product': product,
-            'price': '{:,.2f}'.format(price).replace(',', ' '),
+            'price': round_number(price),
         })
 
     page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
@@ -161,6 +163,6 @@ def product_view(request, product_id):
         'product': product,
         'previous_page': prev_page,
         'currency': currency,
-        'price': '{:,.2f}'.format(price).replace(',', ' '),
+        'price': round_number(price),
     }
     return render(request, 'products/product-view.html', context)

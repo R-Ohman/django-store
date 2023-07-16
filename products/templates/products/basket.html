@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <h4 class="mt-3 mb-3 d-flex justify-content-between align-items-center mb-3">
-    {% trans 'Basket' %} <span class="badge badge-secondary badge-pill total_quantity">{{ total_quantity }}</span>
+    {% trans 'Basket' %} <span class="badge badge-secondary badge-pill total_quantity">{{ baskets.total_quantity }}</span>
 </h4>
 {% if baskets %}
 <div class="card mb-3">
@@ -40,7 +40,7 @@
         <p class="float-left">{% trans 'Total' %}</p>
         <h4 class="float-right">
             <span class="total_sum">
-                {{ total_sum }}
+                {{ baskets.total_sum }}
             </span>
             {{ baskets.currency.symbol }}</h4>
     </div>

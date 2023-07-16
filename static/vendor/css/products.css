@@ -1,3 +1,7 @@
 body {
     padding-top: 56px;
 }
+
+.dropdown-menu li {
+  padding-left: 10px;
+}

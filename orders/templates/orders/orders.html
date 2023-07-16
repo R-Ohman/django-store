@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block css %}
- <link href="{% static '/vendor/css/orders.css' %}" rel="stylesheet">
+ <link href="{% static 'vendor/css/orders.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -40,7 +40,19 @@
                     </tr>
                     {% endif %}
                     {% for order in orders %}
-                    <tr>
+                    <tr class="
+                        {% if order.get_status_display == 'Paid' %}
+                            bg-success bg-opacity-30
+                        {% elif order.get_status_display == 'Ready' %}
+                            bg-success bg-opacity-40
+                        {% elif order.get_status_display == 'Sent to proceed' %}
+                            bg-success bg-opacity-50
+                        {% elif order.get_status_display == 'Proceeded' %}
+                            bg-success bg-opacity-60 text-light
+                        {% elif order.get_status_display == 'Canceled' %}
+                            bg-danger bg-opacity-30
+                        {% endif %}
+                        ">
                         <th scope="row">{{ order.id }}</th>
                         <td>{{ order.get_status_display }}</td>
                         <td>{{ order.created }}</td>

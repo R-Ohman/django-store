@@ -12,7 +12,7 @@ from payments.models import ExchangeRate
 
 def login(request):
     if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
+        form = UserLoginForm(data=request.POST, request=request)
         if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
@@ -21,7 +21,7 @@ def login(request):
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
     else:
-        form = UserLoginForm()
+        form = UserLoginForm(request=request)
     context = {
         'title': translate_text_to_user_language('Authorization', request),
         'form': form,
@@ -31,13 +31,13 @@ def login(request):
 
 def registration(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(data=request.POST)
+        form = UserRegistrationForm(data=request.POST, request=request)
         if form.is_valid():
             form.save()
             messages.success(request, translate_text_to_user_language('You have successfully registered!', request))
             return HttpResponseRedirect(reverse('user:login'))
     else:
-        form = UserRegistrationForm()
+        form = UserRegistrationForm(request=request)
 
     context = {
         'title': translate_text_to_user_language('Registration', request),
@@ -68,8 +68,6 @@ def profile(request):
         'title': translate_text_to_user_language('Profile', request),
         'form': form,
         'baskets': baskets,
-        'total_sum': baskets.total_sum(),
-        'total_quantity': baskets.total_quantity(),
     }
 
     return render(request, 'users/profile.html', context)

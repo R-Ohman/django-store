@@ -1,10 +1,11 @@
 from django.db import models
 
-#from users.models import User
-#from payments.models import Currency
+# from users.models import User
+# from payments.models import Currency
 
 # Create your models here.
 from payments.models import Currency
+from products.utils import round_number
 from store.settings import BASE_CURRENCY
 from users.models import User
 
@@ -21,10 +22,10 @@ class ProductCategory(models.Model):
         verbose_name_plural = 'categories'
 
 
-
 class UserProductsQuerySet(models.QuerySet):
     def total_sum(self):
-        return sum(item.sum for item in self)
+        return round_number(sum(float(item.sum.replace(' ', '').replace(',', '.'))
+                            if isinstance(item.sum, str) else item.sum for item in self))
 
     def total_quantity(self):
         return sum(item.quantity for item in self)
@@ -37,8 +38,8 @@ class Product(models.Model):
     name = models.CharField(max_length=256, unique=True, blank=True)
     image = models.ImageField(upload_to='products_images', blank=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=7, decimal_places=2)             # price in default currency (USD)
-    quantity = models.PositiveIntegerField(default=0)                       # quantity in stock
+    price = models.DecimalField(max_digits=7, decimal_places=2)  # price in default currency (USD)
+    quantity = models.PositiveIntegerField(default=0)  # quantity in stock
 
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
     is_visible = models.BooleanField(default=True)
@@ -57,7 +58,7 @@ class Basket(models.Model):
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, default=1)
 
     quantity = models.PositiveIntegerField(default=0)
-    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)      # price in currency
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)  # price in currency
 
     add_datetime = models.DateTimeField(auto_now_add=True)
     objects = UserProductsQuerySet.as_manager()
@@ -67,4 +68,4 @@ class Basket(models.Model):
 
     @property
     def sum(self):
-        return self.quantity * self.price
+        return round_number(self.quantity * self.price)
