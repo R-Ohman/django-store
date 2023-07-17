@@ -12,8 +12,9 @@ urlpatterns = [
     path('products/', include('products.urls', namespace='products')),
     path('user/', include('users.urls', namespace='user')),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('oauth/', include('social_django.urls', namespace='social')),
-    path('oauth/signup/', signup_redirect, name='signup_redirect'),
+
+    path('social/signup/', signup_redirect, name='signup_redirect'),
+    path('', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

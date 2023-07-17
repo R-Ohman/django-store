@@ -1,6 +1,7 @@
 import json
 from random import shuffle
 
+from django.contrib import messages
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
@@ -19,7 +20,6 @@ def index(request):
         'title': translate_text_to_user_language('Homepage', request),
         'is_promotion': False,
     }
-
     return render(request, 'products/index.html', context)
 
 

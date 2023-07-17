@@ -12,6 +12,10 @@ from payments.models import ExchangeRate
 
 
 def login(request):
+    if request.user.is_authenticated:
+        messages.error(request, translate_text_to_user_language('You are already logged in!', request))
+        return redirect(reverse('user:profile'))
+
     errors = request.GET.getlist('errors', [])
 
     if request.method == 'POST':
@@ -34,6 +38,10 @@ def login(request):
 
 
 def registration(request):
+    if request.user.is_authenticated:
+        messages.error(request, translate_text_to_user_language('You are already logged in!', request))
+        return redirect(reverse('user:profile'))
+
     if request.method == 'POST':
         form = UserRegistrationForm(data=request.POST, request=request)
         if form.is_valid():
@@ -80,37 +88,11 @@ def profile(request):
 @login_required(login_url=LOGIN_URL)
 def logout(request):
     auth.logout(request)
+    messages.success(request, translate_text_to_user_language('You have successfully logged out!', request))
     return HttpResponseRedirect(reverse('index'))
 
 
 def signup_redirect(request):
+    messages.error(request, translate_text_to_user_language('Something went wrong, it may be that the user with this email already exists!', request))
     return redirect(reverse('user:login'))
 
-
-# views.py
-
-from django.shortcuts import redirect
-from social_django.utils import psa
-
-def google_oauth2_login(request):
-    return _oauth2_login(request, backend='google-oauth2')
-
-
-@psa('social:complete')
-def _oauth2_login(request, backend):
-    try:
-        # В этой промежуточной функции `request.backend` будет содержать данные о провайдере (в данном случае, Google OAuth2)
-
-        # Если аутентификация была успешной, `request.user` будет содержать пользователя, или None, если неудача
-        if request.user is not None and request.user.is_authenticated:
-            # Выполните перенаправление на нужную страницу после успешной аутентификации
-            return redirect('/')  # Замените '/' на URL-шаблон для главной страницы
-
-        # Если аутентификация не удалась или пользователь не аутентифицирован, перенаправьте на страницу входа с ошибкой
-        errors = ['Authentication failed. Please try again.']
-        redirect_url = reverse('user:login') + '?errors=' + '&errors='.join(errors)
-        return redirect(redirect_url)
-    except Exception as e:
-        # Выводим более подробную информацию об ошибке в консоли, чтобы легче отследить проблему
-        print("Error during Google OAuth2 login:", e)
-        raise e
