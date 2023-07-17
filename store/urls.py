@@ -4,6 +4,7 @@ from django.conf import settings
 from django.urls import path, include
 
 from products.views import index
+from users.views import signup_redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,6 +12,8 @@ urlpatterns = [
     path('products/', include('products.urls', namespace='products')),
     path('user/', include('users.urls', namespace='user')),
     path('i18n/', include('django.conf.urls.i18n')),
+    path('oauth/', include('social_django.urls', namespace='social')),
+    path('oauth/signup/', signup_redirect, name='signup_redirect'),
 ]
 
 if settings.DEBUG:

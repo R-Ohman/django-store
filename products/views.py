@@ -35,7 +35,6 @@ def products(request, category_id=None):
             'product': product,
             'price': round_number(price),
         })
-
     page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
     per_page = 3  # Количество продуктов на странице
     # Разбиваем продукты на страницы
