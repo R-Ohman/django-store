@@ -8,7 +8,7 @@
 
 {% block content %}
 <section>
-    <div class="container pt-5">
+    <div class="container py-5">
         <div class="text-center mt-5">
             <h1>{{ title }}</h1>
             <div class="orders mt-5">
@@ -40,9 +40,8 @@
                     </tr>
                     {% endif %}
                     {% for order in orders %}
-                    <tr class="
-                        {% if order.get_status_display == 'Paid' %}
-                            bg-success bg-opacity-30
+                    <tr class="{% if order.get_status_display == 'Paid' %}
+                            bg-success bg-opacity-30 opacity-75
                         {% elif order.get_status_display == 'Ready' %}
                             bg-success bg-opacity-40
                         {% elif order.get_status_display == 'Sent to proceed' %}
@@ -50,7 +49,7 @@
                         {% elif order.get_status_display == 'Proceeded' %}
                             bg-success bg-opacity-60 text-light
                         {% elif order.get_status_display == 'Canceled' %}
-                            bg-danger bg-opacity-30
+                            bg-warning bg-opacity-50 opacity-75
                         {% endif %}
                         ">
                         <th scope="row">{{ order.id }}</th>
@@ -59,6 +58,11 @@
                         <td>{{ order.sum }} {{ order.currency.symbol }}</td>
                         <td>
                             <a href="{% url 'user:orders:order_view' order.id %}">{% trans 'view' %}</a>
+                            {% if order.get_status_display == 'Forming' %}
+                                <div>
+                                    <a href="{% url 'user:orders:cancel_order' order.id %}">{% trans 'cancel' %}</a>
+                                </div>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

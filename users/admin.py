@@ -6,7 +6,7 @@ from users.models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'is_staff', 'date_joined')
+    list_display = ('username', 'email', 'is_staff', 'is_confirmed', 'date_joined')
 
     fieldsets = (
         (None, {
@@ -16,7 +16,9 @@ class UserAdmin(admin.ModelAdmin):
             'fields': (('first_name', 'last_name'), 'email'),
         }),
         ('Permissions', {
-            'fields': (('is_staff', 'is_active', 'is_superuser'), ('groups', 'user_permissions')),
+            'fields': (('is_staff', 'is_active', 'is_superuser', ),
+                       ('is_confirmed', 'number_of_available_username_changes'),
+                       ('groups', 'user_permissions')),
             'classes': ('collapse',),
         }),
         ('Important Dates', {

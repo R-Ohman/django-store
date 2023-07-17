@@ -56,12 +56,18 @@
                             {% trans 'Username' %}
                         </label>
                         {{ form.username }}
+                        <small class="form-text">
+                            {{ form.username.help_text }}
+                        </small>
                     </div>
                     <div class="col-lg-6">
                         <label class="small mb-1" for="{{ form.id_for_email }}">
                             {% trans 'E-mail address' %}
                         </label>
                         {{ form.email }}
+                        <small class="form-text">
+                            {{ form.email.help_text }}
+                        </small>
                     </div>
                 </div>
                 <div class="form-row">

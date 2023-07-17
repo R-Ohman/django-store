@@ -16,13 +16,9 @@ class UserLoginForm(AuthenticationForm):
         request = kwargs.pop('request', None)
         super(UserLoginForm, self).__init__(*args, **kwargs)
         if request:
-            dict = {
-                'username': translate_text_to_user_language('Enter your user name', request),
-                'password': translate_text_to_user_language('Enter your password', request),
-            }
-            for field, label in dict.items():
-                self.fields[field].widget.attrs['placeholder'] = label
+            self.fields['username'].widget.attrs['placeholder'] = translate_text_to_user_language('Enter your user name', request)
 
+            self.fields['password'].widget.attrs['placeholder'] = translate_text_to_user_language('Enter your password', request)
 
     class Meta:
         model = User
@@ -92,11 +88,11 @@ class UserProfileForm(UserChangeForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control py-4',
         'aria-describedby': 'usernameHelp',
-    }), disabled=True)
+    }))
     email = forms.CharField(widget=forms.EmailInput(attrs={
         'class': 'form-control py-4',
         'aria-describedby': 'emailHelp',
-    }), disabled=True)
+    }))
     image = forms.ImageField(widget=forms.FileInput(attrs={
         'class': 'custom-file-input',
     }), required=False)
@@ -110,3 +106,27 @@ class UserProfileForm(UserChangeForm):
             'last_name',
             'image'
         )
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+
+        if self.instance.is_confirmed:
+            self.fields['email'].widget.attrs['disabled'] = True
+            self.fields['email'].required = False
+        else:
+            self.fields['email'].help_text = translate_text_to_user_language('You will be required to confirm your email to access all site features. \
+                                                            Viewing your email will be inaccessible to other users.', request)
+
+        if not self.instance.number_of_available_username_changes:
+            self.fields['username'].widget.attrs['disabled'] = True
+        else:
+            self.fields['username'].help_text = translate_text_to_user_language('Username is used to log in to the account.\
+                                                                                Note: You can change it once!', request)
+
+    def clean_email(self):
+        # If the email field is disabled, return the current value from the instance
+        if self.fields['email'].widget.attrs.get('disabled') and self.fields['email'].widget.attrs['disabled']:
+            return self.instance.email
+        # Otherwise, return the cleaned value from the form data
+        return self.cleaned_data['email']

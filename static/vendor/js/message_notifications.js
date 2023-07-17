@@ -13,7 +13,7 @@ function showNotification(message, success=true) {
   toastr.options = {
     "progressBar": true,
     "positionClass": "toast-bottom-left",
-    "timeOut": "3000",
+    "timeOut": "5000",
   };
   if (success) {
     toastr.success(message);
