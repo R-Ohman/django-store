@@ -2,8 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from store.settings import LOGIN_URL
+from users.models import User
 from users.utils import translate_text_to_user_language
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserResetPasswordForm, \
+    UserResetPasswordEmailForm
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import auth, messages
@@ -14,7 +16,7 @@ from payments.models import ExchangeRate
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
+from django.utils.encoding import force_bytes, force_str, force_text
 from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login as auth_login
@@ -28,10 +30,7 @@ def activate(request, uidb64, token):
         user = get_user_model().objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
         user = None
-    print('user', user)
-    print('token', token)
-    print('user.is_confirmed', user.is_confirmed)
-    print('account_activation_token.check_token(user, token)', account_activation_token.check_token(user, token))
+
     if user and account_activation_token.check_token(user, token):
         user.is_confirmed = True
         user.save()
@@ -46,7 +45,7 @@ def activate(request, uidb64, token):
 
 def activate_email(request, user, to_email):
     mail_subject = translate_text_to_user_language('Activate your account.', request)
-    message = render_to_string('template_activate_account.html', {
+    message = render_to_string('users/email_activate_account.html', {
         'user': user.username,
         'domain': get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -118,10 +117,10 @@ def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(instance=request.user, files=request.FILES, data=request.POST, request=request)
         if form.is_valid():
-            if form.fields['username'] != request.user.username and request.user.number_of_available_username_changes == 0:
-                messages.error(request, translate_text_to_user_language('You can not change your username!', request))
+            if 'username' in form.changed_data and request.user.number_of_available_username_changes == 0:
+                messages.error(request, translate_text_to_user_language('You cannot change your username!', request))
                 return HttpResponseRedirect(reverse('user:profile'))
-            elif form.fields['username'] != request.user.username and request.user.number_of_available_username_changes > 0:
+            elif 'username' in form.changed_data and request.user.number_of_available_username_changes > 0:
                 request.user.number_of_available_username_changes -= 1
                 request.user.save()
 
@@ -148,6 +147,7 @@ def profile(request):
         'title': translate_text_to_user_language('Profile', request),
         'form': form,
         'baskets': baskets,
+        'user': request.user,
     }
 
     return render(request, 'users/profile.html', context)
@@ -164,3 +164,82 @@ def signup_redirect(request):
     messages.error(request, translate_text_to_user_language('Something went wrong, it may be that the user with this email already exists!', request))
     return redirect(reverse('user:login'))
 
+
+def reset(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        if not account_activation_token.check_token(user, token):
+            messages.error(request, translate_text_to_user_language('Sorry, the link is no longer valid!', request))
+            return redirect(reverse('user:reset_password'))
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if request.method == 'POST':
+        form = UserResetPasswordForm(data=request.POST, request=request)
+        if form.is_valid():
+            user.set_password(form.cleaned_data.get('password'))
+            user.save()
+            messages.success(request, translate_text_to_user_language('Your password has been successfully changed!', request))
+            return HttpResponseRedirect(reverse('user:login'))
+    else:
+        form = UserResetPasswordForm(request=request)
+
+    context = {
+        'title': translate_text_to_user_language('Reset password', request),
+        'form': form,
+        'uidb64': uidb64,
+        'token': token,
+        'errors': [error for field, error in form.errors.items()],
+    }
+    return render(request, 'users/reset_password.html', context)
+
+
+
+
+def reset_email(request, user):
+    current_site = get_current_site(request)
+    subject = translate_text_to_user_language('Reset password', request)
+    message = render_to_string('users/email_reset_password.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'title': translate_text_to_user_language('Reset password', request),
+    })
+    user.email_user(subject, message)
+
+
+def reset_password(request):
+    if request.user.is_authenticated:
+        messages.error(request, translate_text_to_user_language('You are already logged in!', request))
+        return redirect(reverse('user:profile'))
+
+    if request.method == 'POST':
+        form = UserResetPasswordEmailForm(data=request.POST, request=request)
+        if form.is_valid():
+            user = User.objects.filter(email=form.cleaned_data.get('email')).first()
+
+            context = {
+                'title': translate_text_to_user_language('Reset password', request),
+                'form': form,
+            }
+
+            if user:
+                reset_email(request, user)
+                context['email'] = form.cleaned_data.get('email')
+                messages.add_message(request, messages.SUCCESS, translate_text_to_user_language(
+                    'An email has been sent to your email address with a link to reset your password!', request))
+            else:
+                messages.add_message(request, messages.ERROR,
+                                     translate_text_to_user_language('User with this email does not exist!', request))
+
+            return render(request, 'users/reset_password_email_form.html', context)
+    else:
+        form = UserResetPasswordEmailForm(request=request)
+
+    context = {
+        'title': translate_text_to_user_language('Reset password', request),
+        'form': form,
+    }
+    return render(request, 'users/reset_password_email_form.html', context)

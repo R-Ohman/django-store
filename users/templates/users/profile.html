@@ -72,7 +72,8 @@
                 </div>
                 <div class="form-row">
                     <div class="col-lg-12" style="margin-top: 33px;">
-                        <input class="btn btn-info btn-block" type="submit" value="{% trans 'Save' %}">
+                        <input class="btn btn-info btn-block" type="submit"
+                               value="{% trans 'Save' %}{% if not user.is_confirmed %} {% trans 'and confirm email' %}{% endif %}">
                     </div>
                 </div>
             </form>

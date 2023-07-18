@@ -2,9 +2,6 @@
 {% load i18n %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <main>
     <div class="container">
         <div class="row justify-content-center">
@@ -120,38 +117,6 @@
     </div>
 </main>
 
-<script>
-    // Show/hide password requirements based on user interaction
-    $(document).ready(function () {
-        $('#id_password1').on('focus', function () {
-            $('.password-requirements').removeClass('d-none');
-        });
-
-        $('#id_password1').on('blur', function () {
-            if ($(this).val() === '') {
-                $('.password-requirements').addClass('d-none');
-            }
-        });
-    });
-
-</script>
-
-<script>
-    const togglePasswords = document.querySelectorAll(".togglePassword");
-    const togglePasswordsArray = Array.from(togglePasswords);
-
-    togglePasswordsArray.forEach((togglePassword, index) => {
-        togglePassword.addEventListener('click', function (e) {
-            const password = document.querySelector("#id_password" + (index + 1));
-            // toggle the type attribute
-            const type = password.getAttribute("type") === "password" ? "text" : "password";
-            password.setAttribute("type", type);
-
-            // toggle the icon
-            this.classList.toggle("bi-eye");
-        })
-    });
-
-</script>
+<script src="{% static '/vendor/js/password-inputs.js' %}"></script>
 
 {% endblock %}

@@ -1,7 +1,9 @@
+from captcha.widgets import ReCaptchaV3
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from users.models import User
 from users.utils import translate_text_to_user_language
+from captcha.fields import ReCaptchaField
 
 
 class UserLoginForm(AuthenticationForm):
@@ -11,6 +13,7 @@ class UserLoginForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4',
     }))
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request', None)
@@ -62,8 +65,8 @@ class UserRegistrationForm(UserCreationForm):
             for field, label in dict.items():
                 self.fields[field].widget.attrs['placeholder'] = label
 
-        self.fields['password1'].help_text = translate_text_to_user_language(
-            'Your password must contain at least 8 characters, including both letters and numbers.', request)
+            self.fields['password1'].help_text = translate_text_to_user_language(
+                'Your password must contain at least 8 characters, including both letters and numbers.', request)
 
 
     class Meta:
@@ -130,3 +133,47 @@ class UserProfileForm(UserChangeForm):
             return self.instance.email
         # Otherwise, return the cleaned value from the form data
         return self.cleaned_data['email']
+
+
+class UserResetPasswordEmailForm(forms.Form):
+    email = forms.CharField(widget=forms.EmailInput(attrs={
+        'class': 'form-control py-4',
+        'aria-describedby': 'emailHelp',
+    }))
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
+        super(UserResetPasswordEmailForm, self).__init__(*args, **kwargs)
+        if request:
+            self.fields['email'].widget.attrs['placeholder'] = translate_text_to_user_language('Enter your e-mail address', request)
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+        )
+
+
+class UserResetPasswordForm(UserCreationForm):
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control py-4',
+    }))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control py-4',
+    }))
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
+        super(UserResetPasswordForm, self).__init__(*args, **kwargs)
+        if request:
+            self.fields['password1'].widget.attrs['placeholder'] = translate_text_to_user_language('Enter a new password', request)
+            self.fields['password2'].widget.attrs['placeholder'] = translate_text_to_user_language('Confirm the new password', request)
+            self.fields['password1'].help_text = translate_text_to_user_language(
+                'Your password must contain at least 8 characters, including both letters and numbers.', request)
+
+    class Meta:
+        model = User
+        fields = (
+            'password1',
+            'password2',
+        )
