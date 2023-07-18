@@ -34,3 +34,8 @@ body {
         height: 50vw;
     }
 }
+
+.toast-success {
+  background-color: #4caf50;
+  color: #fff;
+}

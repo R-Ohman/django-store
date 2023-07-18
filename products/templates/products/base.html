@@ -19,8 +19,8 @@
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
-<!-- Toastr JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
     <!-- Custom styles for this template -->
@@ -98,19 +98,19 @@
                         <form action="{% url 'set_language' %}" method="post">
                             {% csrf_token %}
                             <li>
-                                <img id="en" src="{% static '/vendor/img/flags/united-kingdom.png' %}" width="30" height="30">
+                                <img id="en" src="{% static '/vendor/img/flags/united-kingdom.png' %}" class="ml-3" width="30" height="30">
                                 <label for="en" class="text-light">
                                     English
                                 </label>
                             </li>
                             <li>
-                                <img id="uk" src="{% static '/vendor/img/flags/ukraine.png' %}" width="30" height="30">
+                                <img id="uk" src="{% static '/vendor/img/flags/ukraine.png' %}" class="ml-3" width="30" height="30">
                                 <label for="uk" class="text-light">
                                     Українська
                                 </label>
                             </li>
                             <li>
-                                <img id="pl" src="{% static '/vendor/img/flags/poland.png' %}" width="30" height="30">
+                                <img id="pl" src="{% static '/vendor/img/flags/poland.png' %}" class="ml-3" width="30" height="30">
                                 <label for="pl" class="text-light">
                                     Polski
                                 </label>
@@ -149,6 +149,7 @@
 <!-- Custom scripts for this template -->
 <script src="{% static '/vendor/js/nav-change-lang-submit.js' %}"></script>
 <script src="{% static '/vendor/js/message_notifications.js' %}"></script>
+
 </body>
 
 </html>

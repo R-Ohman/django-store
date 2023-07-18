@@ -68,7 +68,6 @@ def login(request):
         return redirect(reverse('user:profile'))
 
     errors = request.GET.getlist('errors', [])
-
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST, request=request)
         if form.is_valid():
@@ -77,13 +76,17 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
+                next_url = request.POST.get('next', '/')
+                return redirect(next_url)
     else:
+        next_url = request.GET.get('next') if request.GET.get('next') else request.META.get('HTTP_REFERER')
         form = UserLoginForm(request=request)
+
     context = {
         'title': translate_text_to_user_language('Authorization', request),
         'form': form,
         'errors': errors,
+        'next': next_url,
     }
     return render(request, 'users/login.html', context)
 

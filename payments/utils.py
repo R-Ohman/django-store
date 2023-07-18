@@ -61,7 +61,7 @@ def is_within_range(num, range_base, range_delta):
 
 def receipt_email(order):
     print('receipt_email')
-    subject = translate_text_to_language_by_currency(f'Purchase receipt №{order.id}', order.currency)
+    subject = "Store | " + translate_text_to_language_by_currency(f'Purchase receipt №{order.id}', order.currency)
 
     message = render_to_string('orders/email_purchase_receipt.html', {
         'order': order,
@@ -75,20 +75,3 @@ def receipt_email(order):
         print('receipt_email sent')
     else:
         print('receipt_email not sent')
-
-def test_send(mail, order):
-    print('test_send')
-    subject = translate_text_to_language_by_currency(f'Purchase receipt №{order.id}', order.currency)
-
-    message = render_to_string('orders/email_purchase_receipt.html', {
-        'order': order,
-        'order_items': OrderItem.objects.filter(order=order),
-    })
-
-    email = EmailMultiAlternatives(subject, message, to=[mail])
-    email.attach_alternative(message, "text/html")
-
-    if email.send():
-        print('test_send sent')
-    else:
-        print('test_send not sent')
