@@ -123,9 +123,11 @@ class UserProfileForm(UserChangeForm):
 
         if not self.instance.number_of_available_username_changes:
             self.fields['username'].widget.attrs['disabled'] = True
+            self.fields['username'].required = False
         else:
             self.fields['username'].help_text = translate_text_to_user_language('Username is used to log in to the account.\
                                                                                 Note: You can change it once!', request)
+
 
     def clean_email(self):
         # If the email field is disabled, return the current value from the instance
@@ -133,6 +135,13 @@ class UserProfileForm(UserChangeForm):
             return self.instance.email
         # Otherwise, return the cleaned value from the form data
         return self.cleaned_data['email']
+
+    def clean_username(self):
+        # If the username field is disabled, return the current value from the instance
+        if self.fields['username'].widget.attrs.get('disabled') and self.fields['username'].widget.attrs['disabled']:
+            return self.instance.username
+        # Otherwise, return the cleaned value from the form data
+        return self.cleaned_data['username']
 
 
 class UserResetPasswordEmailForm(forms.Form):

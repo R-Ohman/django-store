@@ -117,12 +117,16 @@ def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(instance=request.user, files=request.FILES, data=request.POST, request=request)
         if form.is_valid():
-            if 'username' in form.changed_data and request.user.number_of_available_username_changes == 0:
+            if form.cleaned_data.get('username') != request.user.username and request.user.number_of_available_username_changes == 0:
                 messages.error(request, translate_text_to_user_language('You cannot change your username!', request))
                 return HttpResponseRedirect(reverse('user:profile'))
-            elif 'username' in form.changed_data and request.user.number_of_available_username_changes > 0:
+            elif form.cleaned_data.get('username') != request.user.username and request.user.number_of_available_username_changes > 0:
                 request.user.number_of_available_username_changes -= 1
                 request.user.save()
+
+            print("form.cleaned_data.get('username') != request.user.username")
+            print(form.cleaned_data.get('username'))
+            print(request.user.username) # WARN - check when we change it
 
             user = form.save()
             if form.cleaned_data.get('email') and not user.is_confirmed:

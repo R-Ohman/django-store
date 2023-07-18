@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from paypal.standard.models import ST_PP_COMPLETED
 
 from orders.models import Order
-from payments.utils import order_paid_update_stock, is_within_range
+from payments.utils import order_paid_update_stock, is_within_range, receipt_email
 from store.settings import PAYPAL_RECEIVER_EMAIL
 
 
@@ -20,6 +20,7 @@ def process_payment(sender, **kwargs):
             return
 
         order_paid_update_stock(sender)
+        receipt_email(order)
 
 
 @receiver(valid_ipn_received)

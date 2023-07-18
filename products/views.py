@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
+
+from orders.models import Order
 from products.models import ProductCategory, Product, Basket, CarouselImage, Carousel
 from payments.models import ExchangeRate, Currency
 from django.http import JsonResponse
@@ -16,6 +18,7 @@ from users.utils import translate_text_to_user_language
 
 
 def index(request):
+
     context = {
         'title': translate_text_to_user_language('Homepage', request),
         'is_promotion': False,

@@ -7,6 +7,7 @@ from users.models import User
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'is_staff', 'is_confirmed', 'date_joined')
+    list_display_links = ('username', 'email')
 
     fieldsets = (
         (None, {
