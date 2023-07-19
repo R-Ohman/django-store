@@ -1,21 +1,24 @@
 from django import forms
+from django_countries.fields import CountryField
 
+from orders.utils import validate_postal_code
+from phonenumber_field.formfields import PhoneNumberField
 from orders.models import Order
+from users.utils import translate_text_to_user_language
 
 
 class OrderForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        request = kwargs.pop('request', None)
         super(OrderForm, self).__init__(*args, **kwargs)
-        self.user = user
+        self.request = request
 
-        user_last_order = Order.objects.filter(user=self.user).last()
+        user_last_order = Order.objects.filter(user=self.request.user).last()
 
         dict = {
-            'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
-            'email': self.user.email,
+            'first_name': self.request.user.first_name,
+            'last_name': self.request.user.last_name,
+            'email': self.request.user.email,
             'address': user_last_order.address if user_last_order else '',
         }
         for field, label in dict.items():
@@ -23,13 +26,48 @@ class OrderForm(forms.ModelForm):
 
     def save(self, commit=True):
         order = super(OrderForm, self).save(commit=False)
-        # Now you can access self.user and associate it with the order
-        if self.user:
-            order.user = self.user
+
+        if self.request.user:
+            order.user = self.request.user
 
         if commit:
             order.save()
         return order
+
+    def clean_postal_code(self):
+        postal_code = self.cleaned_data['postal_code']
+        country_code = self.cleaned_data['country'].lower()
+        if not validate_postal_code(country_code, postal_code):
+            raise forms.ValidationError(
+                translate_text_to_user_language("Invalid postal code format.", self.request))
+        return postal_code
+
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        if len(first_name) < 2:
+            raise forms.ValidationError(
+                translate_text_to_user_language("Name should have at least 2 characters.", self.request))
+        if len(first_name) > 100:
+            raise forms.ValidationError(
+                translate_text_to_user_language("Name should not exceed 100 characters.", self.request))
+        if not first_name.isalpha():
+            raise forms.ValidationError(
+                translate_text_to_user_language("Name should only contain alphabetic characters.", self.request))
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        if len(last_name) < 2:
+            raise forms.ValidationError(
+                translate_text_to_user_language("Last name should have at least 2 characters.", self.request))
+        if len(last_name) > 100:
+            raise forms.ValidationError(
+                translate_text_to_user_language("Last name should not exceed 100 characters.", self.request))
+        if not last_name.isalpha():
+            raise forms.ValidationError(
+                translate_text_to_user_language("Last name should only contain alphabetic characters.", self.request))
+        return last_name
 
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
@@ -49,11 +87,18 @@ class OrderForm(forms.ModelForm):
         'placeholder': 'Ukraine, Kyiv, Khreschatyk street, 1',
     }), required=True)
 
+    phone = PhoneNumberField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': '+380 00 000 00 00',
+    }), required=True)
+    country = CountryField().formfield(widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), required=True)
+    postal_code = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': '12345',
+    }), required=True)
+
     class Meta:
         model = Order
-        fields = (
-            'first_name',
-            'last_name',
-            'email',
-            'address',
-        )
+        exclude = ['user', 'currency', 'status']

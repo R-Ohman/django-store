@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from store.settings import LOGIN_URL
 from users.models import User
-from users.utils import translate_text_to_user_language
+from users.utils import translate_text_to_user_language, check_referer_no_keywords
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserResetPasswordForm, \
     UserResetPasswordEmailForm
 from django.shortcuts import HttpResponseRedirect
@@ -24,6 +24,7 @@ from django.contrib.auth import login as auth_login
 from users.tokens import account_activation_token
 
 
+@login_required(login_url=LOGIN_URL)
 def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -43,6 +44,7 @@ def activate(request, uidb64, token):
         return redirect(reverse('index'))
 
 
+@login_required(login_url=LOGIN_URL)
 def activate_email(request, user, to_email):
     mail_subject = translate_text_to_user_language('Activate your account.', request)
     message = render_to_string('users/email_activate_account.html', {
@@ -79,7 +81,13 @@ def login(request):
                 next_url = request.POST.get('next', '/')
                 return redirect(next_url)
     else:
-        next_url = request.GET.get('next') if request.GET.get('next') else request.META.get('HTTP_REFERER')
+        if request.GET.get('next'):
+            next_url = request.GET.get('next')
+        elif request.META.get('HTTP_REFERER') and check_referer_no_keywords(request):
+            print(request.META.get('HTTP_REFERER'))
+            next_url = request.META.get('HTTP_REFERER')
+        else:
+            next_url = '/'
         form = UserLoginForm(request=request)
 
     context = {

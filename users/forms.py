@@ -149,6 +149,7 @@ class UserResetPasswordEmailForm(forms.Form):
         'class': 'form-control py-4',
         'aria-describedby': 'emailHelp',
     }))
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request', None)
