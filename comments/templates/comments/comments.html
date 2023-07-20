@@ -2,33 +2,32 @@
 {% load i18n %}
 <script src="{% static '/vendor/js/comments.js' %}"></script>
 <div class="comments">
+    <div class="card-header">
+        <h3 class="text-center font-weight-light my-4">
+            Comments
+        </h3>
+    </div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-5">
-                {% if messages or form.non_field_errors %}
+                {% if form.non_field_errors %}
                 <div class="alert {% if messages.success %} alert-success {% else %}
                  alert-warning {% endif %} alert-dismissible fade show" role="alert"
                      style="margin-top: 50px;">
-                    {% if messages %}
-                    {% for message in messages %}
-                    <strong>{{ message }}</strong>
-                    {% endfor %}
-                    {% else %}
                     <strong>{{ form.non_field_errors }}</strong>
-                    {% endif %}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 {% endif %}
-                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card shadow-lg border-0 rounded-lg my-5">
                     <div class="card-header">
                         <h3 class="text-center font-weight-light my-4">
                             Add a Comment
                         </h3>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{% url 'products:product_view' product.id %}"
+                        <form method="post" action="{% url 'products:comments:view' product.id %}"
                               enctype="multipart/form-data">
                             {% csrf_token %}
 
@@ -54,16 +53,8 @@
                             </div>
 
                             {{ form.captcha }}
-
                             <input class="btn btn-primary" type="submit" name="submit" value="Add the comment"/>
                         </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div class="small">
-                            <a href="{% url 'user:registration' %}">
-                                {% trans 'Need an account? Sign up!'%}
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -71,19 +62,13 @@
     </div>
 
     <!-- List of Comments for this Product -->
-
-    <div class="card-header">
-        <h3 class="text-center font-weight-light my-4">
-            Comments
-        </h3>
-    </div>
     <div class="row">
         {% for comment in product.comments.all %}
         <div class="col-lg-4 mb-4">
             <div class="card shadow-lg border-0 rounded-lg">
                 <div class="card-header">
                     <h3 class="text-center font-weight-light my-4">
-                        {{ comment.user.username }} ({{ comment.rating }})
+                        {{ comment.user.username }} (<span id="rating-{{ comment.id }}">{{ comment.rating }}</span>)
                     </h3>
                 </div>
                 <div class="card-body">
@@ -107,17 +92,26 @@
                         <p class="small mb-1">
                             Attachments
                         </p>
+                        {% if comment.attachments.all %}
                         {% for attachment in comment.attachments.all %}
                         <img src="{{ attachment.file.url }}" width="100px" height="100px"/>
                         {% endfor %}
+                        {% else %}
+                        <p class="small mb-1">
+                            No attachments
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-footer text-center d-flex justify-content-between">
                     <div class="small">
-                        <a href="#">Like</a>
+                        <a href="#" class="like" data-comment-id="{{ comment.id }}" data-is-positive="true">Like</a>
                     </div>
                     <div class="small">
-                        <a href="#">Dislike</a>
+                        {{ comment.created_at|date:"Y-m-d" }}
+                    </div>
+                    <div class="small">
+                        <a href="#" class="like" data-comment-id="{{ comment.id }}" data-is-positive="false">Dislike</a>
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@
             </a>
             <div class="card-body">
                 <h4 class="card-title">
-                    <a href="{% url 'products:product_view' product_with_converted_price.product.id %}">{{ product_with_converted_price.product.name }}</a>
+                    <a href="{% url 'products:comments:view' product_with_converted_price.product.id %}">{{ product_with_converted_price.product.name }}</a>
                 </h4>
                 <h5>{{ product_with_converted_price.price }} {{ currency.symbol }}</h5>
                 <p class="card-text">{{ product_with_converted_price.product.description }}</p>

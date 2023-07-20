@@ -1,13 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from products.views import products
 from products.views import add_product, delete_basket, basket_update
-from comments.views import product_view
 
 app_name = 'products'
 
 urlpatterns = [
     path('', products, name='index'),
-    path('<int:product_id>/', product_view, name='product_view'),
+    path('comments/', include('comments.urls', namespace='comments')),
     path('category/<int:category_id>/', products, name='category'),
     path('basket/add/<int:product_id>/', add_product, name='basket_add'),
     path('basket/delete/<int:basket_id>/', delete_basket, name='basket_delete'),

@@ -69,6 +69,7 @@ def login(request):
         messages.error(request, translate_text_to_user_language('You are already logged in!', request))
         return redirect(reverse('user:profile'))
 
+    next_url = '/'
     errors = request.GET.getlist('errors', [])
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST, request=request)
@@ -86,8 +87,6 @@ def login(request):
         elif request.META.get('HTTP_REFERER') and check_referer_no_keywords(request):
             print(request.META.get('HTTP_REFERER'))
             next_url = request.META.get('HTTP_REFERER')
-        else:
-            next_url = '/'
         form = UserLoginForm(request=request)
 
     context = {
