@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 
+from comments.forms import CommentForm
 from orders.models import Order
 from products.models import ProductCategory, Product, Basket, CarouselImage, Carousel
 from payments.models import ExchangeRate, Currency
@@ -156,18 +157,3 @@ def basket_update(request, id):
             'success': False,
             'message': translate_text_to_user_language('Invalid request', request)
             })
-
-
-def product_view(request, product_id):
-    product = Product.objects.get(id=product_id)
-    prev_page = request.META.get('HTTP_REFERER') if request.META.get('HTTP_REFERER') else '/'
-    currency, price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
-
-    context = {
-        'title': product.name,
-        'product': product,
-        'previous_page': prev_page,
-        'currency': currency,
-        'price': round_number(price),
-    }
-    return render(request, 'products/product-view.html', context)

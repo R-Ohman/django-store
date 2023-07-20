@@ -13,14 +13,22 @@ class OrderForm(forms.ModelForm):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.request = request
 
-        user_last_order = Order.objects.filter(user=self.request.user).last()
-
         dict = {
             'first_name': self.request.user.first_name,
             'last_name': self.request.user.last_name,
             'email': self.request.user.email,
-            'address': user_last_order.address if user_last_order else '',
         }
+
+        user_last_order = Order.objects.filter(user=self.request.user).last()
+        if user_last_order:
+            dict.update({
+                'country': user_last_order.country,
+                'address': user_last_order.address,
+                'postal_code': user_last_order.postal_code,
+                'phone': user_last_order.phone,
+            })
+            self.fields['country'].initial = user_last_order.country
+
         for field, label in dict.items():
             self.fields[field].widget.attrs['value'] = label
 

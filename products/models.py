@@ -1,5 +1,6 @@
 from django.db import models
 
+from comments.models import ProductComment
 # from users.models import User
 # from payments.models import Currency
 
@@ -53,6 +54,15 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'product'
         verbose_name_plural = 'products'
+
+    @property
+    def assessment(self):
+        assessments = [object.assessment for object in ProductComment.objects.filter(product=self)]
+        return sum(assessments) / len(assessments) if assessments else None
+
+    @property
+    def comments(self):
+        return ProductComment.objects.filter(product=self)
 
 
 class Basket(models.Model):
