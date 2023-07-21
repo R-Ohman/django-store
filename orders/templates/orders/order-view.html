@@ -12,8 +12,8 @@
         <div class="text-center mt-5">
             <h1>{% trans 'Order' %} №{{ order.id }}</h1>
             <div class="orders mt-5">
-                <div class="row">
-                    <div class="col">
+                <div class="row justify-content-center">
+                    <div class="col-12">
                         <table class="table">
                             <thead>
                             <tr>
@@ -27,7 +27,7 @@
                             {% for product_basket in product_baskets %}
                             <tr>
                                 <th scope="row">
-                                    <a href="{% url 'products:product_view' product_basket.product.id %}">
+                                    <a href="{% url 'products:comments:view' product_basket.product.id %}">
                                         {{ product_basket.product.name }}
                                     </a>
                                 </th>
@@ -44,7 +44,7 @@
                     </div>
 
                     <h3 class="mt-5">{% trans 'Shipping information' %}</h3>
-                    <div class="orders my-5">
+                    <div class="orders my-5 col-12">
                         <table class="table">
                             <tr>
                                 <th scope="row">

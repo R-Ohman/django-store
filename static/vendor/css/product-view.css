@@ -33,3 +33,8 @@
     font-weight: bold;
     color: #000;
 }
+
+.toast-success {
+    background-color: #4caf50;
+    color: #fff;
+}

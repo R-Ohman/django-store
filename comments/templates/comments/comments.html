@@ -1,6 +1,5 @@
 {% load static %}
 {% load i18n %}
-<script src="{% static '/vendor/js/comments.js' %}"></script>
 <!-- Add Fancybox CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
 
@@ -76,109 +75,14 @@
     </div>
     {% endif %}
     <!-- List of Comments for this Product -->
-    <div class="row">
-        {% for comment in comments %}
-        <div class="col-lg-4 mb-4">
-            <div class="card shadow-lg border-0 rounded-lg">
-                <div class="card-header">
-                    <h3 class="text-center font-weight-light my-4">
-                        {{ comment.user.username }} (<span id="rating-{{ comment.id }}">{{ comment.rating }}</span>)
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <p class="small mb-1">
-                            Assessment
-                        </p>
-                        <div>
-                            {{ comment.assessment }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <p class="small mb-1">
-                            Text
-                        </p>
-                        {{ comment.text }}
-                    </div>
-
-                    <div class="form-group">
-                        <p class="small mb-1">
-                            Attachments
-                        </p>
-                        <div class="row row-cols-1 row-cols-md-4">
-                            {% if comment.attachments.all %}
-                            {% for attachment in comment.attachments.all %}
-                            <div class="col mb-3">
-                                <div class="card">
-                                    <a href="{{ attachment.file.url }}" data-fancybox="comment-gallery-{{ comment.id }}">
-                                        <img src="{{ attachment.file.url }}" alt="{{ attachment.file.name }}" class="card-img-top"/>
-                                    </a>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            {% else %}
-                            <div class="col-12">
-                                <p class="small mb-1">
-                                    No photos
-                                </p>
-                            </div>
-                            {% endif %}
-                        </div>
-
-                    </div>
-                </div>
-                <div class="card-footer text-center d-flex justify-content-between">
-                    <div class="small">
-                        <a href="#" class="like" data-comment-id="{{ comment.id }}" data-is-positive="true">Like</a>
-                    </div>
-                    <div class="small">
-                        {{ comment.created_at|date:"Y-m-d" }}
-                    </div>
-                    <div class="small">
-                        <a href="#" class="like" data-comment-id="{{ comment.id }}" data-is-positive="false">Dislike</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+    <div id="comments-list">
+        {% include 'comments/comments_cards.html' %}
     </div>
+
+    <div class="pagination justify-content-center">
+        {% include 'comments/pagination.html' %}
+    </div>
+
 </div>
 
-<script>
-
-    $(document).ready(function () {
-        // Initialize Fancybox
-        $("[data-fancybox]").fancybox({
-            arrows: true, // Display navigation arrows
-            infobar: true, // Display image count and caption
-            buttons: ["zoom", "slideShow", "fullScreen", "close"], // Customize buttons
-            protect: true, // Prevent right-clicking and downloading images
-            transitionEffect: "slide", // Set transition effect
-        });
-
-        // Close Fancybox when clicking outside the image
-        $(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
-            if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
-                $.fancybox.close();
-            }
-        });
-    });
-
-    // Initialize Fancybox
-    $("[data-fancybox]").fancybox({
-        arrows: true,
-        infobar: true,
-        buttons: ["zoom", "slideShow", "fullScreen", "close"],
-        protect: true,
-        transitionEffect: "slide",
-    });
-
-    // Close Fancybox when clicking outside the image
-    $(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
-        if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
-            $.fancybox.close();
-        }
-    });
-
-</script>
+<script src="{% static '/vendor/js/comments.js' %}"></script>

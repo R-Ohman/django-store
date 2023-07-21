@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<nav id="page-list" aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if not comments.has_previous %} disabled {% endif %}">
+            <a class="page-link" data-page="{% if comments.has_previous %}{{ comments.previous_page_number }}{% else %}1{% endif %}" href="#">
+                {% trans 'Previous' %}
+            </a>
+        </li>
+        {% for page in comments.paginator.page_range %}
+        <li class="page-item {% if page == comments.number %} active {% endif %}">
+            <a class="page-link" data-page="{{ page }}" href="#">
+                {{ page }}
+            </a>
+        </li>
+        {% endfor %}
+
+        <li class=" page-item {% if not comments.has_next %} disabled {% endif %}">
+            <a class="page-link" data-page="{% if comments.has_next %}{{ comments.next_page_number }}{% else %}{{ comments.paginator.num_pages }}{% endif %}" href="#">
+                {% trans 'Next' %}
+            </a>
+        </li>
+    </ul>
+</nav>

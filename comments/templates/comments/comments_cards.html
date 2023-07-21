@@ -1,0 +1,82 @@
+{% load static %}
+{% load i18n %}
+<script>
+    // Define a JavaScript variable with the CSRF token value
+    var csrfToken = "{{ csrf_token }}";
+</script>
+
+<div class="row" id="comment-container" data-current-page="{{ comments.number }}">
+    {% for comment in comments %}
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-lg border-0 rounded-lg">
+            <div class="card-header">
+                {% if comment.user == request.user or request.user.is_superuser or request.user.is_staff %}
+                    <a href="{% url 'products:comments:delete' comment.id %}">
+                        <svg class="float-right my-4" xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 448 512">
+                           <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+                        </svg>
+                    </a>
+                {% endif %}
+                <h3 class="text-center font-weight-light my-4">
+                    {{ comment.user.username }} (<span id="rating-{{ comment.id }}">{{ comment.rating }}</span>)
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <p class="small mb-1">
+                        {% trans 'Assessment' %}
+                    </p>
+                    <div>
+                        {{ comment.assessment }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="small mb-1">
+                        Text
+                    </p>
+                    {{ comment.text }}
+                </div>
+
+                <div class="form-group">
+                    <p class="small mb-1">
+                        {% trans 'Attachments' %}
+                    </p>
+                    <div class="row row-cols-1 row-cols-md-4">
+                        {% if comment.attachments.all %}
+                        {% for attachment in comment.attachments.all %}
+                        <div class="col mb-3">
+                            <div class="card">
+                                <a href="{{ attachment.file.url }}" data-fancybox="comment-gallery-{{ comment.id }}">
+                                    <img src="{{ attachment.file.url }}" alt="{{ attachment.file.name }}"
+                                         class="card-img-top"/>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="col-12">
+                            <p class="small mb-1">
+                                {% trans 'No photos' %}
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-footer text-center d-flex justify-content-between">
+                <div class="small">
+                    <a href="#" class="like" data-comment-id="{{ comment.id }}" data-is-positive="true">{% trans 'Like' %}</a>
+                </div>
+                <div class="small">
+                    {{ comment.created_at|date:"Y-m-d" }}
+                </div>
+                <div class="small">
+                    <a href="#" class="like" data-comment-id="{{ comment.id }}" data-is-positive="false">{% trans 'Dislike' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

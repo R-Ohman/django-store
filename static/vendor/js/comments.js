@@ -71,3 +71,59 @@ function addListenersToInputs() {
 
 document.addEventListener('DOMContentLoaded', addListenersToInputs);
 
+$(document).ready(function () {
+    // Initialize Fancybox
+    $("[data-fancybox]").fancybox({
+        arrows: true, // Display navigation arrows
+        infobar: true, // Display image count and caption
+        buttons: ["zoom", "slideShow", "fullScreen", "close"], // Customize buttons
+        protect: true, // Prevent right-clicking and downloading images
+        transitionEffect: "slide", // Set transition effect
+    });
+
+    // Close Fancybox when clicking outside the image
+    $(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
+        if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
+            $.fancybox.close();
+        }
+    });
+
+
+    // Pagination
+    function loadComments(page) {
+        $.ajax({
+            url: window.location.pathname,
+            data: {page: page},
+            success: function (response) {
+                $('#comments-list').html(response.comments_list_html);
+                $('#page-list').html(response.page_list_html);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    // Use event delegation for handling the click event on pagination links
+    $(document).on('click', '.pagination .page-link', function (e) {
+        e.preventDefault();
+        var page = $(this).data('page');
+        loadComments(page);
+    });
+});
+
+// Initialize Fancybox
+$("[data-fancybox]").fancybox({
+    arrows: true,
+    infobar: true,
+    buttons: ["zoom", "slideShow", "fullScreen", "close"],
+    protect: true,
+    transitionEffect: "slide",
+});
+
+// Close Fancybox when clicking outside the image
+$(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
+    if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
+        $.fancybox.close();
+    }
+});

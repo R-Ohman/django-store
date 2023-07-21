@@ -13,7 +13,6 @@ $(document).ready(function() {
       success: function(response) {
         $('#product-list').html(response.product_list_html);
         $('#page-list').html(response.page_list_html);
-        // После обновления контента привязываем событие click для кнопок добавления в корзину
         bindAddToBasketEvent();
       },
       error: function(xhr, status, error) {
