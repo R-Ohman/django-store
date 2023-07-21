@@ -1,12 +1,23 @@
 {% load static %}
 {% load i18n %}
 <script src="{% static '/vendor/js/comments.js' %}"></script>
-<div class="comments">
+<!-- Add Fancybox CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+<!-- Add jQuery (required by Fancybox) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Add Fancybox JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+<div id="comments">
     <div class="card-header">
         <h3 class="text-center font-weight-light my-4">
             Comments
         </h3>
     </div>
+    {% if can_comment %}
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-5">
@@ -23,7 +34,7 @@
                 <div class="card shadow-lg border-0 rounded-lg my-5">
                     <div class="card-header">
                         <h3 class="text-center font-weight-light my-4">
-                            Add a Comment
+                            {% trans 'Add a comment' %}
                         </h3>
                     </div>
                     <div class="card-body">
@@ -33,23 +44,26 @@
 
                             <div class="form-group">
                                 <label class="small mb-1" for="{{ form.assessment.id_for_label }}">
-                                    Assessment
+                                    {% trans 'Assessment' %}
                                 </label>
                                 {{ form.assessment }}
                             </div>
 
                             <div class="form-group">
                                 <label class="small mb-1" for="{{ form.text.id_for_label }}">
-                                    Text
+                                    {% trans 'Text' %}
                                 </label>
                                 {{ form.text }}
                             </div>
 
                             <div class="custom-file mb-3">
-                                <input class="custom-file-input" type="file" name="files" id="files" multiple accept="image/*" onchange="limitFileSelection()" />
-                                <label class="custom-file-label" for="files">
-                                    Attachment
-                                </label>
+                                <div class="custom-file mb-3">
+                                    <input class="custom-file-input" type="file" name="files" id="files" multiple
+                                           accept="image/*" onchange="limitFileSelection()"/>
+                                    <label class="custom-file-label" for="files">
+                                        {% trans 'Attachment' %}
+                                    </label>
+                                </div>
                             </div>
 
                             {{ form.captcha }}
@@ -60,10 +74,10 @@
             </div>
         </div>
     </div>
-
+    {% endif %}
     <!-- List of Comments for this Product -->
     <div class="row">
-        {% for comment in product.comments.all %}
+        {% for comment in comments %}
         <div class="col-lg-4 mb-4">
             <div class="card shadow-lg border-0 rounded-lg">
                 <div class="card-header">
@@ -92,15 +106,26 @@
                         <p class="small mb-1">
                             Attachments
                         </p>
-                        {% if comment.attachments.all %}
-                        {% for attachment in comment.attachments.all %}
-                        <img src="{{ attachment.file.url }}" width="100px" height="100px"/>
-                        {% endfor %}
-                        {% else %}
-                        <p class="small mb-1">
-                            No attachments
-                        </p>
-                        {% endif %}
+                        <div class="row row-cols-1 row-cols-md-4">
+                            {% if comment.attachments.all %}
+                            {% for attachment in comment.attachments.all %}
+                            <div class="col mb-3">
+                                <div class="card">
+                                    <a href="{{ attachment.file.url }}" data-fancybox="comment-gallery-{{ comment.id }}">
+                                        <img src="{{ attachment.file.url }}" alt="{{ attachment.file.name }}" class="card-img-top"/>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="col-12">
+                                <p class="small mb-1">
+                                    No photos
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+
                     </div>
                 </div>
                 <div class="card-footer text-center d-flex justify-content-between">
@@ -119,3 +144,41 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function () {
+        // Initialize Fancybox
+        $("[data-fancybox]").fancybox({
+            arrows: true, // Display navigation arrows
+            infobar: true, // Display image count and caption
+            buttons: ["zoom", "slideShow", "fullScreen", "close"], // Customize buttons
+            protect: true, // Prevent right-clicking and downloading images
+            transitionEffect: "slide", // Set transition effect
+        });
+
+        // Close Fancybox when clicking outside the image
+        $(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
+            if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
+                $.fancybox.close();
+            }
+        });
+    });
+
+    // Initialize Fancybox
+    $("[data-fancybox]").fancybox({
+        arrows: true,
+        infobar: true,
+        buttons: ["zoom", "slideShow", "fullScreen", "close"],
+        protect: true,
+        transitionEffect: "slide",
+    });
+
+    // Close Fancybox when clicking outside the image
+    $(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
+        if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
+            $.fancybox.close();
+        }
+    });
+
+</script>

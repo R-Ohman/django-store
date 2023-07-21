@@ -2,7 +2,7 @@ from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 
 from products.forms import ProductAdminForm
-from products.models import ProductCategory, Product, Basket, Carousel, CarouselImage
+from products.models import ProductCategory, Product, Basket, Carousel, CarouselImage, ProductCarousel
 from products.utils import change_product_visibility
 from store import settings
 from store.admin import set_admin_settings
@@ -82,3 +82,4 @@ class BasketAdmin(admin.TabularInline):
 
 admin.site.register(Carousel)
 admin.site.register(CarouselImage)
+admin.site.register(ProductCarousel)

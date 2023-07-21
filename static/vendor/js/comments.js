@@ -29,18 +29,20 @@ function addListenersToInputs() {
     const fileInput = document.querySelector('.custom-file-input');
     const label = document.querySelector('.custom-file-label');
 
-    fileInput.addEventListener('change', (event) => {
-        const files = event.target.files;
-        if (files.length === 0) {
-            label.textContent = 'Choose files';
-        } else {
-            let filenames = Array.from(files).map((file) => file.name).join(', ');
-            if (filenames.length > 43) {
-                filenames = filenames.substring(0, 40) + '...';
+    if (fileInput) {
+        fileInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files.length === 0) {
+                label.textContent = 'Choose files';
+            } else {
+                let filenames = Array.from(files).map((file) => file.name).join(', ');
+                if (filenames.length > 43) {
+                    filenames = filenames.substring(0, 40) + '...';
+                }
+                label.textContent = filenames;
             }
-            label.textContent = filenames;
-        }
-    });
+        });
+    }
 
     const likeButtons = document.querySelectorAll('.like');
     likeButtons.forEach((button) => {

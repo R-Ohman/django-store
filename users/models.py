@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 
+
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)

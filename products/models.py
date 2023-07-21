@@ -38,6 +38,8 @@ class UserProductsQuerySet(models.QuerySet):
         return self[0].currency if self else BASE_CURRENCY
 
 
+
+
 class Product(models.Model):
     name = models.CharField(max_length=256, unique=True, blank=True)
     image = models.ImageField(upload_to='products_images', blank=True)
@@ -58,11 +60,17 @@ class Product(models.Model):
     @property
     def assessment(self):
         assessments = [object.assessment for object in ProductComment.objects.filter(product=self)]
-        return sum(assessments) / len(assessments) if assessments else None
+        average = round(sum(assessments) / len(assessments), 1) if assessments else 0
+        return average
 
     @property
     def comments(self):
         return ProductComment.objects.filter(product=self)
+
+    @property
+    def carousel_images(self):
+        carousel = ProductCarousel.objects.get(product=self)
+        return CarouselImage.objects.filter(carousel=carousel) if carousel else None
 
 
 class Basket(models.Model):
@@ -88,8 +96,22 @@ class Carousel(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class CarouselImage(models.Model):
     carousel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name='carousel_images')
     image = models.ImageField(upload_to='carousel_images/')
     caption = models.CharField(max_length=200, blank=True)
+
+
+class ProductCarousel(Carousel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_carousel')
+
+    def __str__(self):
+        return self.name + ' | ' + self.product.name
+
+    class Meta:
+        verbose_name = 'product carousel'
+        verbose_name_plural = 'product carousels'
