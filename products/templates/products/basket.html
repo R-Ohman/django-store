@@ -34,10 +34,13 @@
                            data-basket-id="{{ basket.id }}">
                 </div>
                 <div class="col-lg-4">
-                    <span id="product-{{ basket.id }}">
-                        {{ basket.sum }}
-                    </span>
-                    {{ baskets.currency.symbol }}
+                    {% if basket.sum != basket.sum_without_discount %}
+                        <s id="product-{{ basket.id }}">{{ basket.sum_without_discount }}</s>
+                        <strong id="product-discount-{{ basket.id }}" class="text-danger">{{basket.sum}}</strong>
+                    <strong class="text-danger">{{ baskets.currency.symbol }}</strong>
+                    {% else %}
+                        <span id="product-{{ basket.id }}">{{ basket.sum }}</span> {{ baskets.currency.symbol }}
+                    {% endif %}
                 </div>
                 <div class="col-lg-4">
                     <a href="#" class="delete-basket" data-basket-id="{{ basket.id }}">

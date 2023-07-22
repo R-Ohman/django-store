@@ -67,4 +67,9 @@ body {
 .card-img-top {
     position: relative;
     z-index: 0; /* Set a lower z-index for the image to stack behind the rating */
+    transition: filter 0.3s;
+}
+
+.card-img-top:hover {
+    filter: brightness(0.95);
 }

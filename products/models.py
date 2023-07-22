@@ -1,3 +1,5 @@
+import decimal
+
 from django.db import models
 
 from comments.models import ProductComment
@@ -38,8 +40,6 @@ class UserProductsQuerySet(models.QuerySet):
         return self[0].currency if self else BASE_CURRENCY
 
 
-
-
 class Product(models.Model):
     name = models.CharField(max_length=256, unique=True, blank=True)
     image = models.ImageField(upload_to='products_images', blank=True)
@@ -49,6 +49,7 @@ class Product(models.Model):
 
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
     is_visible = models.BooleanField(default=True)
+    discount_percentage = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
 
     def __str__(self):
         return f'{self.category.name} | {self.name}'
@@ -72,6 +73,20 @@ class Product(models.Model):
         carousel = ProductCarousel.objects.get(product=self)
         return CarouselImage.objects.filter(carousel=carousel) if carousel else None
 
+    @property
+    def discounted_price(self):
+        if self.discount_percentage:
+            discounted_price = self.price * (1 - self.discount_percentage / 100)
+            return round(2 * discounted_price) / 2
+        return self.price
+
+    def discount_multiply(self, num):
+        discount_percentage = self.discount_percentage or 0
+        discount_decimal = decimal.Decimal(discount_percentage) / 100
+        num_decimal = decimal.Decimal(num)
+        discounted_price = (1 - discount_decimal) * num_decimal
+        return round(2 * discounted_price) / 2
+
 
 class Basket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -88,8 +103,17 @@ class Basket(models.Model):
         return f'{self.user.username} | {self.product.name}'
 
     @property
-    def sum(self):
+    def sum_without_discount(self):
         return round_number(self.quantity * self.price)
+
+    @property
+    def discounted_price(self):
+        return self.product.discount_multiply(self.price)
+
+
+    @property
+    def sum(self):
+        return round_number(self.quantity * self.discounted_price)
 
 
 class Carousel(models.Model):

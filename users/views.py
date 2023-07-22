@@ -134,10 +134,6 @@ def profile(request):
                 request.user.number_of_available_username_changes -= 1
                 request.user.save()
 
-            print("form.cleaned_data.get('username') != request.user.username")
-            print(form.cleaned_data.get('username'))
-            print(request.user.username) # WARN - check when we change it
-
             user = form.save()
             if form.cleaned_data.get('email') and not user.is_confirmed:
                 activate_email(request, user, form.cleaned_data.get('email'))
@@ -207,8 +203,6 @@ def reset(request, uidb64, token):
         'errors': [error for field, error in form.errors.items()],
     }
     return render(request, 'users/reset_password.html', context)
-
-
 
 
 def reset_email(request, user):

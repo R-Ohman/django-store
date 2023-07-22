@@ -34,12 +34,16 @@ quantityInputs.forEach((input) => {
             // Обновить информацию на странице
             const totalQuantityElement = document.querySelector('.total_quantity');
             const totalSumElement = document.querySelector('.total_sum');
-            const productSumElement = document.querySelector('#product-' + basketId);
+            const productSumWithoutDiscountElement = document.querySelector('#product-' + basketId);
+            const productSumElement = document.querySelector('#product-discount-' + basketId);
 
             if (totalQuantityElement && totalSumElement && productSumElement) {
                 totalQuantityElement.textContent = data.total_quantity.toLocaleString('en-EN');
                 totalSumElement.textContent = data.total_sum.toLocaleString('en-EN', { minimumFractionDigits: 2 });
-                productSumElement.textContent = data.product_sum.toLocaleString('en-EN', { minimumFractionDigits: 2 });
+                if (productSumElement) {
+                    productSumElement.textContent = data.product_sum.toLocaleString('en-EN', {minimumFractionDigits: 2});
+                }
+                productSumWithoutDiscountElement.textContent = data.product_sum_without_discount.toLocaleString('en-EN', {minimumFractionDigits: 2});
                 event.target.value = data.quantity;
             }
         })

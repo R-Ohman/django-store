@@ -94,7 +94,13 @@
                     <div class="d-flex flex-column">
                         <p class="ml-lg-4">{{ product.description }}</p>
                         <div class="d-flex justify-content-between align-items-center pl-lg-4 pr-lg-4 mt-3">
-                            <h4>{{ converted_price }} {{ currency.symbol }}</h4>
+                            {% if discounted_price != converted_price %}
+                                <h4>
+                                    <s>{{ converted_price }}</s> <strong class="text-danger">{{ discounted_price }} {{ currency.symbol }}</strong>
+                                </h4>
+                            {% else %}
+                                <h4>{{ converted_price }} {{ currency.symbol }}</h4>
+                            {% endif %}
                         </div>
                         <div class="d-flex flex-row justify-content-between mt-3">
                             <a href="#" class="btn btn-primary flex-grow-1 mr-2 add-to-basket"

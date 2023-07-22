@@ -35,10 +35,11 @@ def products(request, category_id=None):
     currency = None
     products_with_converted_price = []
     for product in products:
-        currency, price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
+        currency, converted_price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
         products_with_converted_price.append({
             'product': product,
-            'price': round_number(price),
+            'price': round_number(converted_price),
+            'discounted_price': round_number(product.discount_multiply(converted_price)),
         })
     page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
     per_page = 3  # Количество продуктов на странице
@@ -149,6 +150,7 @@ def basket_update(request, id):
             'total_sum': baskets.total_sum(),
             'total_quantity': baskets.total_quantity(),
             'product_sum': basket.sum,
+            'product_sum_without_discount': basket.sum_without_discount,
             'quantity': basket.quantity,
         })
 

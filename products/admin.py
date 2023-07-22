@@ -28,7 +28,7 @@ class ProductAdmin(TranslationAdmin):
             'fields': ('name_en', 'description_en'),
         }),
         ('Details', {
-            'fields': ('price', 'quantity', 'category'),
+            'fields': ('price', 'discount_percentage', 'quantity', 'category'),
             'classes': ('wide',),
         }),
         ('Translations', {

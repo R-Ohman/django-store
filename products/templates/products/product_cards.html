@@ -5,9 +5,9 @@
     {% for product_with_converted_price in products_with_converted_price %}
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card h-100">
-            <a href="#" style="position: relative; display: inline-block;">
+            <div style="position: relative; display: inline-block;">
                 <div class="product-rating">
-                    <a href="{% url 'products:comments:view' product_with_converted_price.product.id %}#comments">
+                    <a class="text-decoration-none" href="{% url 'products:comments:view' product_with_converted_price.product.id %}#comments">
                         <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <!-- Placeholder SVG path for the star icon. Replace this with the actual SVG path. -->
                             <style>svg.star{fill:#f5b938}</style>
@@ -20,16 +20,26 @@
                         <span class="product-rating-text">{{ product_with_converted_price.product.assessment }}/5</span>
                     </a>
                 </div>
-                <img class="card-img-top"
-                     src="{% if product_with_converted_price.product.image %}{{ product_with_converted_price.product.image.url }}
-                        {% else %}{% static '/vendor/img/products/default-product-image.png' %}{% endif %}"
-                     alt="">
-            </a>
+                <a href="{% url 'products:comments:view' product_with_converted_price.product.id %}">
+                    <img class="card-img-top"
+                         src="{% if product_with_converted_price.product.image %}{{ product_with_converted_price.product.image.url }}
+                            {% else %}{% static '/vendor/img/products/default-product-image.png' %}{% endif %}"
+                         alt="">
+                </a>
+            </div>
             <div class="card-body">
                 <h4 class="card-title">
-                    <a href="{% url 'products:comments:view' product_with_converted_price.product.id %}">{{ product_with_converted_price.product.name }}</a>
+                    <a class="text-decoration-none text-dark" href="{% url 'products:comments:view' product_with_converted_price.product.id %}">
+                        {{ product_with_converted_price.product.name }}
+                    </a>
                 </h4>
+                {% if product_with_converted_price.discounted_price != product_with_converted_price.price %}
+                <h5>
+                    <s>{{ product_with_converted_price.price }}</s> <strong class="text-danger">{{ product_with_converted_price.discounted_price }} {{ currency.symbol }}</strong>
+                </h5>
+                {% else %}
                 <h5>{{ product_with_converted_price.price }} {{ currency.symbol }}</h5>
+                {% endif %}
                 <p class="card-text">{{ product_with_converted_price.product.description }}</p>
             </div>
             <div class="card-footer text-center">
