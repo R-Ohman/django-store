@@ -1,5 +1,8 @@
 {% load static %}
 {% load i18n %}
+{% load custom_filters %}
+
+
 <script>
     // Define a JavaScript variable with the CSRF token value
     var csrfToken = "{{ csrf_token }}";
@@ -33,9 +36,18 @@
 
                 <div class="form-group">
                     <p class="small mb-1">
-                        Text
+                        {% trans 'Text' %}
                     </p>
-                    {{ comment.text }}
+                    <div class="comment-text">
+                        {{ comment.text }}
+                    </div>
+                    {% if comment|is_foreign_language:request %}
+                    <div class="text-right">
+                        <a href="#" class="translate" data-comment-id="{{ comment.id }}" data-translate="false">
+                            {% trans 'Show translation' %}
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="form-group">

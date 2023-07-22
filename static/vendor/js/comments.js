@@ -44,34 +44,31 @@ function addListenersToInputs() {
         });
     }
 
-    const likeButtons = document.querySelectorAll('.like');
-    likeButtons.forEach((button) => {
-        button.addEventListener('click', (event) => {
-            event.preventDefault();
-            const commentId = parseInt(button.dataset.commentId, 10);
-            const isPositive = button.dataset.isPositive === 'true';
-            const url = `/products/comments/like/${commentId}/${isPositive}/`;
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'), // Ensure you have a function to get the CSRF token
-                },
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        const ratingElement = document.querySelector(`#rating-${commentId}`);
-                        ratingElement.textContent = data.rating;
-                    }
-                })
-                .catch((error) => console.error('Error:', error));
+    // Event delegation for handling like/dislike buttons
+    $(document).on('click', '.like', function (event) {
+        event.preventDefault();
+        var button = $(this);
+        var commentId = parseInt(button.data('comment-id'), 10);
+        var isPositive = button.data('is-positive') === true;
+        var url = `/products/comments/like/${commentId}/${isPositive}/`;
+        $.ajax({
+            url: url,
+            type: "POST",
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            success: function (data) {
+                if (data.success) {
+                    var ratingElement = $(`#rating-${commentId}`);
+                    ratingElement.text(data.rating);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
         });
     });
-}
 
-document.addEventListener('DOMContentLoaded', addListenersToInputs);
-
-$(document).ready(function () {
     // Initialize Fancybox
     $("[data-fancybox]").fancybox({
         arrows: true, // Display navigation arrows
@@ -86,6 +83,42 @@ $(document).ready(function () {
         if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
             $.fancybox.close();
         }
+    });
+
+
+    $(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
+        if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
+            $.fancybox.close();
+        }
+    });
+
+    $(document).on('click', '.translate', function (event) {
+        event.preventDefault(); // Prevent the anchor tag from navigating to the top of the page
+
+        var link = $(this);
+        var commentText = link.closest('.card').find('.comment-text');
+        var commentId = link.data('comment-id');
+        var isTranslated = link.data('translate') === true;
+
+        $.ajax({
+            url: "/products/comments/translate/" + commentId + "/",
+            type: "GET",
+            success: function (response) {
+                if (response.success) {
+                    if (isTranslated) {
+                        commentText.text(response.original_text);
+                        link.text(response.message_translate);
+                    } else {
+                        commentText.text(response.translated_text);
+                        link.text(response.message_original);
+                    }
+                    link.data('translate', !isTranslated);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
     });
 
 
@@ -110,20 +143,6 @@ $(document).ready(function () {
         var page = $(this).data('page');
         loadComments(page);
     });
-});
+}
 
-// Initialize Fancybox
-$("[data-fancybox]").fancybox({
-    arrows: true,
-    infobar: true,
-    buttons: ["zoom", "slideShow", "fullScreen", "close"],
-    protect: true,
-    transitionEffect: "slide",
-});
-
-// Close Fancybox when clicking outside the image
-$(document).on("click", ".fancybox-slide, .fancybox-toolbar", function (e) {
-    if ($(e.target).hasClass("fancybox-content") || $(e.target).hasClass("fancybox-inner")) {
-        $.fancybox.close();
-    }
-});
+document.addEventListener('DOMContentLoaded', addListenersToInputs);
