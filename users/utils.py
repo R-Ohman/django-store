@@ -31,6 +31,6 @@ def user_received_product(request, product):
         user_order_items = OrderItem.objects.filter(order__user=request.user, product=product)
         for user_order_item in user_order_items:
             print(user_order_item.order.get_status_display())
-            if user_order_item and user_order_item.order.get_status_display() == 'Finished':
+            if user_order_item and user_order_item.order.get_status_display() == 'Completed':
                 return True
     return request.user.is_staff

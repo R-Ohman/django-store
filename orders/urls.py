@@ -1,5 +1,5 @@
 from django.urls import path, include
-from orders.views import place_order, orders_list, order_view, cancel_order
+from orders.views import place_order, orders_list, order_view, cancel_order, request_refund
 
 
 app_name = 'orders'
@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:pk>/', order_view, name='order_view'),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('payment/', include('payments.urls', namespace='payments')),
+    path('refund/<int:order_id>/', request_refund, name='request_refund'),
 ]

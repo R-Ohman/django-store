@@ -22,12 +22,6 @@
     z-index: 1; /* Set a higher z-index to ensure it appears above the image */
 }
 
-.product-rating svg {
-    fill: #f5b938;
-    height: 1.5em;
-    margin-right: 5px;
-}
-
 .product-rating .product-rating-text {
     font-size: 16px;
     font-weight: bold;
@@ -37,4 +31,24 @@
 .toast-success {
     background-color: #4caf50;
     color: #fff;
+}
+
+.like-icon,
+.dislike-icon,
+.trash-icon,
+.card-img-top {
+    transition: fill 0.3s, filter 0.3s;
+}
+
+.like-icon:hover {
+    fill: green;
+}
+
+.dislike-icon:hover,
+.trash-icon:hover {
+    fill: red;
+}
+
+.card-img-top:hover {
+    filter: brightness(0.8);
 }

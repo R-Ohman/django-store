@@ -44,7 +44,7 @@
                     </div>
 
                     <h3 class="mt-5">{% trans 'Shipping information' %}</h3>
-                    <div class="orders my-5 col-12">
+                    <div class="orders mt-5 col-12">
                         <table class="table">
                             <tr>
                                 <th scope="row">
@@ -77,6 +77,12 @@
                             </tr>
                             <tr>
                                 <th scope="row">
+                                    {% trans 'Created' %}
+                                </th>
+                                <td>{{ order.created }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
                                     {% trans 'Last order update' %}
                                 </th>
                                 <td>{{ order.updated }}</td>
@@ -87,6 +93,13 @@
                 </div>
             </div>
         </div>
+        {% if order.can_refund %}
+        <div class="text-right pb-5">
+            <a href="{% url 'user:orders:request_refund' order.id %}">
+                <strong>Request a refund</strong>
+            </a>
+        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

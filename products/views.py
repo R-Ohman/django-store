@@ -4,7 +4,8 @@ from random import shuffle
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from comments.forms import CommentForm
 from orders.models import Order
@@ -157,3 +158,16 @@ def basket_update(request, id):
             'success': False,
             'message': translate_text_to_user_language('Invalid request', request)
             })
+
+@login_required
+def empty_cart(request):
+    user_baskets = Basket.objects.filter(user=request.user)
+    if user_baskets:
+        for basket in user_baskets:
+            basket.delete()
+
+        messages.success(request, translate_text_to_user_language('Cart has been successfully emptied', request))
+    else:
+        messages.error(request, translate_text_to_user_language('Your cart is already empty!', request))
+
+    return redirect(request.META.get('HTTP_REFERER', reverse('user:profile')))

@@ -1,3 +1,11 @@
 body {
     padding-top: 56px;
 }
+
+.trash-icon {
+    transition: fill 0.3s;
+}
+
+.trash-icon:hover {
+    fill: red;
+}
