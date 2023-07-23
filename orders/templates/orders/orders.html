@@ -2,6 +2,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block title %}
+    {% trans 'Orders' %}
+{% endblock %}
+
 {% block css %}
  <link href="{% static 'vendor/css/orders.css' %}" rel="stylesheet">
 {% endblock %}
@@ -35,15 +39,14 @@
                     {% for order in orders %}
                     <tr>
                         <th scope="row">{{ order.id }}</th>
-                        <td>{{ order.get_status_display }}</td>
+                        <td>{% trans order.get_status_display %}</td>
                         <td>{{ order.created }}</td>
                         <td>{{ order.sum }} {{ order.currency.symbol }}</td>
                         <td>
                             <a href="{% url 'user:orders:order_view' order.id %}">{% trans 'view' %}</a>
                             {% if order.get_status_display == 'Forming' %}
-                                <div>
-                                    <a href="{% url 'user:orders:cancel_order' order.id %}">{% trans 'cancel' %}</a>
-                                </div>
+                            - <a href="{% url 'user:orders:payments:index' order.id %}">{% trans 'pay' %}</a> -
+                            <a href="{% url 'user:orders:cancel_order' order.id %}">{% trans 'cancel' %}</a>
                             {% endif %}
                         </td>
                     </tr>

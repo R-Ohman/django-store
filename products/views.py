@@ -19,7 +19,6 @@ from users.translator import translate_text_to_user_language
 def index(request):
 
     context = {
-        'title': translate_text_to_user_language('Homepage', request),
         'is_promotion': False,
     }
     return render(request, 'products/index.html', context)
@@ -65,7 +64,6 @@ def products(request, category_id=None):
 
     # Возвращаем полный HTML для обычного запроса
     context = {
-        'title': translate_text_to_user_language('Catalog', request),
         'products_with_converted_price': page_products,
         'categories': ProductCategory.objects.all(),
         'current_page': int(page),  # Добавляем текущую страницу в контекст

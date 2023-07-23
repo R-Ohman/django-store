@@ -1,6 +1,9 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 from modeltranslation.admin import TranslationAdmin
 
+from comments.admin import CommentInline, AttachmentInline
 from products.forms import ProductAdminForm
 from products.models import ProductCategory, Product, Basket, Carousel, CarouselImage, ProductCarousel
 from products.utils import change_product_visibility
@@ -9,6 +12,47 @@ from store.admin import set_admin_settings
 
 
 set_admin_settings()
+
+
+class CarouselImageInline(admin.TabularInline):
+    model = CarouselImage
+    extra = 0
+    readonly_fields = ('file_preview',)
+    fields = ('image', 'file_preview', 'caption')
+
+    def file_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="150">', obj.image.url)
+        return ''
+
+    file_preview.short_description = 'Image Preview'
+
+
+@admin.register(Carousel)
+class CarouselAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'get_carousel_images_number')
+    ordering = ('name',)
+    search_fields = ('name',)
+
+    def get_carousel_images_number(self, obj):
+        return obj.carousel_images.count()
+    get_carousel_images_number.short_description = 'Images'
+    inlines = (CarouselImageInline,)
+
+
+class ProductCarouselInline(admin.StackedInline):
+    model = ProductCarousel
+    extra = 0
+    readonly_fields = ('get_images',)
+    fields = ('name', 'description', 'product', 'get_images')
+
+    def get_images(self, obj):
+        images = obj.carousel_images.all()
+        url = reverse('admin:products_carousel_change', args=[obj.pk])
+        images = ''.join(f'<img src="{image.image.url}" width="200" style="margin:10px;"/>' for image in images)
+        return format_html(f'<a href="{url}">{images}</a>')
+    get_images.short_description = 'Images'
+    classes = ('collapse',)
 
 
 @admin.register(Product)
@@ -46,6 +90,7 @@ class ProductAdmin(TranslationAdmin):
     change_visibility.short_description = "Change visibility"
 
     actions = (change_visibility,)
+    inlines = (ProductCarouselInline, CommentInline,)
 
 
 @admin.register(ProductCategory)
@@ -80,6 +125,3 @@ class BasketAdmin(admin.TabularInline):
     extra = 0
 
 
-admin.site.register(Carousel)
-admin.site.register(CarouselImage)
-admin.site.register(ProductCarousel)

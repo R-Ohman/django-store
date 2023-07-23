@@ -2,6 +2,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block title %}
+    {% trans 'Order' %}
+{% endblock %}
+
 {% block css %}
 <link href="{% static '/vendor/css/orders.css' %}" rel="stylesheet">
 {% endblock %}
@@ -73,7 +77,7 @@
                                 <th scope="row">
                                     {% trans 'Order status' %}
                                 </th>
-                                <td>{{ order.get_status_display }}</td>
+                                <td>{% trans order.get_status_display %}</td>
                             </tr>
                             <tr>
                                 <th scope="row">
@@ -97,7 +101,7 @@
                                 <th scope="row">
                                     {% trans 'Refund status' %}
                                 </th>
-                                <td>{{ order.refund.get_status_display }}</td>
+                                <td>{% trans order.refund.get_status_display %}</td>
                             </tr>
                             <tr>
                                 <th scope="row">

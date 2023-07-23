@@ -1,60 +1,57 @@
-{% load static %}
+{% extends 'users/base.html' %}
 {% load i18n %}
 
+{% block title %}
+    {% trans 'Payment' %}
+{% endblock %}
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <title>Store - {{ title }} | {{ order.id }} </title>
-</head>
-
-<body>
-<style>
-      .w3-container {
-          font-size: 14px;
-      }
-
-      .center {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-      }
-
-</style>
-
-<div class="center">
-    <h3 class="donate">
-        <div class="w3-card-4">
-
-            <header class="w3-container w3-blue">
-                <h3>{% trans 'Order' %} № {{ order.id }}</h3>
-            </header>
-
-            <div class="w3-container ml-4 justify-content-center">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}" role="alert">
-                            {{ message }}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                {% if messages or form.non_field_errors %}
+                <div class="alert {% if messages.success %} alert-success {% else %}
+                 alert-warning {% endif %} alert-dismissible fade show" role="alert"
+                     style="margin-top: 50px;">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <strong>{{ message }}</strong>
+                        {% endfor %}
+                    {% else %}
+                        <strong>{{ form.non_field_errors }}</strong>
+                    {% endif %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header">
+                        <h3 class="text-center font-weight-light my-4">
+                            {% trans 'Order' %} № {{ order.id }}
+                        </h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="form-group">
+                            <p class="mb-4">
+                                {% trans 'Pay to complete your order' %}
+                            </p>
+                            {{ form.render }}
                         </div>
-                    {% endfor %}
-                {% endif%}
-                <p>
-                    {% trans 'Pay to complete your order' %}
-                </p>
-
-                {{ form.render }}
-
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="small">
+                            <a href="{% url 'user:orders:orders_history' %}">
+                                {% trans 'Pay later' %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <footer class="w3-container w3-blue">
-                <h5>&copy Store 2023</h5>
-            </footer>
-
         </div>
-    </h3>
+    </div>
+</main>
+{% endblock %}
 
-</div>
 
-</body>

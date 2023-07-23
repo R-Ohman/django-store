@@ -2,6 +2,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block title %}
+    {% trans 'Place order' %}
+{% endblock %}
+
 {% block css %}
  <link href="{% static '/vendor/css/orders.css' %}" rel="stylesheet">
 {% endblock %}

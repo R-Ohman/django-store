@@ -1,5 +1,14 @@
 import re
 
+from orders.models import Refund
+
+
+def update_refund_status_to_refunded(queryset=None):
+    for refund in queryset:
+        refund.status = Refund.REFUNDED
+        refund.save()
+    # send message to user
+
 
 def validate_postal_code(country_code, postal_code):
     postal_code_patterns = {

@@ -2,6 +2,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block title %}
+    {% trans 'Profile' %}
+{% endblock %}
+
 {% block css %}
 <link href="{% static 'vendor/css/profile.css' %}" rel="stylesheet">
 {% endblock %}

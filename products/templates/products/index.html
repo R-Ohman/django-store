@@ -2,6 +2,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block title %}
+    {% trans 'Home' %}
+{% endblock %}
+
 {% block css %}
     <link href="{% static 'vendor/css/index.css' %}" rel="stylesheet">
 {% endblock %}

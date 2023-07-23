@@ -89,7 +89,6 @@ def login(request):
         form = UserLoginForm(request=request)
 
     context = {
-        'title': translate_text_to_user_language('Authorization', request),
         'form': form,
         'errors': errors,
         'next': next_url,
@@ -114,7 +113,6 @@ def registration(request):
         form = UserRegistrationForm(request=request)
 
     context = {
-        'title': translate_text_to_user_language('Registration', request),
         'form': form,
         'errors': [error for field, error in form.errors.items()],
     }
@@ -153,7 +151,6 @@ def profile(request):
         basket.save()
 
     context = {
-        'title': translate_text_to_user_language('Profile', request),
         'form': form,
         'baskets': baskets,
         'user': request.user,
@@ -195,7 +192,6 @@ def reset(request, uidb64, token):
         form = UserResetPasswordForm(request=request)
 
     context = {
-        'title': translate_text_to_user_language('Reset password', request),
         'form': form,
         'uidb64': uidb64,
         'token': token,
@@ -212,7 +208,6 @@ def reset_email(request, user):
         'domain': current_site.domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
-        'title': translate_text_to_user_language('Reset password', request),
     })
     user.email_user(subject, message)
 
@@ -222,16 +217,15 @@ def reset_password(request):
         messages.error(request, translate_text_to_user_language('You are already logged in!', request))
         return redirect(reverse('user:profile'))
 
+
     if request.method == 'POST':
         form = UserResetPasswordEmailForm(data=request.POST, request=request)
         if form.is_valid():
             user = User.objects.filter(email=form.cleaned_data.get('email')).first()
 
             context = {
-                'title': translate_text_to_user_language('Reset password', request),
                 'form': form,
             }
-
             if user:
                 reset_email(request, user)
                 context['email'] = form.cleaned_data.get('email')
@@ -246,7 +240,6 @@ def reset_password(request):
         form = UserResetPasswordEmailForm(request=request)
 
     context = {
-        'title': translate_text_to_user_language('Reset password', request),
         'form': form,
     }
     return render(request, 'users/reset_password_email_form.html', context)
