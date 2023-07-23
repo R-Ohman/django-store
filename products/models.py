@@ -3,14 +3,8 @@ import decimal
 from django.db import models
 
 from comments.models import ProductComment
-# from users.models import User
-# from payments.models import Currency
-
-# Create your models here.
-from payments.models import Currency
 from products.utils import round_number
 from store.settings import BASE_CURRENCY
-from users.models import User
 
 
 class ProductCategory(models.Model):
@@ -47,7 +41,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)  # price in default currency (USD)
     quantity = models.PositiveIntegerField(default=0)  # quantity in stock
 
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey('products.ProductCategory', on_delete=models.CASCADE, null=True)
     is_visible = models.BooleanField(default=True)
     discount_percentage = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
 
@@ -89,9 +83,9 @@ class Product(models.Model):
 
 
 class Basket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    currency = models.ForeignKey(Currency, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    currency = models.ForeignKey('payments.Currency', on_delete=models.CASCADE, default=1)
 
     quantity = models.PositiveIntegerField(default=0)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0)  # price in currency
@@ -125,7 +119,7 @@ class Carousel(models.Model):
 
 
 class CarouselImage(models.Model):
-    carousel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name='carousel_images')
+    carousel = models.ForeignKey('products.Carousel', on_delete=models.CASCADE, related_name='carousel_images')
     image = models.ImageField(upload_to='carousel_images/')
     caption = models.CharField(max_length=200, blank=True)
 
@@ -134,7 +128,7 @@ class CarouselImage(models.Model):
 
 
 class ProductCarousel(Carousel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_carousel')
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='product_carousel')
 
     def __str__(self):
         return self.name + ' | ' + self.product.name

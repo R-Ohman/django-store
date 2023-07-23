@@ -1,5 +1,4 @@
 import json
-from random import shuffle
 
 from django.contrib import messages
 from django.template.loader import render_to_string
@@ -7,16 +6,14 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from comments.forms import CommentForm
-from orders.models import Order
 from products.models import ProductCategory, Product, Basket, CarouselImage, Carousel
-from payments.models import ExchangeRate, Currency
+from payments.models import ExchangeRate
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from products.utils import round_number
 from store.settings import LOGIN_URL
-from users.utils import translate_text_to_user_language
+from users.translator import translate_text_to_user_language
 
 
 def index(request):

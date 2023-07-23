@@ -1,0 +1,137 @@
+{% extends 'users/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                {% if messages or form.non_field_errors %}
+                <div class="alert {% if messages.success %} alert-success {% else %}
+                 alert-warning {% endif %} alert-dismissible fade show" role="alert"
+                     style="margin-top: 50px;">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <strong>{{ message }}</strong>
+                        {% endfor %}
+                    {% else %}
+                        <strong>{{ form.non_field_errors }}</strong>
+                    {% endif %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header">
+                        <h3 class="text-center font-weight-light my-4">
+                            {% trans 'Refund products' %}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'user:orders:request_refund' order.id %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <strong class="mb-3 d-block">
+                                    {% trans 'Choose products you would like to refund' %}
+                                </strong>
+
+                                {% for order_item in order_items %}
+                                <div class="form-group mb-5 order-item">
+                                    <div class="ml-4">
+                                        <input class="form-check-input" type="checkbox" id="item-{{order_item.id}}" name="refund-item" value="{{order_item.id}}"/>
+                                        <label class="form-check-label" for="item-{{order_item.id}}">{{ order_item.product.name }}</label>
+                                    </div>
+                                    <div class="quantity-field" style="display: none;">
+                                        <label class="small mb-1" for="quantity-{{order_item.id}}">
+                                            {% trans 'Quantity' %}
+                                        </label>
+                                        <input class="form-control" type="number" id="quantity-{{order_item.id}}" name="refund-item-quantity"
+                                               min="1" max="{{order_item.quantity}}" value="{{order_item.quantity}}"/><br>
+                                    </div>
+                                    <div class="reason-field" style="display: none;">
+                                        <label class="small mb-1" for="reason-{{order_item.id}}">
+                                            {% trans 'Reason' %}
+                                        </label>
+                                        <select class="form-control" id="reason-{{order_item.id}}" name="refund-item-reason">
+                                            {% for reason in reasons %}
+                                                <option value="{{reason}}">{{reason}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                <label class="small mb-1" for="{{ form.message.id_for_label }}">
+                                    {% trans 'Message' %}
+                                </label>
+                                {{ form.message }}
+                            </div>
+                            <div class="custom-file mb-3">
+                                <div class="custom-file mb-3">
+                                    <input class="custom-file-input" type="file" name="files" id="files" multiple
+                                           onchange="limitFileSelection()"/>
+                                    <label class="custom-file-label" for="files">
+                                        {% trans 'Attachment' %}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <a href="{% url 'user:orders:order_view' order.id %}">
+                                    {% trans 'Back'%}
+                                </a>
+                                <input class="btn btn-primary" type="submit" value="{% trans 'Request refund' %}">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function handleFormSubmit() {
+    const form = document.getElementById('refund-form');
+    const orderItems = document.querySelectorAll('.order-item');
+
+    orderItems.forEach((orderItem) => {
+        const checkbox = orderItem.querySelector('.form-check-input');
+        const quantityField = orderItem.querySelector('.quantity-field');
+        const reasonField = orderItem.querySelector('.reason-field');
+
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                quantityField.style.display = 'block';
+                reasonField.style.display = 'block';
+                // Включить скрытые поля
+                quantityField.querySelector('input').disabled = false;
+                reasonField.querySelector('select').disabled = false;
+            } else {
+                quantityField.style.display = 'none';
+                reasonField.style.display = 'none';
+                // Отключить поля перед отправкой формы
+                quantityField.querySelector('input').disabled = true;
+                reasonField.querySelector('select').disabled = true;
+            }
+        });
+    });
+
+    // Удалить скрытые поля перед отправкой формы
+    form.addEventListener('submit', () => {
+        const hiddenFields = form.querySelectorAll('[disabled]');
+        hiddenFields.forEach((field) => field.remove());
+    });
+}
+
+window.onload = function () {
+    handleFormSubmit();
+};
+
+</script>
+
+<script src="{% static '/vendor/js/refund.js' %}"></script>
+{% endblock %}

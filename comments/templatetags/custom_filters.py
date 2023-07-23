@@ -1,5 +1,5 @@
 from django import template
-from users.utils import translate_text_to_user_language
+from users.translator import translate_text_to_user_language
 
 register = template.Library()
 

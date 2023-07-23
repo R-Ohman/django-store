@@ -89,17 +89,75 @@
                             </tr>
                         </table>
                     </div>
-
+                    {% if order.refund_exists %}
+                    <h3 class="mt-5">{% trans 'Refund information' %}</h3>
+                    <div class="orders mt-5 col-12">
+                        <table class="table">
+                            <tr>
+                                <th scope="row">
+                                    {% trans 'Refund status' %}
+                                </th>
+                                <td>{{ order.refund.get_status_display }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    {% trans 'Message' %}
+                                </th>
+                                <td>{{ order.refund.message }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    {% trans 'Created' %}
+                                </th>
+                                <td>{{ order.refund.created }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    {% trans 'Last status update' %}
+                                </th>
+                                <td>{{ order.refund.updated }}</td>
+                            </tr>
+                        </table>
+                        <table class="table">
+                            <tr>
+                                <th scope="row">
+                                    {% trans 'Product name' %}
+                                </th>
+                                <th>
+                                    {% trans 'Quantity' %}
+                                </th>
+                                <th>
+                                    {% trans 'Reason' %}
+                                </th>
+                            </tr>
+                            {% for refund_product in order.refund.refund_products %}
+                            <tr>
+                                <td>
+                                    {{ refund_product.ordered_product.product.name }}
+                                </td>
+                                <td>{{ refund_product.quantity }}</td>
+                                <td>{{ refund_product.reason }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        <p class="text-right h4 pb-5">
+                            {% trans 'Total' %} {{ order.refund.sum }} {{ order.currency }}
+                        </p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        {% if order.can_refund %}
-        <div class="text-right pb-5">
-            <a href="{% url 'user:orders:request_refund' order.id %}">
-                <strong>Request a refund</strong>
+        <div class="d-flex justify-content-between pb-5">
+            <a href="{% url 'user:orders:orders_history' %}" class="btn btn-secondary">
+                {% trans 'Back'%}
             </a>
+            {% if order.can_refund %}
+            <a href="{% url 'user:orders:request_refund' order.id %}">
+                <strong>{% trans 'Request a refund' %}</strong>
+            </a>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 </section>
 {% endblock %}

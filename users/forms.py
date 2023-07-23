@@ -2,7 +2,7 @@ from captcha.widgets import ReCaptchaV3
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from users.models import User
-from users.utils import translate_text_to_user_language
+from users.translator import translate_text_to_user_language
 from captcha.fields import ReCaptchaField
 
 

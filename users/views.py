@@ -1,11 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from store.settings import LOGIN_URL
 from users.models import User
-from users.utils import translate_text_to_user_language, check_referer_no_keywords
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserResetPasswordForm, \
-    UserResetPasswordEmailForm
+from users.translator import translate_text_to_user_language
+from users.utils import check_referer_no_keywords
+from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserResetPasswordForm, UserResetPasswordEmailForm
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import auth, messages

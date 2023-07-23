@@ -1,8 +1,8 @@
 from captcha.widgets import ReCaptchaV3
 from django import forms
 
-from comments.models import Attachment, ProductComment
-from users.utils import translate_text_to_user_language
+from comments.models import ProductComment
+from users.translator import translate_text_to_user_language
 from captcha.fields import ReCaptchaField
 
 class CommentForm(forms.ModelForm):

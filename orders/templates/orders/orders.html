@@ -12,22 +12,15 @@
         <div class="text-center mt-5">
             <h1>{{ title }}</h1>
             <div class="orders mt-5">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif%}
                 <table class="table">
                     <thead>
-                    <tr class="table-light">
-                        <th scope="col">#</th>
-                        <th scope="col">{% trans 'Status' %}</th>
-                        <th scope="col">{% trans 'Created' %}</th>
-                        <th scope="col">{% trans 'Total' %}</th>
-                        <th scope="col">{% trans 'Action' %}</th>
-                    </tr>
+                        <tr class="table-light">
+                            <th scope="col">#</th>
+                            <th scope="col">{% trans 'Status' %}</th>
+                            <th scope="col">{% trans 'Created' %}</th>
+                            <th scope="col">{% trans 'Total' %}</th>
+                            <th scope="col">{% trans 'Action' %}</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {% if not orders %}

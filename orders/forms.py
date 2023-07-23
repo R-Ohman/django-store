@@ -3,8 +3,8 @@ from django_countries.fields import CountryField
 
 from orders.utils import validate_postal_code
 from phonenumber_field.formfields import PhoneNumberField
-from orders.models import Order
-from users.utils import translate_text_to_user_language
+from orders.models import Order, Refund
+from users.translator import translate_text_to_user_language
 
 
 class OrderForm(forms.ModelForm):
@@ -110,3 +110,20 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         exclude = ['user', 'currency', 'status']
+
+
+class RefundForm(forms.ModelForm):
+    message = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'rows': '4',
+    }))
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
+        super(RefundForm, self).__init__(*args, **kwargs)
+        if request:
+            self.fields['message'].widget.attrs['placeholder'] = translate_text_to_user_language('Enter extra information', request)
+
+    class Meta:
+        fields = ('message',)
+        model = Refund
