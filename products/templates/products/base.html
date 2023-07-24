@@ -55,7 +55,7 @@
                        data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu bg-light" aria-labelledby="navbarDropdown">
                         <li>
                             <a class="dropdown-item" href="{% url 'user:profile' %}">
                                 {% trans 'Profile' %}
@@ -143,6 +143,8 @@
 
 <!-- Bootstrap core JavaScript -->
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
 <!-- FontAwesome script -->
 <script src="{% static 'vendor/fontawesome/fontawesome-icons.js' %}" crossorigin="anonymous"></script>
 

@@ -20,17 +20,25 @@
                         </svg>
                     </a>
                 {% endif %}
-                {% if request.user.is_superuser %}
-                <a class="text-dark" href="/admin/comments/productcomment/{{comment.id}}/change/" target="_blank">
-                    <h3 class="text-center font-weight-light my-4">
+                <div class="d-flex justify-content-center pt-3">
+                    {% if comment.user.image %}
+                    <span class="user-avatar opacity-75 pr-4">
+                        <img src="{{ comment.user.image.url }}" class="rounded-circle" alt="{{ comment.user.username }}"
+                             style="width: 50px; height: 50px;">
+                    </span>
+                    {% endif %}
+                    {% if request.user.is_superuser %}
+                    <a class="text-dark" href="{% url 'admin:comments_productcomment_change' comment.id %}" target="_blank">
+                        <h3 class=" font-weight-light">
+                            {{ comment.user.username }} (<span id="rating-{{ comment.id }}">{{ comment.rating }}</span>)
+                        </h3>
+                    </a>
+                    {% else %}
+                    <h3 class=" font-weight-light">
                         {{ comment.user.username }} (<span id="rating-{{ comment.id }}">{{ comment.rating }}</span>)
                     </h3>
-                </a>
-                {% else %}
-                <h3 class="text-center font-weight-light my-4">
-                    {{ comment.user.username }} (<span id="rating-{{ comment.id }}">{{ comment.rating }}</span>)
-                </h3>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -92,7 +100,7 @@
                     </a>
                 </div>
                 <div class="small">
-                    {{ comment.created_at|date:"Y-m-d" }}
+                    {{ comment.created_at|date:"d.m.Y" }}
                 </div>
                 <div class="small">
                     <a href="#" class="like" data-comment-id="{{ comment.id }}" data-is-positive="false">

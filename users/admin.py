@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from orders.admin import OrderInline
 from users.models import User
+from django.utils.html import format_html
 
 
 @admin.register(User)
@@ -11,7 +12,7 @@ class UserAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('username', 'password'),
+            'fields': ('username', 'password', 'get_image'),
         }),
         ('Personal Info', {
             'fields': (('first_name', 'last_name'), 'email'),
@@ -29,6 +30,12 @@ class UserAdmin(admin.ModelAdmin):
     )
 
     ordering = ('-date_joined',)
-    readonly_fields = ('last_login', 'date_joined')
+    readonly_fields = ('last_login', 'date_joined', 'get_image')
     search_fields = ('username',)
     inlines = (OrderInline,)
+
+    def get_image(self, obj):
+        if obj.image:
+            return format_html(f'<img src="{obj.image.url}" width=150>')
+        return '-'
+    get_image.short_description = 'Avatar'

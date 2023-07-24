@@ -95,7 +95,7 @@
                     </div>
                     {% if order.refund_exists %}
                     <h3 class="mt-5">{% trans 'Refund information' %}</h3>
-                    <div class="orders mt-5 col-12">
+                    <div class="mt-5 col-12" id="refund">
                         <table class="table">
                             <tr>
                                 <th scope="row">
@@ -144,7 +144,7 @@
                             </tr>
                             {% endfor %}
                         </table>
-                        <p class="text-right h4 pb-5">
+                        <p class="float-right h4 pb-5">
                             {% trans 'Total' %} {{ order.refund.sum }} {{ order.currency }}
                         </p>
                     </div>
@@ -153,7 +153,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-between pb-5">
-            <a href="{% url 'user:orders:orders_history' %}" class="btn btn-secondary">
+            <a href="{% url 'user:orders:orders_history' %}" class="btn btn-secondary col-3">
                 {% trans 'Back'%}
             </a>
             {% if order.can_refund %}
