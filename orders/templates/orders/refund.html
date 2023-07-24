@@ -35,7 +35,7 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <form action="{% url 'user:orders:request_refund' order.id %}" method="post" enctype="multipart/form-data">
+                        <form id="refund-form" action="{% url 'user:orders:request_refund' order.id %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
                                 <strong class="mb-3 d-block">
@@ -97,45 +97,8 @@
     </div>
 </main>
 
-<script>
-function handleFormSubmit() {
-    const form = document.getElementById('refund-form');
-    const orderItems = document.querySelectorAll('.order-item');
 
-    orderItems.forEach((orderItem) => {
-        const checkbox = orderItem.querySelector('.form-check-input');
-        const quantityField = orderItem.querySelector('.quantity-field');
-        const reasonField = orderItem.querySelector('.reason-field');
-
-        checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-                quantityField.style.display = 'block';
-                reasonField.style.display = 'block';
-                // Включить скрытые поля
-                quantityField.querySelector('input').disabled = false;
-                reasonField.querySelector('select').disabled = false;
-            } else {
-                quantityField.style.display = 'none';
-                reasonField.style.display = 'none';
-                // Отключить поля перед отправкой формы
-                quantityField.querySelector('input').disabled = true;
-                reasonField.querySelector('select').disabled = true;
-            }
-        });
-    });
-
-    // Удалить скрытые поля перед отправкой формы
-    form.addEventListener('submit', () => {
-        const hiddenFields = form.querySelectorAll('[disabled]');
-        hiddenFields.forEach((field) => field.remove());
-    });
-}
-
-window.onload = function () {
-    handleFormSubmit();
-};
-
-</script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="{% static '/vendor/js/refund.js' %}"></script>
 {% endblock %}

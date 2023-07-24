@@ -7,6 +7,57 @@ function limitFileSelection() {
     }
 }
 
+function showNotification(message, success=true) {
+    toastr.options = {
+      "progressBar": true,
+      "positionClass": "toast-bottom-left",
+      "timeOut": "2000",
+    }
+    if (success) {
+        toastr.success(message);
+        } else {
+            toastr.warning(message);
+        }
+  }
+
+function handleFormSubmit() {
+    const form = document.getElementById('refund-form');
+    const orderItems = document.querySelectorAll('.order-item');
+
+    orderItems.forEach((orderItem) => {
+        const checkbox = orderItem.querySelector('.form-check-input');
+        const quantityField = orderItem.querySelector('.quantity-field');
+        const reasonField = orderItem.querySelector('.reason-field');
+
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                quantityField.style.display = 'block';
+                reasonField.style.display = 'block';
+                // Включить скрытые поля
+                quantityField.querySelector('input').disabled = false;
+                reasonField.querySelector('select').disabled = false;
+            } else {
+                quantityField.style.display = 'none';
+                reasonField.style.display = 'none';
+                // Отключить поля перед отправкой формы
+                quantityField.querySelector('input').disabled = true;
+                reasonField.querySelector('select').disabled = true;
+            }
+        });
+    });
+
+
+    form.addEventListener('submit', (event) => {
+        const checkedCheckboxes = form.querySelectorAll('.form-check-input:checked');
+        if (checkedCheckboxes.length === 0) {
+            event.preventDefault();
+            showNotification("Please select at least one item to refund.", false);
+        } else {
+            const hiddenFields = form.querySelectorAll('[disabled]');
+            hiddenFields.forEach((field) => field.remove());
+        }
+    });
+}
 
 function addListenersToInputs() {
 
@@ -27,6 +78,8 @@ function addListenersToInputs() {
             }
         });
     }
+
+    handleFormSubmit();
 }
 
 document.addEventListener('DOMContentLoaded', addListenersToInputs);

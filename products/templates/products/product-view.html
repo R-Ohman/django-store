@@ -33,16 +33,19 @@
                             <span class="product-rating-text">{{ product.assessment }}/5</span>
                         </a>
                     </span>
+                    {% if product.discount_percentage %}
+                        <strong class="product-discount bg-danger text-light">
+                            {{ product.discount }}
+                        </strong>
+                    {% endif %}
                     {% if request.user.is_superuser %}
                         <a class="text-dark" href="/admin/products/product/{{product.id}}/change/" target="_blank">
-                            <h4>
+                            <h4 class="d-inline-block ml-1">
                                 {{ product.name }}
                             </h4>
                         </a>
                     {% else %}
-                        <h4>
-                        {{ product.name }}
-                    </h4>
+                        <h4 class="d-inline-block ml-1">{{ product.name }}</h4>
                     {% endif %}
                 </div>
             </div>

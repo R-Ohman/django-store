@@ -74,6 +74,11 @@ class Product(models.Model):
             return round(2 * discounted_price) / 2
         return self.price
 
+    @property
+    def discount(self):
+        return f'-{int(self.discount_percentage)} %' if self.discount_percentage else ''
+
+
     def discount_multiply(self, num):
         discount_percentage = self.discount_percentage or 0
         discount_decimal = decimal.Decimal(discount_percentage) / 100

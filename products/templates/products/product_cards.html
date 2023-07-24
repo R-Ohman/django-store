@@ -6,6 +6,11 @@
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card h-100">
             <div style="position: relative; display: inline-block;">
+                {% if product_with_converted_price.product.discount_percentage %}
+                    <strong class="product-discount-on-image bg-danger text-light">
+                        {{ product_with_converted_price.product.discount}}
+                    </strong>
+                {% endif %}
                 <div class="product-rating">
                     <a class="text-decoration-none" href="{% url 'products:comments:view' product_with_converted_price.product.id %}#comments">
                         <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -51,3 +56,5 @@
     </div>
     {% endfor %}
 </div>
+
+

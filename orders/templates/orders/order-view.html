@@ -140,7 +140,7 @@
                                     {{ refund_product.ordered_product.product.name }}
                                 </td>
                                 <td>{{ refund_product.quantity }}</td>
-                                <td>{{ refund_product.reason }}</td>
+                                <td>{% trans refund_product.reason %}</td>
                             </tr>
                             {% endfor %}
                         </table>
