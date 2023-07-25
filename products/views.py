@@ -1,6 +1,9 @@
 import json
 
 from django.contrib import messages
+from decimal import Decimal
+
+from django.db.models import F
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
@@ -11,7 +14,7 @@ from payments.models import ExchangeRate
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from products.utils import round_number
+from products.utils import round_number, number_to_float
 from store.settings import LOGIN_URL
 from users.translator import translate_text_to_user_language
 
@@ -25,8 +28,16 @@ def index(request):
 
 
 def products(request, category_id=None):
-    products = Product.objects.filter(category_id=category_id, is_visible=True) if category_id else Product.objects.filter(is_visible=True)
-    products = products.order_by('-id')
+    all_products = Product.objects.filter(category_id=category_id, is_visible=True) if category_id else Product.objects.filter(is_visible=True)
+    products = all_products.order_by('-id')
+
+    min_price, max_price = request.GET.get('price').split('-') if request.GET.get('price') else (None, None)
+    if min_price and max_price:
+        min_price = ExchangeRate.convert_from_user_to_base(request, int(min_price))
+        max_price = ExchangeRate.convert_from_user_to_base(request, int(max_price))
+
+        products = list(filter(lambda product: min_price <= product.discounted_price <= max_price, products))
+
 
     currency = None
     products_with_converted_price = []
@@ -62,7 +73,16 @@ def products(request, category_id=None):
             'page_list_html': page_list_html
             })
 
-    # Возвращаем полный HTML для обычного запроса
+    #filtered_products = Product.objects.filter(is_visible=True).order_by('price')
+    lowest_price_product = min(all_products, key=lambda product: product.discounted_price)
+    highest_price_product = max(all_products, key=lambda product: product.discounted_price)
+    lowest_price = ExchangeRate.convert_to_user_currency(request, lowest_price_product.price)
+    highest_price = ExchangeRate.convert_to_user_currency(request, highest_price_product.price)
+    lowest_price = int(lowest_price_product.discount_multiply(lowest_price))
+    highest_price = int(highest_price_product.discount_multiply(highest_price))
+
+    min_price, max_price = request.GET.get('price').split('-') if request.GET.get('price') else (None, None)
+
     context = {
         'products_with_converted_price': page_products,
         'categories': ProductCategory.objects.all(),
@@ -70,6 +90,11 @@ def products(request, category_id=None):
         'category': ProductCategory.objects.get(id=category_id) if category_id else None,
         'currency': currency,
         'carousel_images': CarouselImage.objects.filter(carousel=Carousel.objects.get(name="products_main_page")),
+
+        'lowest_price': lowest_price,
+        'highest_price': highest_price,
+        'min_price': min_price if min_price else lowest_price,
+        'max_price': max_price if max_price else highest_price,
     }
 
     return render(request, 'products/products.html', context)

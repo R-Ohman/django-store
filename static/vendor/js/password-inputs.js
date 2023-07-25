@@ -16,7 +16,8 @@ const togglePasswordsArray = Array.from(togglePasswords);
 
 togglePasswordsArray.forEach((togglePassword, index) => {
     togglePassword.addEventListener('click', function (e) {
-        const password = document.querySelector("#id_password" + (index + 1));
+        const passwordWithIndex = document.querySelector("#id_password" + (index + 1));
+        const password = passwordWithIndex ? passwordWithIndex : document.querySelector("#id_password");
         // toggle the type attribute
         const type = password.getAttribute("type") === "password" ? "text" : "password";
         password.setAttribute("type", type);

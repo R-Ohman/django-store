@@ -35,9 +35,7 @@ class ExchangeRate(models.Model):
 
         exchange_rate = ExchangeRate.objects.filter(base_currency=default_currency,
                                                     target_currency=user_currency).first()
-        # round to 0.5
         converted_price = round( 2 * product.price * exchange_rate.rate) / 2
-        print(converted_price)
         return user_currency, converted_price
 
     @staticmethod
@@ -46,4 +44,23 @@ class ExchangeRate(models.Model):
         exchange_rate = ExchangeRate.objects.filter(base_currency=default_currency,
                                                     target_currency=currency).first()
         converted_price = round(2 * num / exchange_rate.rate) / 2
+        return converted_price
+
+    @staticmethod
+    def convert_from_user_to_base(request, num):
+        user_currency = Currency.objects.get(language=request.LANGUAGE_CODE)
+        default_currency = Currency.objects.get(code=BASE_CURRENCY)
+        exchange_rate = ExchangeRate.objects.filter(base_currency=default_currency,
+                                                    target_currency=user_currency).first()
+        converted_price = round(2 * num / exchange_rate.rate) / 2
+        return converted_price
+
+    @staticmethod
+    def convert_to_user_currency(request, num):
+        user_currency = Currency.objects.get(language=request.LANGUAGE_CODE)
+        default_currency = Currency.objects.get(code=BASE_CURRENCY)
+        exchange_rate = ExchangeRate.objects.filter(base_currency=default_currency,
+                                                    target_currency=user_currency).first()
+        converted_price = round(2 * num * exchange_rate.rate) / 2
+        print(f'convert_to_user_currency {num} -> {converted_price}')
         return converted_price

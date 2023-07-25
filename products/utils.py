@@ -7,8 +7,12 @@ def change_product_visibility(queryset):
 
 def round_number(num):
     """
-        Round number to 0.5
-        Set decimal places to 2
+        '{:,.2f}'.format(num)
     """
     #num = round(num * 2) / 2
     return '{:,.2f}'.format(num)
+
+def number_to_float(num_str):
+    num_str = num_str.replace(',', '')
+    num_float = float(num_str)
+    return num_float
