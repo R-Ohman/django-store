@@ -27,31 +27,76 @@ def index(request):
     return render(request, 'products/index.html', context)
 
 
+def filter_products(request, category_id=None):
+    if request.GET.get('cat'):
+        category_id = int(request.GET.get('cat'))
+
+    category_products = Product.objects.filter(category_id=category_id,
+                                          is_visible=True) if category_id else Product.objects.filter(is_visible=True)
+
+    if category_products:
+        category_products = category_products.order_by('-id')
+        # filtered_products = Product.objects.filter(is_visible=True).order_by('price')
+        lowest_price_product = min(category_products, key=lambda product: product.discounted_price)
+        highest_price_product = max(category_products, key=lambda product: product.discounted_price)
+
+        lowest_price = ExchangeRate.convert_to_user_currency(request, lowest_price_product.price)
+        highest_price = ExchangeRate.convert_to_user_currency(request, highest_price_product.price)
+        lowest_price = int(lowest_price_product.discount_multiply(lowest_price))
+        highest_price = int(highest_price_product.discount_multiply(highest_price))
+
+        # get min and max price from user
+        min_price, max_price = request.GET.get('price').split('-') if request.GET.get('price') else (None, None)
+        min_price = int(min_price) if min_price else None
+        max_price = int(max_price) if max_price else None
+
+        if not min_price or not lowest_price <= min_price <= highest_price:
+            min_price = lowest_price
+        if not max_price or not lowest_price <= max_price <= highest_price:
+            max_price = highest_price
+
+        if min_price > max_price:
+            min_price, max_price = max_price, min_price
+
+        min_price_base = ExchangeRate.convert_from_user_to_base(request, min_price)
+        max_price_base = ExchangeRate.convert_from_user_to_base(request, max_price)
+        products = list(filter(lambda product: min_price_base <= product.discounted_price <= max_price_base, category_products))
+
+        currency, products_with_converted_price = None, []
+        for product in products:
+            currency, converted_price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
+            products_with_converted_price.append({
+                'product': product,
+                'price': round_number(converted_price),
+                'discounted_price': round_number(product.discount_multiply(converted_price)),
+            })
+
+        return {
+            'category_products': category_products,
+            'products_with_converted_price': products_with_converted_price,
+            'lowest_price': str(lowest_price),
+            'highest_price': str(highest_price),
+            'min_price': str(min_price),
+            'max_price': str(max_price),
+            'category': ProductCategory.objects.get(id=category_id) if category_id else None,
+            'currency': currency,
+        }
+    return {
+        'products_with_converted_price': [],
+        'min_price': None,
+        'max_price': None,
+        'currency': None,
+        'category': ProductCategory.objects.get(id=category_id) if category_id else None,
+    }
+
 def products(request, category_id=None):
-    all_products = Product.objects.filter(category_id=category_id, is_visible=True) if category_id else Product.objects.filter(is_visible=True)
-    products = all_products.order_by('-id')
 
-    min_price, max_price = request.GET.get('price').split('-') if request.GET.get('price') else (None, None)
-    if min_price and max_price:
-        min_price = ExchangeRate.convert_from_user_to_base(request, int(min_price))
-        max_price = ExchangeRate.convert_from_user_to_base(request, int(max_price))
+    context = filter_products(request)
 
-        products = list(filter(lambda product: min_price <= product.discounted_price <= max_price, products))
+    page = request.GET.get('page', 1)
+    per_page = 3
 
-
-    currency = None
-    products_with_converted_price = []
-    for product in products:
-        currency, converted_price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
-        products_with_converted_price.append({
-            'product': product,
-            'price': round_number(converted_price),
-            'discounted_price': round_number(product.discount_multiply(converted_price)),
-        })
-    page = request.GET.get('page', 1)  # Получаем номер страницы из параметров запроса
-    per_page = 3  # Количество продуктов на странице
-    # Разбиваем продукты на страницы
-    paginator = Paginator(products_with_converted_price, per_page)
+    paginator = Paginator(context['products_with_converted_price'], per_page)
 
     try:
         page_number = int(page)
@@ -63,7 +108,7 @@ def products(request, category_id=None):
     if request.is_ajax():
         context = {
             'products_with_converted_price': page_products,
-            'currency': currency,
+            'currency': context['currency'],
             'current_page': int(page),
         }
         product_list_html = render_to_string('products/product_cards.html', context)
@@ -73,29 +118,15 @@ def products(request, category_id=None):
             'page_list_html': page_list_html
             })
 
-    #filtered_products = Product.objects.filter(is_visible=True).order_by('price')
-    lowest_price_product = min(all_products, key=lambda product: product.discounted_price)
-    highest_price_product = max(all_products, key=lambda product: product.discounted_price)
-    lowest_price = ExchangeRate.convert_to_user_currency(request, lowest_price_product.price)
-    highest_price = ExchangeRate.convert_to_user_currency(request, highest_price_product.price)
-    lowest_price = int(lowest_price_product.discount_multiply(lowest_price))
-    highest_price = int(highest_price_product.discount_multiply(highest_price))
+    context.update(
+        {
+            'products_with_converted_price': page_products,
+            'categories': ProductCategory.objects.all(),
+            'current_page': int(page),
+            'carousel_images': CarouselImage.objects.filter(carousel=Carousel.objects.get(name="products_main_page")),
+        }
+    )
 
-    min_price, max_price = request.GET.get('price').split('-') if request.GET.get('price') else (None, None)
-
-    context = {
-        'products_with_converted_price': page_products,
-        'categories': ProductCategory.objects.all(),
-        'current_page': int(page),  # Добавляем текущую страницу в контекст
-        'category': ProductCategory.objects.get(id=category_id) if category_id else None,
-        'currency': currency,
-        'carousel_images': CarouselImage.objects.filter(carousel=Carousel.objects.get(name="products_main_page")),
-
-        'lowest_price': lowest_price,
-        'highest_price': highest_price,
-        'min_price': min_price if min_price else lowest_price,
-        'max_price': max_price if max_price else highest_price,
-    }
 
     return render(request, 'products/products.html', context)
 
