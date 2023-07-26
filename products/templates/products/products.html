@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block css %}
+<!-- Подключение js-cookie -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+
+
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
@@ -36,7 +40,26 @@
                 {% endfor %}
             </div>
             {% if category_products %}
-            <div class="form-row">
+            <div class="form-row d-flex justify-content-center">
+                <div class="col-12 my-4">
+                        <select id="sortSelect" class="custom-select">
+                                <option value="none" {% if sort_by == "none" %} selected {% endif %}>
+                                    {% trans 'Novelties' %}
+                                </option>
+                                <option value="asc" {% if sort_by == "asc" %} selected {% endif %}>
+                                    {% trans 'Price: Low to High' %}
+                                </option>
+                                <option value="desc" {% if sort_by == "desc" %} selected {% endif %}>
+                                    {% trans 'Price: High to Low' %}
+                                </option>
+                                <option value="pop" {% if sort_by == "pop" %} selected {% endif %}>
+                                    {% trans 'By popularity' %}
+                                </option>
+                                <option value="top" {% if sort_by == "top" %} selected {% endif %}>
+                                    {% trans 'By rating' %}
+                                </option>
+                            </select>
+                    </div>
                 <div class="range_container">
                     <div class="sliders_control">
                         <input id="fromSlider" type="range" value="{{ min_price }}" min="{{ lowest_price }}"
@@ -45,14 +68,14 @@
                                max="{{ highest_price }}"/>
                     </div>
                     <div class="form_control">
-                        <div class="col-10">
+                        <div class="col-9 d-flex justify-content-between">
                             <input class="form_control_container__time__input" type="number" id="fromInput"
                                    value="{{ min_price }}" min="{{ lowest_price }}" max="{{ highest_price }}"/>
-                            <span>-</span>
+                            <span class="text-dark opacity-75">—</span>
                             <input class="form_control_container__time__input" type="number" id="toInput"
                                    value="{{ max_price }}" min="{{ lowest_price }}" max="{{ highest_price }}"/>
                         </div>
-                        <div class="col-2">
+                        <div class="col-3">
                             <button id="applyFilter" class="btn btn-primary">{% trans 'OK' %}</button>
                         </div>
                     </div>

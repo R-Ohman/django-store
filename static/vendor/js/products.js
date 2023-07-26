@@ -1,3 +1,13 @@
+function saveSortByToCookies(sortBy) {
+    Cookies.set('sort_by', sortBy);
+}
+
+// Функция для загрузки значения sort_by из cookies
+function loadSortByFromCookies() {
+    return Cookies.get('sort_by');
+}
+
+
 function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -95,18 +105,37 @@ function addPriceToUrl() {
 
 
 $(document).ready(function () {
+    const sortByFromCookies = loadSortByFromCookies();
+    if (sortByFromCookies) {
+        $('#sortSelect').val(sortByFromCookies);
+    }
+
     // Используем делегирование событий для обработки кликов на кнопках пагинации
     $(document).on('click', '.pagination .page-link', function (e) {
         e.preventDefault();
         var page = $(this).data('page');
         var cat = getUrlParameter('cat');
-        loadProducts(page, cat);
+        var price = getUrlParameter('price');
+        loadProducts(page, cat, price);
     });
 
-    function loadProducts(page, cat) {
+    $('#sortSelect').on('change', function () {
+        var page = getUrlParameter('page') || 1;
+        var cat = getUrlParameter('cat');
+        var price = getUrlParameter('price');
+        const selectedSort = $(this).val();
+        saveSortByToCookies(selectedSort);
+        loadProducts(page, cat, price);
+    });
+
+    function loadProducts(page, cat, price) {
         $.ajax({
             url: window.location.pathname,
-            data: {page: page, cat: cat},
+            data: {
+                page: page,
+                cat: cat,
+                price: price
+            },
             success: function (response) {
                 $('#product-list').html(response.product_list_html);
                 $('#page-list').html(response.page_list_html);

@@ -27,15 +27,9 @@ def index(request):
     return render(request, 'products/index.html', context)
 
 
-def filter_products(request, category_id=None):
-    if request.GET.get('cat'):
-        category_id = int(request.GET.get('cat'))
-
-    category_products = Product.objects.filter(category_id=category_id,
-                                          is_visible=True) if category_id else Product.objects.filter(is_visible=True)
+def filter_products(request, category_id=None, category_products=None):
 
     if category_products:
-        category_products = category_products.order_by('-id')
         # filtered_products = Product.objects.filter(is_visible=True).order_by('price')
         lowest_price_product = min(category_products, key=lambda product: product.discounted_price)
         highest_price_product = max(category_products, key=lambda product: product.discounted_price)
@@ -91,7 +85,26 @@ def filter_products(request, category_id=None):
 
 
 def products(request, category_id=None):
-    context = filter_products(request)
+    sort_by = request.COOKIES.get('sort_by') if request.COOKIES.get('sort_by') else "none"
+    print(sort_by)
+
+    ordered_products = Product.objects.filter(is_visible=True)
+
+    if request.GET.get('cat'):
+        category_id = int(request.GET.get('cat'))
+        ordered_products = ordered_products.filter(category_id=category_id)
+
+    if sort_by in ['asc', 'desc']:
+        ordered_products = sorted(ordered_products, key=lambda product: product.discounted_price)
+        if sort_by == 'desc':
+            ordered_products = ordered_products[::-1]
+
+    elif sort_by == 'top':
+        ordered_products = sorted(ordered_products, key=lambda product: product.assessment, reverse=True)
+    elif sort_by == 'pop':
+        ordered_products = sorted(ordered_products, key=lambda product: product.comments.count(), reverse=True)
+
+    context = filter_products(request, category_products=ordered_products, category_id=category_id)
     page = request.GET.get('page', 1)
     per_page = 3
     paginator = Paginator(context['products_with_converted_price'], per_page)
@@ -107,6 +120,7 @@ def products(request, category_id=None):
             'products_with_converted_price': page_products,
             'currency': context['currency'],
             'current_page': int(page),
+            'sort_by': sort_by,
         }
         product_list_html = render_to_string('products/product_cards.html', context)
         page_list_html = render_to_string('products/pagination.html', context)
@@ -117,6 +131,7 @@ def products(request, category_id=None):
 
     context.update(
         {
+            'sort_by': sort_by,
             'products_with_converted_price': page_products,
             'categories': ProductCategory.objects.all(),
             'current_page': int(page),
