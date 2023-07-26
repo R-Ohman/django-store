@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
-from comments.forms import CommentForm
+from comments.forms import CommentForm, UserReportForm
 from comments.models import ProductComment, Attachment, Like
 from payments.models import ExchangeRate
 from products.models import Product
@@ -145,3 +145,30 @@ def translate_comment(request, comment_id):
     except ProductComment.DoesNotExist:
         messages.error(request, translate_text_to_user_language("Comment does not exist!", request))
     return JsonResponse({ 'success': False })
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = UserReportForm(request.POST)
+        if form.is_valid():
+            user_report = form.save(commit=False)
+            user_report.user = request.user if request.user.is_authenticated else None
+            user_report.save()
+            messages.success(request, translate_text_to_user_language("Your message has been sent!", request))
+            return redirect('contact')
+    else:
+        if request.user.is_authenticated:
+            initial_data = {
+                'name': f'{request.user.first_name} {request.user.last_name}',
+                'email': request.user.email,
+            }
+            form = UserReportForm(initial=initial_data)
+        else:
+            form = UserReportForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'comments/contact.html', context)
+

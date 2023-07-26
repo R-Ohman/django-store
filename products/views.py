@@ -89,13 +89,11 @@ def filter_products(request, category_id=None):
         'category': ProductCategory.objects.get(id=category_id) if category_id else None,
     }
 
+
 def products(request, category_id=None):
-
     context = filter_products(request)
-
     page = request.GET.get('page', 1)
     per_page = 3
-
     paginator = Paginator(context['products_with_converted_price'], per_page)
 
     try:
@@ -104,7 +102,6 @@ def products(request, category_id=None):
     except (PageNotAnInteger, EmptyPage):
         page_products = paginator.page(1)
 
-    # Если это AJAX-запрос, возвращаем фрагмент HTML
     if request.is_ajax():
         context = {
             'products_with_converted_price': page_products,
@@ -126,8 +123,6 @@ def products(request, category_id=None):
             'carousel_images': CarouselImage.objects.filter(carousel=Carousel.objects.get(name="products_main_page")),
         }
     )
-
-
     return render(request, 'products/products.html', context)
 
 

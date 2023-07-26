@@ -45,6 +45,11 @@
                             class="fas fa-shopping-bag"></i> </a>
                 </li>
                 {% if not user.is_authenticated %}
+                <li>
+                    <a class="nav-link" href="{% url 'contact' %}">
+                        {% trans 'About us' %}
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user:login' %}">{% trans 'Log in' %}<i
                             class="fas fa-sign-in-alt"></i></a>
@@ -73,6 +78,11 @@
                             </a>
                         </li>
                         {% endif %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'contact' %}">
+                                {% trans 'About us' %}
+                            </a>
+                        </li>
 
                         <li>
                             <hr class="dropdown-divider">

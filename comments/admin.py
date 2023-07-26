@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from comments.models import ProductComment, Attachment
+from comments.models import ProductComment, Attachment, UserReport
 
 
 class AttachmentInline(admin.TabularInline):
@@ -53,4 +53,20 @@ class CommentAdmin(admin.ModelAdmin):
     def get_attachments_number(self, obj):
         return obj.attachments.count()
     get_attachments_number.short_description = 'Attachments'
+
+
+@admin.register(UserReport)
+class UserReportAdmin(admin.ModelAdmin):
+    list_display = ('email', 'topic', 'created_at', 'is_resolved')
+    readonly_fields = ('user', 'name', 'email', 'topic', 'text', 'created_at')
+    fields = ('user', 'name', 'email', 'topic', 'text', 'created_at', 'is_resolved')
+    search_fields = ('email', 'topic', )
+
+    def run_set_resolved(modeladmin, request, queryset):
+        for obj in queryset:
+            obj.is_resolved = True
+            obj.save()
+
+    run_set_resolved.short_description = "Set status to resolved"
+    actions = (run_set_resolved,)
 

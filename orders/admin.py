@@ -103,7 +103,7 @@ class RefundAdmin(admin.ModelAdmin):
         update_refund_status_to_refunded(queryset)
 
     run_update_refund_status.short_description = "Set refund status to refunded"
-    actions = [run_update_refund_status]
+    actions = (run_update_refund_status,)
     def get_images(self, obj):
         return format_html(''.join([f'<img src="{attachment.file.url}" width="500" style="margin:10px;" alt="{attachment.file.url}" />' for attachment in obj.attachments.all()]))
 

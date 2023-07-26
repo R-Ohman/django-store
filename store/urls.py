@@ -9,12 +9,16 @@ from products.views import index
 from store.settings import STATIC_URL
 from users.views import signup_redirect
 
+from comments.views import contact
+
+
 urlpatterns = [
     url(r'^favicon\.ico$', RedirectView.as_view(url = STATIC_URL + 'vendor/img/store/favicon.ico')),
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('products/', include('products.urls', namespace='products')),
     path('user/', include('users.urls', namespace='user')),
+    path('contact/', contact, name='contact'),
     path('i18n/', include('django.conf.urls.i18n')),
 
     path('social/signup/', signup_redirect, name='signup_redirect'),

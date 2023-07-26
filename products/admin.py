@@ -49,8 +49,9 @@ class ProductCarouselInline(admin.StackedInline):
     def get_images(self, obj):
         images = obj.carousel_images.all()
         url = reverse('admin:products_carousel_change', args=[obj.pk])
-        images = ''.join(f'<img src="{image.image.url}" width="200" style="margin:10px;"/>' for image in images)
-        return format_html(f'<a href="{url}">{images}</a>')
+        images_html = f'<a href="{url}">Click to go to the carousel preview.</a><br/>'
+        images_html += ''.join(f'<img src="{image.image.url}" width="200" style="margin:10px;"/>' for image in images)
+        return format_html(f'<a href="{url}">{images_html}</a>')
     get_images.short_description = 'Images'
     classes = ('collapse',)
 

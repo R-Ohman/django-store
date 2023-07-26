@@ -65,3 +65,22 @@ class Like(models.Model):
         return 1 if self.is_positive else -1
 
     is_positive_value = property(get_is_positive, set_is_positive)
+
+
+class UserReport(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='comment_reports', null=True, blank=True)
+    name = models.CharField(max_length=255, null=False, blank=False)
+    email = models.EmailField(null=False, blank=False)
+    topic = models.CharField(max_length=255, null=False, blank=False)
+    text = models.TextField(max_length=2048, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.name} | {self.topic}'
+
+    class Meta:
+        verbose_name = 'user report'
+        verbose_name_plural = 'user reports'
+
+

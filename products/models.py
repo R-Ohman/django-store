@@ -133,6 +133,11 @@ class CarouselImage(models.Model):
 class ProductCarousel(Carousel):
     product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='product_carousel')
 
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.product.name
+        super(ProductCarousel, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.name + ' | ' + self.product.name
 
