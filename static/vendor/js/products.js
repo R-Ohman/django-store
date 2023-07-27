@@ -1,10 +1,17 @@
 function saveSortByToCookies(sortBy) {
-    Cookies.set('sort_by', sortBy);
+    if (areCookiesAccepted()) {
+        Cookies.set('sort_by', sortBy);
+    }
 }
 
 // Функция для загрузки значения sort_by из cookies
 function loadSortByFromCookies() {
-    return Cookies.get('sort_by');
+    if (areCookiesAccepted()) {
+        return Cookies.get('sort_by');
+    }
+    else {
+        return 'pop';
+    }
 }
 
 

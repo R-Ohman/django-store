@@ -32,14 +32,14 @@
                 <form action="{% url 'user:orders:place_order' %}" method="post">
                     {% csrf_token %}
                     <div class="row g-3">
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <label for="{{ form.first_name.id_for_label }}" class="form-label">
                                 {% trans 'Name' %}
                             </label>
                             {{ form.first_name }}
                         </div>
 
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <label for="{{ form.last_name.id_for_label }}" class="form-label">
                                 {% trans 'Surname' %}
                             </label>
@@ -60,25 +60,25 @@
                             {{ form.country }}
                         </div>
 
-                        <div class="col-12 mt-3">
+                        <div class="col-12 mt-3 form-outline">
+                            {{ form.postal_code }}
                             <label for="{{ form.postal_code.id_for_label }}" class="form-label">
                                 {% trans 'Postal code' %}
                             </label>
-                            {{ form.postal_code }}
                         </div>
 
-                        <div class="col-12 mt-3">
+                        <div class="col-12 mt-3 form-outline">
+                            {{ form.address }}
                             <label for="{{ form.address.id_for_label }}" class="form-label">
                                 {% trans 'Address' %}
                             </label>
-                            {{ form.address }}
                         </div>
 
-                        <div class="col-12 mt-3">
+                        <div class="col-12 mt-3 form-outline">
+                            {{ form.phone }}
                             <label for="{{ form.phone.id_for_label }}" class="form-label">
                                 {% trans 'Phone number' %}
                             </label>
-                            {{ form.phone }}
                         </div>
                     </div>
                     <input type="hidden" name="currency_id" value="{{ baskets.currency.id }}">
@@ -93,5 +93,6 @@
         </div>
     </div>
 </section>
+
 {% endblock %}
 

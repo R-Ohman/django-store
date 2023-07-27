@@ -13,28 +13,6 @@ body {
     object-fit: cover;
 }
 
-@media (max-width: 992px) {
-    /* For screens smaller than 992px, set the height to 400px */
-    .carousel-inner img {
-        height: 400px;
-    }
-}
-
-/* Adjust the height for specific screen sizes */
-@media (max-width: 768px) {
-    /* For screens smaller than 768px, set the height to 200px */
-    .carousel-inner img {
-        height: 292px;
-    }
-}
-
-@media (max-width: 576px) {
-    /* For screens smaller than 576px, set the height to 150px */
-    .carousel-inner img {
-        height: 50vw;
-    }
-}
-
 .toast-success {
     background-color: #4caf50;
     color: #fff;
@@ -89,7 +67,6 @@ body {
 
 
 .sliders_control {
-    position: relative;
     min-height: 20px;
 }
 
@@ -139,6 +116,7 @@ input[type="number"] {
     font-size: 16px;
     border: none;
     -moz-appearance: textfield;
+    text-align: center;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -152,7 +130,7 @@ input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     height: 2px;
-    width: 100%;
+    width: 90%;
     position: absolute;
     background-color: #ffffff;
     pointer-events: none;
@@ -161,4 +139,36 @@ input[type="range"] {
 #fromSlider {
     height: 0;
     z-index: 1;
+}
+
+@media (max-width: 992px) {
+    /* For screens smaller than 992px, set the height to 400px */
+    .carousel-inner img {
+        height: 400px;
+    }
+
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 2px;
+        width: 100%;
+        background-color: #ffffff;
+        pointer-events: none;
+    }
+
+}
+
+/* Adjust the height for specific screen sizes */
+@media (max-width: 768px) {
+    /* For screens smaller than 768px, set the height to 200px */
+    .carousel-inner img {
+        height: 292px;
+    }
+}
+
+@media (max-width: 576px) {
+    /* For screens smaller than 576px, set the height to 150px */
+    .carousel-inner img {
+        height: 50vw;
+    }
 }

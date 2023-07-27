@@ -146,7 +146,7 @@ class UserProfileForm(UserChangeForm):
 
 class UserResetPasswordEmailForm(forms.Form):
     email = forms.CharField(widget=forms.EmailInput(attrs={
-        'class': 'form-control py-4',
+        'class': 'form-control form-icon-trailing py-4',
         'aria-describedby': 'emailHelp',
     }))
     captcha = ReCaptchaField(widget=ReCaptchaV3)

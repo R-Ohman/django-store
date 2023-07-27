@@ -17,3 +17,14 @@ body {
     text-decoration: none;
     color: white;
 }
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 116px;
+        background: url("../img/wallpaper_sm.jpg") no-repeat center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+    }
+}

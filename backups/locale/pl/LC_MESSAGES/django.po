@@ -53,7 +53,7 @@ msgstr "Załączniki"
 
 #: .\comments\templates\comments\comments_cards.html:80
 msgid "No photos"
-msgstr "Bez zdjęć"
+msgstr "Brak zdjęć"
 
 #: .\comments\templates\comments\pagination.html:7
 #: .\products\templates\products\pagination.html:8
@@ -507,3 +507,15 @@ msgstr "Zażądano zwrotu"
 
 msgid "Refunded"
 msgstr "Zwrócono"
+
+msgid "Defective Product"
+msgstr "Wadliwy produkt"
+
+msgid "Wrong Product"
+msgstr "Zły produkt"
+
+msgid "Received Damaged"
+msgstr "Uszkodzony produkt"
+
+msgid "Other"
+msgstr "Inne"

@@ -13,9 +13,11 @@
     <title>Store - {% block title %} {% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static '/vendor/mdb/css/mdb.min.css' %}" />
+
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <link href="{% static 'vendor/css/auth.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/css/base.css' %}" rel="stylesheet">
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
@@ -23,12 +25,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="{% static '/vendor/js/message_notifications.js' %}"></script>
 
-    <!-- Custom styles for this template -->
     {% block css %} {% endblock %}
 
 </head>
 
 <body>
+<div class="cookie-banner" id="cookieBanner" style="display: none;">
+    <p>{% trans 'This website uses cookies to ensure you get the best experience on our website.' %}</p>
+    <button onclick="acceptCookies()" class="btn btn-success">I agree</button>
+</div>
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -38,6 +43,7 @@
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
@@ -47,7 +53,7 @@
                 {% if not user.is_authenticated %}
                 <li>
                     <a class="nav-link" href="{% url 'contact' %}">
-                        {% trans 'About us' %}
+                        {% trans 'About us' %} <i class="fas fa-address-card"></i>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -107,19 +113,19 @@
                     <ul class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
                         <form action="{% url 'set_language' %}" method="post">
                             {% csrf_token %}
-                            <li>
+                            <li class="lang">
                                 <img id="en" src="{% static '/vendor/img/flags/united-kingdom.png' %}" class="ml-3" width="30" height="30">
                                 <label for="en" class="text-light">
                                     English
                                 </label>
                             </li>
-                            <li>
+                            <li class="lang">
                                 <img id="uk" src="{% static '/vendor/img/flags/ukraine.png' %}" class="ml-3" width="30" height="30">
                                 <label for="uk" class="text-light">
                                     Українська
                                 </label>
                             </li>
-                            <li>
+                            <li class="lang">
                                 <img id="pl" src="{% static '/vendor/img/flags/poland.png' %}" class="ml-3" width="30" height="30">
                                 <label for="pl" class="text-light">
                                     Polski
@@ -144,8 +150,6 @@
 </div>
 {% endif %}
 
-
-
 <!-- Page Content -->
 {% block content %} {% endblock %}
 
@@ -155,11 +159,15 @@
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
+
 <!-- FontAwesome script -->
 <script src="{% static 'vendor/fontawesome/fontawesome-icons.js' %}" crossorigin="anonymous"></script>
 
 <!-- Custom scripts for this template -->
 <script src="{% static '/vendor/js/nav-change-lang-submit.js' %}"></script>
+
+<script type="text/javascript" src="{% static '/vendor/mdb/js/mdb.min.js' %}"></script>
+<script src="{% static '/vendor/js/cookies.js' %}"></script>
 
 </body>
 

@@ -100,7 +100,7 @@ class OrderForm(forms.ModelForm):
         'placeholder': '+380 00 000 00 00',
     }), required=True)
     country = CountryField().formfield(widget=forms.Select(attrs={
-        'class': 'form-control',
+        'class': 'form-control select-input',
     }), required=True)
     postal_code = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',

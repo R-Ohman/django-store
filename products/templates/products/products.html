@@ -14,10 +14,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 <script src="{% static 'vendor/js/products.js' %}"></script>
 <link href="{% static 'vendor/css/products.css' %}" rel="stylesheet">
@@ -60,22 +57,22 @@
                                 </option>
                             </select>
                     </div>
-                <div class="range_container">
-                    <div class="sliders_control">
+                <div class="range_container align-content-center">
+                    <div class="sliders_control col-12">
                         <input id="fromSlider" type="range" value="{{ min_price }}" min="{{ lowest_price }}"
                                max="{{ highest_price }}"/>
                         <input id="toSlider" type="range" value="{{ max_price }}" min="{{ lowest_price }}"
                                max="{{ highest_price }}"/>
                     </div>
-                    <div class="form_control">
-                        <div class="col-9 d-flex justify-content-between">
+                    <div class="form_control mr-2">
+                        <div class="col-8 d-flex justify-content-between">
                             <input class="form_control_container__time__input" type="number" id="fromInput"
                                    value="{{ min_price }}" min="{{ lowest_price }}" max="{{ highest_price }}"/>
                             <span class="text-dark opacity-75">—</span>
                             <input class="form_control_container__time__input" type="number" id="toInput"
                                    value="{{ max_price }}" min="{{ lowest_price }}" max="{{ highest_price }}"/>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4 text-right">
                             <button id="applyFilter" class="btn btn-primary">{% trans 'OK' %}</button>
                         </div>
                     </div>

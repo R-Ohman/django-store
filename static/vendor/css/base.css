@@ -1,0 +1,15 @@
+li.lang:hover {
+    background-color: #3f454d;
+}
+
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+    z-index: 3;
+    opacity: 0.95;
+}

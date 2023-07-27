@@ -495,3 +495,15 @@ msgstr "Запит на повернення"
 
 msgid "Refunded"
 msgstr "Повернуто"
+
+msgid "Defective Product"
+msgstr "Товар пошкоджено"
+
+msgid "Wrong Product"
+msgstr "Невірний товар"
+
+msgid "Received Damaged"
+msgstr "Товар пошкоджено"
+
+msgid "Other"
+msgstr "Інша причина"
