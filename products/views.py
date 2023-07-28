@@ -3,6 +3,7 @@ import json
 from django.contrib import messages
 from decimal import Decimal
 
+from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import F
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -28,7 +29,6 @@ def index(request):
 
 
 def filter_products(request, category_id=None, category_products=None):
-
     if category_products:
         # filtered_products = Product.objects.filter(is_visible=True).order_by('price')
         lowest_price_product = min(category_products, key=lambda product: product.discounted_price)

@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+
+from email_app.models import EmailManager
 from store.settings import LOGIN_URL
 from users.models import User
 from users.translator import translate_text_to_user_language
-from users.utils import check_referer_no_keywords
+from users.utils import check_referer_no_keywords, get_user_country
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserResetPasswordForm, UserResetPasswordEmailForm
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
@@ -21,6 +23,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import login as auth_login
 
 from users.tokens import account_activation_token
+
 
 
 @login_required(login_url=LOGIN_URL)
@@ -43,26 +46,6 @@ def activate(request, uidb64, token):
         return redirect(reverse('index'))
 
 
-@login_required(login_url=LOGIN_URL)
-def activate_email(request, user, to_email):
-    mail_subject = translate_text_to_user_language('Activate your account.', request)
-    message = render_to_string('users/email_activate_account.html', {
-        'user': user.username,
-        'domain': get_current_site(request).domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user),
-        'protocol': 'https' if request.is_secure() else 'http',
-    })
-    email = EmailMessage(mail_subject, message, to=[to_email])
-    if email.send():
-        messages.success(request, translate_text_to_user_language(f'Please go to your \
-                                email {to_email} inbox and click on received activation link to confirm \
-                                and complete the registration. Note: Check your spam folder.', request))
-    else:
-        messages.error(request, translate_text_to_user_language('Sorry, we could not send you an activation link. \
-                                Please try again later.', request))
-
-
 def login(request):
     if request.user.is_authenticated:
         messages.error(request, translate_text_to_user_language('You are already logged in!', request))
@@ -79,12 +62,13 @@ def login(request):
             if user:
                 auth.login(request, user)
                 next_url = request.POST.get('next', '/')
+                user.country_code = get_user_country(request)
+                user.save()
                 return redirect(next_url)
     else:
         if request.GET.get('next'):
             next_url = request.GET.get('next')
         elif request.META.get('HTTP_REFERER') and check_referer_no_keywords(request):
-            print(request.META.get('HTTP_REFERER'))
             next_url = request.META.get('HTTP_REFERER')
         form = UserLoginForm(request=request)
 
@@ -105,7 +89,7 @@ def registration(request):
         form = UserRegistrationForm(data=request.POST, request=request)
         if form.is_valid():
             user = form.save()
-            activate_email(request, user, form.cleaned_data.get('email'))
+            EmailManager.activate_account(request, user, form.cleaned_data.get('email'))
 
             messages.success(request, translate_text_to_user_language('You have been successfully registered!', request))
             return HttpResponseRedirect(reverse('user:login'))
@@ -133,7 +117,7 @@ def profile(request):
 
             user = form.save()
             if form.cleaned_data.get('email') and not user.is_confirmed:
-                activate_email(request, user, form.cleaned_data.get('email'))
+                EmailManager.activate_account(request, user, form.cleaned_data.get('email'))
 
             messages.success(request, translate_text_to_user_language('The data has been successfully changed!', request))
         else:
@@ -200,18 +184,6 @@ def reset(request, uidb64, token):
     return render(request, 'users/reset_password.html', context)
 
 
-def reset_email(request, user):
-    current_site = get_current_site(request)
-    subject = translate_text_to_user_language('Reset password', request)
-    message = render_to_string('users/email_reset_password.html', {
-        'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user),
-    })
-    user.email_user(subject, message)
-
-
 def reset_password(request):
     if request.user.is_authenticated:
         messages.error(request, translate_text_to_user_language('You are already logged in!', request))
@@ -227,7 +199,7 @@ def reset_password(request):
                 'form': form,
             }
             if user:
-                reset_email(request, user)
+                EmailManager.reset_password(request, user)
                 context['email'] = form.cleaned_data.get('email')
                 messages.add_message(request, messages.SUCCESS, translate_text_to_user_language(
                     'An email has been sent to your email address with a link to reset your password!', request))

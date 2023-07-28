@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
@@ -172,3 +172,9 @@ def contact(request):
 
     return render(request, 'comments/contact.html', context)
 
+
+def image_view(request, product_id):
+    product = Product.objects.get(id=product_id)
+    image = product.image
+    image_html = f'<img src="{image.url}"/>'
+    return HttpResponse(image_html)

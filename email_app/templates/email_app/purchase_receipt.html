@@ -3,28 +3,29 @@
 {% load i18n %}
 
 {% block title %}
-  Store | {% trans 'Refund information' %}
+  Store | {% trans 'Order Receipt' %}
 {% endblock %}
 
 {% block id %}
-    {% trans 'Refund NO' %}: <strong>{{ refund.id }}</strong>
+    Invoice NO: <strong>{{ order.id }}</strong>
 {% endblock %}
 
 {% block date %}
-  {% trans 'Refund Date' %}: <strong>{{ refund.created }}</strong>
+  {% trans 'Invoice Date' %}: <strong>{{ order.created }}</strong>
 {% endblock %}
 
 {% block third_column %}
-  {% trans 'Total' %}: <strong>{{ refund.sum_str }}</strong>
+  {% trans 'Total' %}: <strong>{{ order.sum_str }}</strong>
 {% endblock %}
+
 
 
 {% block table_header %}
     <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
       <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
 
-<!--[if (mso)|(IE)]><td align="center" width="150" style="background-color: #1b1c4a;width: 150px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
+<!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #1b1c4a;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
   <div style="background-color: #1b1c4a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
 
@@ -44,8 +45,8 @@
   </div>
 </div>
 <!--[if (mso)|(IE)]></td><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="150" style="background-color: #1b1c4a;width: 150px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
+<!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #1b1c4a;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
   <div style="background-color: #1b1c4a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
 
@@ -64,29 +65,9 @@
   <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
   </div>
 </div>
-
-        <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
-  <div style="background-color: #1b1c4a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-
-<table id="u_content_heading_8" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-
-  <h1 class="v-text-align v-font-size" style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 18px; font-weight: 400;"><strong>{% trans 'Reason' %}</strong></h1>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
 <!--[if (mso)|(IE)]></td><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="150" style="background-color: #1b1c4a;width: 150px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
+<!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #1b1c4a;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
   <div style="background-color: #1b1c4a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
 
@@ -111,14 +92,14 @@
 {% endblock %}
 
 {% block table_body %}
-  {% for refund_product in refund.refund_products %}
+  {% for order_item in order_items %}
     <div class="u-row-container" style="padding: 0px;background-color: transparent">
     <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
       <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
         <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
 
-  <!--[if (mso)|(IE)]><td align="center" width="150" style="background-color: #ffffff;width: 150px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-  <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
+  <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #ffffff;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+  <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
     <div style="background-color: #ffffff;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
     <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
 
@@ -127,7 +108,7 @@
       <tr>
         <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 11px;font-family:arial,helvetica,sans-serif;" align="left">
 
-    <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 14px; font-weight: 400;">{{ refund_product.ordered_product.product.name }} | №{{ refund_product.ordered_product.product.id }}</h1>
+    <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 14px; font-weight: 400;">{{ order_item.product.name }} | №{{ order_item.product.id }}</h1>
 
         </td>
       </tr>
@@ -138,8 +119,8 @@
     </div>
   </div>
   <!--[if (mso)|(IE)]></td><![endif]-->
-  <!--[if (mso)|(IE)]><td align="center" width="150" style="background-color: #ffffff;width: 150px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-  <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
+  <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #ffffff;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+  <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
     <div style="background-color: #ffffff;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
     <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
 
@@ -148,27 +129,7 @@
       <tr>
         <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:20px 10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-    <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 14px; font-weight: 400;"><strong>{{ refund_product.quantity }}</strong></h1>
-
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-    <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-    </div>
-  </div>
-
-          <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
-    <div style="background-color: #ffffff;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-    <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-
-  <table id="u_content_heading_13" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-    <tbody>
-      <tr>
-        <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:20px 10px;font-family:arial,helvetica,sans-serif;" align="left">
-
-    <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 14px; font-weight: 400;"><strong>{% trans refund_product.reason %}</strong></h1>
+    <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 14px; font-weight: 400;"><strong>{{ order_item.quantity }}</strong></h1>
 
         </td>
       </tr>
@@ -179,8 +140,8 @@
     </div>
   </div>
   <!--[if (mso)|(IE)]></td><![endif]-->
-  <!--[if (mso)|(IE)]><td align="center" width="150" style="background-color: #ffffff;width: 150px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-  <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
+  <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #ffffff;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+  <div class="u-col u-col-33p33" style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
     <div style="background-color: #ffffff;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
     <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
 
@@ -189,7 +150,7 @@
       <tr>
         <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:20px 10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-    <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 14px; font-weight: 400;"><strong>{{ refund_product.sum }} {{ refund.order.currency.code }}</strong></h1>
+    <h1 class="v-text-align v-font-size" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 14px; font-weight: 400;"><strong>{{ order_item.sum_str }}</strong></h1>
 
         </td>
       </tr>
@@ -208,7 +169,7 @@
 {% endblock %}
 
 {% block table_footer %}
-<div class="u-row-container" style="padding: 0px;background-color: transparent">
+  <div class="u-row-container" style="padding: 0px;background-color: transparent">
   <div class="u-row no-stack" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
     <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
       <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
@@ -234,8 +195,8 @@
   </div>
 </div>
 <!--[if (mso)|(IE)]></td><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="150" style="background-color: #1b1c4a;width: 150px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 150px;display: table-cell;vertical-align: top;">
+<!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #1b1c4a;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-33p33" style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
   <div style="background-color: #1b1c4a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
 
@@ -244,7 +205,7 @@
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:20px 10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-  <h1 class="v-text-align v-font-size" style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 18px; font-weight: 400;"><strong>{{ refund.sum_str }}</strong></h1>
+  <h1 class="v-text-align v-font-size" style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Montserrat',sans-serif; font-size: 18px; font-weight: 400;"><strong>{{ order.sum_str }}</strong></h1>
 
       </td>
     </tr>
@@ -263,22 +224,21 @@
 
 {% block info_center %}
   <div class="v-text-align v-font-size" style="font-size: 14px; line-height: 180%; text-align: center; word-wrap: break-word;">
-    <p style="font-size: 16px; line-height: 180%;"><span>{% trans 'The requester is' %}: {{ refund.order.first_name }} {{ refund.order.last_name }}</span></p>
-    <p style="font-size: 16px; line-height: 180%;"><span>{% trans 'Actual refund status' %}: {% trans refund.get_status_display %}</span></p>
-    <p style="font-size: 16px; line-height: 180%;"><span>{% trans 'Your message' %}: {{ refund.message }}</span></p>
+    <p style="font-size: 16px; line-height: 180%;"><span>{% trans 'The receiver is' %}: {{ order.first_name }} {{ order.last_name }}</span></p>
+    <p style="font-size: 16px; line-height: 180%;"><span>{% trans 'Your delivery address is' %}: {{ order.address }}</span></p>
+    <p style="font-size: 14px; line-height: 180%;"><span style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 25.2px;">{% trans 'Thank you for your order! We are very happy that you use our services!' %}</span></p>
   </div>
 {% endblock %}
 
 {% block letter_and_contact_info %}
-  {% trans 'This letter is a confirmation of your refund request. Please do not reply to it. If you have any questions or want to change some information in your request, please contact us via our website.' %}
+    {% trans 'This letter is a confirmation of payment for the order. Please do not reply to it. If you have any questions or want to change some information in your order, please contact us via our website.' %}
 {% endblock %}
 
 {% block links %}
-  <a href="http://{{ domain }}{% url 'user:orders:orders_history' %}#refunds" style="text-decoration: none; color: white;">
-    {% trans 'View refunds' %}
+  <a href="{{ domain }}{% url 'user:orders:orders_history' %}" style="text-decoration: none; color: white;">
+    {% trans 'View orders' %}</a> &nbsp;
+  |
+  <a href="{{ domain }}" style="text-decoration: none; color: white;">
+    {% trans 'View in browser' %}
   </a>
-&nbsp;|
-<a href="http://{{ domain }}{% url 'user:orders:order_view' refund.order.id %}#refund" style="text-decoration: none; color: white;">
-  {% trans 'View in browser' %}
-</a>
 {% endblock %}

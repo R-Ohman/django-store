@@ -1,10 +1,21 @@
-from django.contrib import messages
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage, EmailMultiAlternatives
-from django.template.loader import render_to_string
 from django.urls import reverse
 from orders.models import OrderItem
-from users.translator import translate_text_to_user_language
+import geoip2.database
+
+def get_user_country(request):
+    geoip_database = 'data/GeoLite2-Country.mmdb'
+    user_ip = request.META.get('REMOTE_ADDR', None)
+    if user_ip:
+        reader = geoip2.database.Reader(geoip_database)
+
+        try:
+            response = reader.country(user_ip)
+            country_code = response.country.iso_code
+            return country_code
+        except geoip2.errors.AddressNotFoundError:
+            pass
+
+    return 'en'
 
 
 def check_referer_no_keywords(request):
@@ -29,24 +40,3 @@ def user_received_product(request, product):
             if user_order_item and user_order_item.order.get_status_display() == 'Completed':
                 return True
     return request.user.is_staff
-
-
-def refund_email(request, refund):
-    user = request.user
-    subject = translate_text_to_user_language('Confirmation of receipt of return request', request)
-    message = render_to_string('users/email_refund_products.html', {
-        'user': user,
-        'refund': refund,
-        'domain': get_current_site(request).domain,
-    })
-
-    email = EmailMultiAlternatives(subject, message, to=[user.email])
-    email.attach_alternative(message, "text/html")
-
-    if email.send():
-        messages.success(request, translate_text_to_user_language(
-            f'We have sent an confirmation of receipt of return request to your email ({user.email}). ', request))
-    else:
-        messages.error(request, translate_text_to_user_language(
-            'Unfortunately, we were unable to send a confirmation of receipt of return request to your email.\
-            However, you can find information about refunds in the "Orders" section or on your order page.', request))

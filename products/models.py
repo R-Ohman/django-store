@@ -45,7 +45,7 @@ class Product(models.Model):
     is_visible = models.BooleanField(default=True)
 
     discount_percentage = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
-
+    discount_end_date = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.category.name} | {self.name}'
@@ -72,6 +72,10 @@ class Product(models.Model):
     @property
     def discounted_price(self):
         return self.discount_multiply(self.price)
+
+    @property
+    def discounted_price_str(self):
+        return f'{round_number(self.discounted_price)} $'
 
     @property
     def discount(self):

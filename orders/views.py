@@ -4,13 +4,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
+from email_app.models import EmailManager
 from orders.forms import OrderForm, RefundForm
 from orders.models import OrderItem, Order, Refund, RefundAttachment, RefundProduct
 from products.models import Basket
 from store.settings import LOGIN_URL
 from payments.models import Currency
 from users.translator import translate_text_to_user_language
-from users.utils import refund_email
 
 
 @login_required(login_url=LOGIN_URL)
@@ -155,7 +155,7 @@ def request_refund(request, order_id):
                     return redirect(request.META.get('HTTP_REFERER', reverse('user:orders:orders_history')))
 
             if refund:
-                refund_email(request, refund)
+                EmailManager.refund_requested(request, refund)
 
             return redirect(reverse('user:orders:order_view', args=(order.id,)))
         else:

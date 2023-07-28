@@ -2,9 +2,10 @@ from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
 from django.dispatch import receiver
 from paypal.standard.models import ST_PP_COMPLETED
 
+from email_app.models import EmailManager
 from orders.models import Order
 from payments.models import ExchangeRate
-from payments.utils import order_paid_update_stock, is_within_range, receipt_email
+from payments.utils import order_paid_update_stock, is_within_range
 from store.settings import PAYPAL_RECEIVER_EMAIL
 
 
@@ -26,7 +27,7 @@ def process_payment(sender, **kwargs):
             return
 
         order_paid_update_stock(sender)
-        receipt_email(order)
+        EmailManager.purchase_receipt(order)
 
 
 @receiver(valid_ipn_received)

@@ -3,5 +3,5 @@ Hi, {{ user }}!
 
 Please, click on the link below to confirm your email:
 
-http://{{ domain }}{% url 'user:activate' uidb64=uid token=token %}
+{{ domain }}{% url 'user:activate' uidb64=uid token=token %}
 {% endautoescape %}
