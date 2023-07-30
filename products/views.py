@@ -4,7 +4,7 @@ from django.contrib import messages
 from decimal import Decimal
 
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import F
+from django.db.models import F, Q
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
@@ -94,6 +94,13 @@ def products(request, category_id=None):
         category_id = int(request.GET.get('cat'))
         ordered_products = ordered_products.filter(category_id=category_id)
 
+    search_text = request.GET.get('search') if request.GET.get('search') else None
+    if search_text:
+        ordered_products = ordered_products.filter(
+            Q(name__icontains=search_text)
+        )
+
+
     if sort_by in ['asc', 'desc']:
         ordered_products = sorted(ordered_products, key=lambda product: product.discounted_price)
         if sort_by == 'desc':
@@ -121,6 +128,7 @@ def products(request, category_id=None):
             'currency': context['currency'],
             'current_page': int(page),
             'sort_by': sort_by,
+            'search_text': search_text,
         }
         product_list_html = render_to_string('products/product_cards.html', context)
         page_list_html = render_to_string('products/pagination.html', context)
@@ -136,6 +144,7 @@ def products(request, category_id=None):
             'categories': ProductCategory.objects.all(),
             'current_page': int(page),
             'carousel_images': CarouselImage.objects.filter(carousel=Carousel.objects.get(name="products_main_page")),
+            'search_text': search_text,
         }
     )
     return render(request, 'products/products.html', context)

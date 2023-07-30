@@ -29,6 +29,10 @@
 
             <h1 class="my-4">Store</h1>
             <div class="list-group">
+                <a href="{% url 'products:index'%}" class="list-group-item text-dark
+                {% if not category %} active {% endif %}">
+                    {% trans 'All' %}
+                </a>
                 {% for cat in categories %}
                 <a href="{% url 'products:index'%}?cat={{cat.id}}" class="list-group-item text-dark
                 {% if category and category == cat %} active {% endif %}">
@@ -82,6 +86,19 @@
         </div>
 
         <div class="col-lg-9">
+
+           <div class="form-row align-items-center my-3">
+                    <div class="col">
+                        <input id="searchInput" type="text" class="form-control" name="search"
+                               placeholder="{% if search_text %}{{ search_text }}
+                                            {% else %}{% trans 'Search by product name' %}{% endif %}">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" id="searchButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+                        </button>
+                    </div>
+                </div>
 
             <div id="carouselExampleIndicators" class="carousel slide my-4 pr-4" data-ride="carousel">
                 <ol class="carousel-indicators">

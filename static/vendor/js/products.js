@@ -111,6 +111,16 @@ function addPriceToUrl() {
 }
 
 
+function addSearchTextToUrl() {
+    const search = document.getElementById('searchInput').value;
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set('search', search);
+    const currentUrl = window.location.href.split('?')[0];
+    const newUrl = `${currentUrl}?${queryParams.toString()}`;
+    window.location.href = newUrl;
+}
+
+
 $(document).ready(function () {
     const sortByFromCookies = loadSortByFromCookies();
     if (sortByFromCookies) {
@@ -123,7 +133,8 @@ $(document).ready(function () {
         var page = $(this).data('page');
         var cat = getUrlParameter('cat');
         var price = getUrlParameter('price');
-        loadProducts(page, cat, price);
+        var search = $('#searchInput').val();
+        loadProducts(page, cat, price, search);
     });
 
     $('#sortSelect').on('change', function () {
@@ -131,17 +142,19 @@ $(document).ready(function () {
         var cat = getUrlParameter('cat');
         var price = getUrlParameter('price');
         const selectedSort = $(this).val();
+        var search = $('#searchInput').val();
         saveSortByToCookies(selectedSort);
-        loadProducts(page, cat, price);
+        loadProducts(page, cat, price, search);
     });
 
-    function loadProducts(page, cat, price) {
+    function loadProducts(page, cat, price, search) {
         $.ajax({
             url: window.location.pathname,
             data: {
                 page: page,
                 cat: cat,
-                price: price
+                price: price,
+                search: search,
             },
             success: function (response) {
                 $('#product-list').html(response.product_list_html);
@@ -181,7 +194,7 @@ $(document).ready(function () {
             .catch(error => {
                 console.error(error);
                 showNotification('Authorization required', success = false);
-                window.location.href = '/user/login/'; // Перенаправляем пользователя на страницу входа
+                window.location.href = '/user/login/';
             });
     }
 
@@ -214,4 +227,5 @@ $(document).ready(function () {
     toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
 
     document.getElementById('applyFilter').addEventListener('click', addPriceToUrl);
+    document.getElementById('searchButton').addEventListener('click', addSearchTextToUrl);
 });
