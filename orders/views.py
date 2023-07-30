@@ -105,9 +105,10 @@ def order_view(request, pk):
 
 @login_required
 def cancel_order(request, pk):
-    order = Order.objects.get(id=pk)
-    order.status = Order.CANCEL
-    order.save()
+    order = Order.objects.get(id=pk, user=request.user)
+    if order:
+        order.status = Order.CANCEL
+        order.save()
     return HttpResponseRedirect(reverse('user:orders:orders_history'))
 
 

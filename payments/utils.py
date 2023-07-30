@@ -1,13 +1,9 @@
 from decimal import Decimal
 
 import requests
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-
 from orders.models import Order, OrderItem
 from payments.models import Currency
 from store.settings import BASE_CURRENCY
-from users.translator import translate_text_to_language_by_currency
 
 
 def update_exchange_rates(exchange_rates_queryset=None):

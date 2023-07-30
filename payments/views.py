@@ -14,6 +14,7 @@ from store.settings import LOGIN_URL, PAYPAL_RECEIVER_EMAIL
 from paypal.standard.forms import PayPalPaymentsForm
 
 from users.translator import translate_text_to_user_language
+from payments.tasks import check_payment_status_task
 
 
 @login_required(login_url=LOGIN_URL)
@@ -42,17 +43,22 @@ def make_payment(request, order_id):
 
     form = PayPalPaymentsForm(initial=paypal_dict)
 
-    context = {
-        'form': form,
-        'order': order,
-    }
-
     print(urlparse(request.META.get('HTTP_REFERER')).path)
     print(reverse('user:orders:orders_history'))
+
     if urlparse(request.META.get('HTTP_REFERER')).path == reverse('user:orders:orders_history'):
         messages.warning(request, translate_text_to_user_language(
                          'If you have already paid for your order, please wait for payment confirmation by email.\
                          In case of prolonged waiting please contact the site administration!', request))
+
+
+    time_to_pay = 30 * 60       # 30 min
+    check_payment_status_task.apply_async(args=[order_id], countdown=time_to_pay)
+
+    context = {
+        'form': form,
+        'order': order,
+    }
 
     return render(request, 'payments/payment.html', context)
 

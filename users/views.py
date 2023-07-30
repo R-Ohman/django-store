@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from email_app.models import EmailManager
+from orders.models import Order
 from store.settings import LOGIN_URL
 from users.models import User
 from users.translator import translate_text_to_user_language

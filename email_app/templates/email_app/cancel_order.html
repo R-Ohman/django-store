@@ -1,0 +1,33 @@
+{% extends 'email_app/purchase_receipt.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block title %}
+  Store | {% trans 'Order Cancel' %}
+{% endblock %}
+
+{% block id %}
+    Order NO: <strong>{{ order.id }}</strong>
+{% endblock %}
+
+{% block date %}
+  {% trans 'Date' %}: <strong>{{ order.created }}</strong>
+{% endblock %}
+
+
+{% block info_center %}
+  <div class="v-text-align v-font-size" style="font-size: 14px; line-height: 180%; text-align: center; word-wrap: break-word;">
+    <p style="font-size: 14px; line-height: 180%;"><span style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 25.2px;">{% trans 'Order canceled because we have not received payment for it.' %}</span></p>
+    <p style="font-size: 14px; line-height: 180%;"><span style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 25.2px;">{% trans 'If you believe there has been an error, please contact us through our website.' %}</span></p>
+  </div>
+{% endblock %}
+
+{% block links %}
+  <a href="{{ domain }}{% url 'user:orders:orders_history' %}#past_orders" style="text-decoration: none; color: white;">
+    {% trans 'View orders' %}</a> &nbsp;
+  |
+  <a href="{{ domain }}" style="text-decoration: none; color: white;">
+    {% trans 'View in browser' %}
+  </a>
+{% endblock %}

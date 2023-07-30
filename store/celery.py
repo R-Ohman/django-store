@@ -15,13 +15,9 @@ app.config_from_object(settings, namespace='CELERY')
 
 # Celery beat settings
 app.conf.beat_schedule = {
-    'send-report-every-single-minute': {
-        'task': 'payments.tasks.send_report',
-        'schedule': 60.0,
-    },
     'send-user-invite-2-times-a-day': {
         'task': 'users.tasks.invite_users_to_visit',
-        'schedule': 60.0,
+        'schedule': crontab(minute=0, hour='*/12')
     },
 }
 
