@@ -234,3 +234,12 @@ def empty_cart(request):
         messages.error(request, translate_text_to_user_language('Your cart is already empty!', request))
 
     return redirect(request.META.get('HTTP_REFERER', reverse('user:profile')))
+
+
+def product_discount_expiration(request, product_id):
+    try:
+        product = Product.objects.get(id=product_id)
+        time_to_expiration = product.time_to_discount_expiration
+        return JsonResponse({'time_to_expiration': time_to_expiration})
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)

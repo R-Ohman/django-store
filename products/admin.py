@@ -64,7 +64,7 @@ class ProductAdmin(TranslationAdmin):
     name_fields = [f'name_{lang_code}' for lang_code in lang_codes]
     description_fields = [f'description_{lang_code}' for lang_code in lang_codes]
 
-    list_display = ('name', 'price', 'quantity', 'category', 'id' ,'is_visible',)
+    list_display = ('name', 'price', 'discount_percentage', 'quantity', 'category', 'id' ,'is_visible',)
     fieldsets = (
         (None, {
             'fields': (('image', 'is_visible'),),
@@ -73,7 +73,7 @@ class ProductAdmin(TranslationAdmin):
             'fields': ('name_en', 'description_en'),
         }),
         ('Details', {
-            'fields': ('price', 'discount_percentage', 'quantity', 'category'),
+            'fields': ('price', ('discount_percentage', 'discount_end_date'), 'quantity', 'category'),
             'classes': ('wide',),
         }),
         ('Translations', {

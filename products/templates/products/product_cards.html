@@ -6,7 +6,7 @@
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card h-100">
             <div style="position: relative; display: inline-block;">
-                {% if product_with_converted_price.product.discount_percentage %}
+                {% if product_with_converted_price.product.discount %}
                     <strong class="product-discount-on-image bg-danger text-light">
                         {{ product_with_converted_price.product.discount}}
                     </strong>
@@ -41,6 +41,12 @@
                 {% if product_with_converted_price.discounted_price != product_with_converted_price.price %}
                 <h5>
                     <s>{{ product_with_converted_price.price }}</s> <strong class="text-danger">{{ product_with_converted_price.discounted_price }} {{ currency.symbol }}</strong>
+                    {% if product_with_converted_price.product.time_to_discount_expiration %}
+                    <br/>
+                    <span class="product-discount-time-to-expiration" data-product-id="{{ product_with_converted_price.product.id }}">
+                        {{ product_with_converted_price.product.time_to_discount_expiration }}
+                    </span>
+                    {% endif %}
                 </h5>
                 {% else %}
                 <h5>{{ product_with_converted_price.price }} {{ currency.symbol }}</h5>
@@ -56,5 +62,4 @@
     </div>
     {% endfor %}
 </div>
-
 

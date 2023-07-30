@@ -1,6 +1,7 @@
 import decimal
 
 from django.db import models
+from django.utils import timezone
 
 from comments.models import ProductComment
 from products.utils import round_number
@@ -79,16 +80,53 @@ class Product(models.Model):
 
     @property
     def discount(self):
-        return f'-{int(self.discount_percentage)} %' if self.discount_percentage else ''
+        return f'-{int(self.discount_percentage)} %' if self.discount_is_active else ''
 
+
+    @property
+    def discount_is_active(self):
+        return (self.discount_percentage and timezone.now() <= self.discount_end_date or
+                self.discount_percentage and not self.discount_end_date)
 
     def discount_multiply(self, num):
-        discount_percentage = self.discount_percentage or 0
+
+        discount_percentage = self.discount_percentage if self.discount_is_active else 0
+
         discount_decimal = decimal.Decimal(discount_percentage) / 100
         num_decimal = decimal.Decimal(num)
         discounted_price = (1 - discount_decimal) * num_decimal
         print(f'discount_multiply {num} -> {round(2 * discounted_price) / 2}')
         return round(2 * discounted_price) / 2
+
+    @property
+    def time_to_discount_expiration(self):
+        if self.discount_end_date:
+            time_difference = self.discount_end_date - timezone.now()
+
+            total_seconds = time_difference.total_seconds() if self.discount_is_active else 0
+
+            days = total_seconds // 86400
+            hours = (total_seconds % 86400) // 3600
+            minutes = (total_seconds % 3600) // 60
+            seconds = total_seconds % 60
+
+            if days >= 1:
+                # "DD:HH:MM:SS"
+                return f"{int(days):02d}:{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+            else:
+                # "HH:MM:SS"
+                return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+
+        return None
+
+    @property
+    def delete_discount(self):
+        if self.discount_percentage or self.discount_end_date:
+            self.discount_end_date = None
+            self.discount_percentage = None
+            self.save()
+            return True
+        return False
 
 
 class Basket(models.Model):
