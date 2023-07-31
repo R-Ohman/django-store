@@ -54,9 +54,15 @@
                 <p class="card-text">{{ product_with_converted_price.product.description }}</p>
             </div>
             <div class="card-footer text-center">
+                {% if product_with_converted_price.product.quantity == 0 %}
+                <a href="#" class="btn btn-outline-primary follow-product-availability" data-product-id="{{ product_with_converted_price.product.id }}">
+                    {% trans 'Follow it' %}
+                </a>
+                {% else %}
                 <a href="#" class="btn btn-outline-success add-to-basket" data-product-id="{{ product_with_converted_price.product.id }}">
                     {% trans 'Add to cart' %}
                 </a>
+                {% endif %}
             </div>
         </div>
     </div>

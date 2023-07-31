@@ -8,8 +8,7 @@ function saveSortByToCookies(sortBy) {
 function loadSortByFromCookies() {
     if (areCookiesAccepted()) {
         return Cookies.get('sort_by');
-    }
-    else {
+    } else {
         return 'pop';
     }
 }
@@ -175,6 +174,13 @@ $(document).ready(function () {
         });
     }
 
+    $(document).on('click', '.follow-product-availability', function (e) {
+        e.preventDefault();
+        var productId = $(this).data('product-id');
+        addToFollow(productId);
+    });
+
+
     function addToBasket(productId) {
         fetch('/products/basket/add/' + productId + '/')
             .then(response => {
@@ -187,6 +193,29 @@ $(document).ready(function () {
             .then(data => {
                 if (data.success) {
                     showNotification(data.product_name + data.message);
+                } else {
+                    showNotification(data.message, success = false);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                showNotification('Authorization required', success = false);
+                window.location.href = '/user/login/';
+            });
+    }
+
+    function addToFollow(productId) {
+        fetch('/products/follow/' + productId + '/')
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error when adding an item to cart');
+                }
+            })
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.product + ": " + data.message);
                 } else {
                     showNotification(data.message, success = false);
                 }

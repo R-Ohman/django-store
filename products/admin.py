@@ -5,7 +5,7 @@ from modeltranslation.admin import TranslationAdmin
 
 from comments.admin import CommentInline, AttachmentInline
 from products.forms import ProductAdminForm
-from products.models import ProductCategory, Product, Basket, Carousel, CarouselImage, ProductCarousel
+from products.models import ProductCategory, Product, Basket, Carousel, CarouselImage, ProductCarousel, ProductFollower
 from products.utils import change_product_visibility
 from store import settings
 from store.admin import set_admin_settings
@@ -126,3 +126,10 @@ class BasketAdmin(admin.TabularInline):
     extra = 0
 
 
+@admin.register(ProductFollower)
+class ProductFollowerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'created')
+    ordering = ('user',)
+    search_fields = ('product',)
+    fields = ('user', 'product', 'created')
+    readonly_fields = ('user', 'product', 'created')

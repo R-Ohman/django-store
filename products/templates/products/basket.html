@@ -30,7 +30,7 @@
             <div class="row text-center">
                 <div class="col-lg-4">
                     <input name="basketID" type="number" class="form-control basket-quantity"
-                           value="{{ basket.quantity|addslashes }}" min="1"
+                           value="{{ basket.quantity|addslashes }}" min="1" max="{{ basket.product.quantity }}"
                            data-basket-id="{{ basket.id }}">
                 </div>
                 <div class="col-lg-4">

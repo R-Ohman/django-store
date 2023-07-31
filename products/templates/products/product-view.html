@@ -114,10 +114,16 @@
                             {% endif %}
                         </div>
                         <div class="d-flex flex-row justify-content-between mt-3">
+                            {% if product.quantity == 0 %}
+                            <a href="{% url 'products:follow' product.id %}" class="btn btn-primary flex-grow-1 mr-2">
+                                {% trans 'Follow it' %}
+                            </a>
+                            {% else %}
                             <a href="#" class="btn btn-primary flex-grow-1 mr-2 add-to-basket"
                                data-product-id="{{ product.id }}">
                                 {% trans 'Add to cart' %}
                             </a>
+                            {% endif %}
                             <a href="{{ previous_page }}" class="btn btn-secondary flex-grow-1">
                                 {% trans 'Back' %}
                             </a>

@@ -33,16 +33,13 @@ def get_current_exchange_rate(targer_currency_code):
         return rate
 
 
-def order_paid_update_stock(sender):
-    print('order_paid_update_stock')
-    order = Order.objects.get(id=sender.invoice)
-    order.status = Order.PAID
+def order_cancel_update_stock(order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = Order.CANCEL
     order.save()
     order_items = OrderItem.objects.filter(order=order)
-
-    # decrease product quantity in stock
     for order_item in order_items:
-        order_item.product.quantity -= order_item.quantity
+        order_item.product.quantity += order_item.quantity
         order_item.product.save()
 
 

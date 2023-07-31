@@ -5,7 +5,7 @@ from paypal.standard.models import ST_PP_COMPLETED
 from email_app.models import EmailManager
 from orders.models import Order
 from payments.models import ExchangeRate
-from payments.utils import order_paid_update_stock, is_within_range
+from payments.utils import is_within_range, order_cancel_update_stock
 from store.settings import PAYPAL_RECEIVER_EMAIL
 
 
@@ -23,10 +23,11 @@ def process_payment(sender, **kwargs):
         if ipn.receiver_email != PAYPAL_RECEIVER_EMAIL or not is_within_range(ipn.mc_gross, order_sum, 0.1):
             # Not a valid payment
             print(f'Not a valid payment: {ipn.receiver_email} != {PAYPAL_RECEIVER_EMAIL} or {ipn.mc_gross} != {order.sum}')
-            order.status = Order.CANCEL
+            order_cancel_update_stock(order.id)
             return
-
-        order_paid_update_stock(sender)
+        else:
+            order.status = Order.PAID
+        order.save()
         EmailManager.purchase_receipt(order)
 
 

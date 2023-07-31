@@ -1,5 +1,7 @@
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
+
+from email_app.models import EmailManager
 from orders.models import Order, OrderItem
 
 
@@ -8,6 +10,9 @@ def update_product_quantity(sender, instance, **kwargs):
     order_items = instance.order_items.all()
     for order_item in order_items:
         product = order_item.product
+        if product.quantity == 0 and order_item.quantity > 0:
+            EmailManager.product_is_available(product)
+
         product.quantity += order_item.quantity
         product.save()
 
@@ -15,6 +20,9 @@ def update_product_quantity(sender, instance, **kwargs):
 @receiver(post_delete, sender=OrderItem)
 def update_product_quantity(sender, instance, **kwargs):
     product = instance.product
+    if product.quantity == 0 and instance.quantity > 0:
+        EmailManager.product_is_available(product)
+
     product.quantity += instance.quantity
     product.save()
 

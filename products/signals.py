@@ -1,5 +1,7 @@
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+
+from email_app.models import EmailManager
 from products.models import Product, ProductCategory
 from store import settings
 from deep_translator import GoogleTranslator
@@ -56,3 +58,19 @@ def auto_fill_translation_fields_product(sender, instance, **kwargs):
 @receiver(pre_save, sender=ProductCategory)
 def auto_fill_translation_fields_product_category(sender, instance, **kwargs):
     translate_fields(sender, instance, **kwargs)
+
+
+@receiver(pre_save, sender=Product)
+def remember_quantity_before_save(sender, instance, **kwargs):
+    try:
+        instance._original_quantity = Product.objects.get(id=instance.id).quantity
+    except Product.DoesNotExist:
+        pass
+
+@receiver(post_save, sender=Product)
+def update_quantity_after_save(sender, instance, **kwargs):
+    try:
+        if instance._original_quantity == 0 and instance.quantity > 0:
+            EmailManager.product_is_available(product=instance)
+    except AttributeError:
+        pass

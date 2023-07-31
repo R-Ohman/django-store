@@ -48,6 +48,8 @@ class Product(models.Model):
     discount_percentage = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     discount_end_date = models.DateTimeField(blank=True, null=True)
 
+    _original_quantity = None
+
     def __str__(self):
         return f'{self.category.name} | {self.name}'
 
@@ -95,7 +97,7 @@ class Product(models.Model):
         discount_decimal = decimal.Decimal(discount_percentage) / 100
         num_decimal = decimal.Decimal(num)
         discounted_price = (1 - discount_decimal) * num_decimal
-        print(f'discount_multiply {num} -> {round(2 * discounted_price) / 2}')
+
         return round(2 * discounted_price) / 2
 
     @property
@@ -127,6 +129,7 @@ class Product(models.Model):
             self.save()
             return True
         return False
+
 
 
 class Basket(models.Model):
@@ -188,3 +191,13 @@ class ProductCarousel(Carousel):
     class Meta:
         verbose_name = 'product carousel'
         verbose_name_plural = 'product carousels'
+
+
+class ProductFollower(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} | {self.product.name}'
+

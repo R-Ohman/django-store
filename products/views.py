@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from products.models import ProductCategory, Product, Basket, CarouselImage, Carousel
+from products.models import ProductCategory, Product, Basket, CarouselImage, Carousel, ProductFollower
 from payments.models import ExchangeRate
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -111,7 +111,15 @@ def products(request, category_id=None):
     elif sort_by == 'pop':
         ordered_products = sorted(ordered_products, key=lambda product: product.comments.count(), reverse=True)
 
-    context = filter_products(request, category_products=ordered_products, category_id=category_id)
+    products = []
+    for product in ordered_products:
+        if product.quantity > 0:
+            products.append(product)
+    for product in ordered_products:
+        if product.quantity == 0:
+            products.append(product)
+
+    context = filter_products(request, category_products=products, category_id=category_id)
     page = request.GET.get('page', 1)
     per_page = 3
     paginator = Paginator(context['products_with_converted_price'], per_page)
@@ -252,3 +260,18 @@ def product_discount_expiration(request, product_id):
         return JsonResponse({'time_to_expiration': time_to_expiration})
     except Product.DoesNotExist:
         return JsonResponse({'error': 'Product not found'}, status=404)
+
+
+@login_required(login_url=LOGIN_URL)
+def follow_product_availability(request, product_id):
+    product = Product.objects.get(id=product_id)
+    follower = ProductFollower.objects.filter(user=request.user, product=product)
+    if follower.exists():
+        follower = follower.first()
+        message = translate_text_to_user_language('You are already following this product', request)
+        success = False
+    else:
+        follower = ProductFollower.objects.create(user=request.user, product=product)
+        message = translate_text_to_user_language('You are now following this product', request)
+        success = True
+    return JsonResponse({'success': success, 'message': message, 'product': product.name})

@@ -7,6 +7,7 @@ from django.urls import reverse
 from email_app.models import EmailManager
 from orders.forms import OrderForm, RefundForm
 from orders.models import OrderItem, Order, Refund, RefundAttachment, RefundProduct
+from payments.utils import order_cancel_update_stock
 from products.models import Basket
 from store.settings import LOGIN_URL
 from payments.models import Currency
@@ -48,6 +49,8 @@ def place_order(request):
                         quantity=basket.quantity,
                         price=basket.discounted_price,
                     )
+                    order_item.product.quantity -= order_item.quantity
+                    order_item.product.save()
 
                 baskets.delete()
 
@@ -105,10 +108,9 @@ def order_view(request, pk):
 
 @login_required
 def cancel_order(request, pk):
-    order = Order.objects.get(id=pk, user=request.user)
-    if order:
-        order.status = Order.CANCEL
-        order.save()
+    if Order.objects.get(id=pk, user=request.user):
+        order_cancel_update_stock(order_id=pk)
+
     return HttpResponseRedirect(reverse('user:orders:orders_history'))
 
 

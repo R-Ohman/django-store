@@ -4,8 +4,9 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+
 from orders.models import Order, OrderItem, Refund
-from products.models import Product
+from products.models import Product, ProductFollower
 from store.settings import SITE_DOMAIN
 from users.models import User
 from users.translator import translate_text_to_language_by_currency, translate_text_to_language
@@ -148,3 +149,26 @@ def email_cancel_order_task(order_id):
         return f'cancel_order sent (order_id={order_id})'
     else:
         return f'cancel_order not sent (order_id={order_id})'
+
+
+@shared_task
+def email_product_is_available_task(product_id):
+    product_followers = ProductFollower.objects.filter(product_id=product_id)
+
+    for follower in product_followers:
+        user = follower.user
+        subject = translate_text_to_language(f'Hi, {user.first_name}, your product is available!', user.country_code)
+
+        message = render_to_string('email_app/product_is_available.html', {
+            'product': follower.product,
+            'domain': SITE_DOMAIN,
+        })
+
+        email = EmailMultiAlternatives(subject, message, to=[user.email])
+        email.attach_alternative(message, "text/html")
+        if email.send():
+            print(f'product_is_available sent (product_id={product_id}, user_id={user.id})')
+        else:
+            print(f'product_is_available not sent (product_id={product_id}), user_id={user.id})')
+
+    product_followers.delete()
