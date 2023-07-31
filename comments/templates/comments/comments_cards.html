@@ -10,7 +10,7 @@
 
 <div class="row justify-content-center" id="comment-container" data-current-page="{{ comments.number }}">
     {% for comment in comments %}
-    <div class="col-lg-4 mb-4">
+    <div class="col-lg-4 col-6 mb-4">
         <div class="card shadow-lg border-0 rounded-lg">
             <div class="card-header">
                 {% if comment.user == request.user or request.user.is_superuser or request.user.is_staff %}
@@ -73,7 +73,7 @@
                     <div class="row row-cols-1 row-cols-md-4">
                         {% if comment.attachments.all %}
                         {% for attachment in comment.attachments.all %}
-                        <div class="col mb-3">
+                        <div class="col-6 mb-3">
                             <div class="card">
                                 <a href="{{ attachment.file.url }}" data-fancybox="comment-gallery-{{ comment.id }}">
                                     <img src="{{ attachment.file.url }}" alt="{{ attachment.file.name }}"

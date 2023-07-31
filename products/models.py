@@ -87,7 +87,7 @@ class Product(models.Model):
 
     @property
     def discount_is_active(self):
-        return (self.discount_percentage and timezone.now() <= self.discount_end_date or
+        return (self.discount_percentage and self.discount_end_date and timezone.now() <= self.discount_end_date or
                 self.discount_percentage and not self.discount_end_date)
 
     def discount_multiply(self, num):
@@ -194,8 +194,8 @@ class ProductCarousel(Carousel):
 
 
 class ProductFollower(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='product_followers')
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='product_followers')
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

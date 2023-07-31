@@ -1,21 +1,44 @@
 {% load static %}
 {% load i18n %}
+<style>
+    @media (max-width: 768px) {
+        h4 {
+            font-size: 1rem;
+        }
+
+        h5 {
+            font-size: 0.9rem;
+        }
+
+        .description {
+            display: none;
+        }
+
+        .card-body {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
+</style>
 
 <div id="product-list" class="row">
     {% for product_with_converted_price in products_with_converted_price %}
-    <div class="col-lg-4 col-md-6 mb-4">
+    <div class="col-md-4 col-6 mb-4">
         <div class="card h-100">
             <div style="position: relative; display: inline-block;">
                 {% if product_with_converted_price.product.discount %}
-                    <strong class="product-discount-on-image bg-danger text-light">
-                        {{ product_with_converted_price.product.discount}}
-                    </strong>
+                <strong class="product-discount-on-image bg-danger text-light">
+                    {{ product_with_converted_price.product.discount}}
+                </strong>
                 {% endif %}
                 <div class="product-rating">
-                    <a class="text-decoration-none" href="{% url 'products:comments:view' product_with_converted_price.product.id %}#comments">
+                    <a class="text-decoration-none"
+                       href="{% url 'products:comments:view' product_with_converted_price.product.id %}#comments">
                         <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <!-- Placeholder SVG path for the star icon. Replace this with the actual SVG path. -->
-                            <style>svg.star{fill:#f5b938}</style>
+                            <style>svg.star {
+                                fill: #f5b938
+                            }</style>
                             {% if product_with_converted_price.product.assessment >= 2 %}
                             <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
                             {% else %}
@@ -34,16 +57,21 @@
             </div>
             <div class="card-body">
                 <h4 class="card-title">
-                    <a class="text-decoration-none text-dark" href="{% url 'products:comments:view' product_with_converted_price.product.id %}">
+                    <a class="text-decoration-none text-dark"
+                       href="{% url 'products:comments:view' product_with_converted_price.product.id %}">
                         {{ product_with_converted_price.product.name }}
                     </a>
                 </h4>
                 {% if product_with_converted_price.discounted_price != product_with_converted_price.price %}
                 <h5>
-                    <s>{{ product_with_converted_price.price }}</s> <strong class="text-danger">{{ product_with_converted_price.discounted_price }} {{ currency.symbol }}</strong>
+                    <s>{{ product_with_converted_price.price }}</s>
+                    <strong class="text-danger">
+                        {{ product_with_converted_price.discounted_price }} {{ currency.symbol }}
+                    </strong>
                     {% if product_with_converted_price.product.time_to_discount_expiration %}
                     <br/>
-                    <span class="product-discount-time-to-expiration" data-product-id="{{ product_with_converted_price.product.id }}">
+                    <span class="product-discount-time-to-expiration"
+                          data-product-id="{{ product_with_converted_price.product.id }}">
                         {{ product_with_converted_price.product.time_to_discount_expiration }}
                     </span>
                     {% endif %}
@@ -51,15 +79,17 @@
                 {% else %}
                 <h5>{{ product_with_converted_price.price }} {{ currency.symbol }}</h5>
                 {% endif %}
-                <p class="card-text">{{ product_with_converted_price.product.description }}</p>
+                <p class="card-text description">{{ product_with_converted_price.product.description }}</p>
             </div>
             <div class="card-footer text-center">
                 {% if product_with_converted_price.product.quantity == 0 %}
-                <a href="#" class="btn btn-outline-primary follow-product-availability" data-product-id="{{ product_with_converted_price.product.id }}">
+                <a href="#" class="btn btn-outline-primary follow-product-availability"
+                   data-product-id="{{ product_with_converted_price.product.id }}">
                     {% trans 'Follow it' %}
                 </a>
                 {% else %}
-                <a href="#" class="btn btn-outline-success add-to-basket" data-product-id="{{ product_with_converted_price.product.id }}">
+                <a href="#" class="btn btn-outline-success add-to-basket"
+                   data-product-id="{{ product_with_converted_price.product.id }}">
                     {% trans 'Add to cart' %}
                 </a>
                 {% endif %}
@@ -68,4 +98,20 @@
     </div>
     {% endfor %}
 </div>
+
+<script>
+    function updatePerPage() {
+        var perPage = window.innerWidth >= 768 ? 3 : 4;
+        // Отправляем значение perPage на сервер, чтобы можно было использовать его во view функции.
+        // Можно использовать AJAX-запрос или каким-либо другим способом передать значение на сервер.
+        // Здесь для примера используется cookie.
+        document.cookie = "per_page=" + perPage + "; path=/";
+    }
+
+    // Вызываем функцию при загрузке страницы
+    updatePerPage();
+
+    // Обновляем значение при изменении размера окна
+    window.addEventListener('resize', updatePerPage);
+</script>
 

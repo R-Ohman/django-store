@@ -14,7 +14,7 @@
 
 <div class="container-fluid mt-xs-3 mt-md-5 pt-2 mb-lg-5">
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8 col-sm-10">
+        <div class="col-lg-7 col-sm-10">
             <div class="row">
                 <div class="col-lg-12 mb-3 mx-2 mt-5 mt-lg-3">
                     <span class="product-rating">
@@ -31,7 +31,7 @@
                             <span class="product-rating-text">{{ product.assessment }}/5</span>
                         </a>
                     </span>
-                    {% if product.discount_percentage %}
+                    {% if product.discount %}
                         <strong class="product-discount bg-danger text-light">
                             {{ product.discount }}
                         </strong>
@@ -49,7 +49,7 @@
             </div>
             <div class="row">
                 <!-- Main product image carousel -->
-                <div id="product-carousel" class="carousel slide col-lg-6 col-md-6" data-ride="carousel">
+                <div id="product-carousel" class="carousel slide col-md-6" data-ride="carousel">
                     <ol class="carousel-indicators">
                         {% if product.carousel_images %}
                             {% for carousel_image in product.carousel_images %}
@@ -95,7 +95,7 @@
                 </div>
 
                 <!-- Product description and buttons -->
-                <div class="col-lg-6 col-md-3 mt-3">
+                <div class="col-md-6 mt-3">
                     <div class="d-flex flex-column">
                         <p class="ml-lg-4">{{ product.description }}</p>
                         <div class="d-flex justify-content-between align-items-center pl-lg-4 pr-lg-4 mt-3">
@@ -106,7 +106,7 @@
                             {% else %}
                                 <h4>{{ converted_price }} {{ currency.symbol }}</h4>
                             {% endif %}
-                            {% if product.time_to_discount_expiration %}
+                            {% if product.discount %}
                             <br/>
                             <span class="product-discount-time-to-expiration" data-product-id="{{ product.id }}">
                                 {{ product.time_to_discount_expiration }}
@@ -115,7 +115,8 @@
                         </div>
                         <div class="d-flex flex-row justify-content-between mt-3">
                             {% if product.quantity == 0 %}
-                            <a href="{% url 'products:follow' product.id %}" class="btn btn-primary flex-grow-1 mr-2">
+                            <a href="#" class="btn btn-outline-primary flex-grow-1 mr-2 follow-product-availability"
+                               data-product-id="{{ product.id }}">
                                 {% trans 'Follow it' %}
                             </a>
                             {% else %}
@@ -154,5 +155,21 @@
 <script src="{% static '/vendor/js/product-view.js' %}"></script>
 <link rel="stylesheet" href="{% static '/vendor/css/product-view.css' %}">
 <script src="{% static '/vendor/js/update_discount_time.js' %}"></script>
+
+<script>
+    function updatePerPage() {
+        var perPage = window.innerWidth >= 768 ? 3 : 4;
+        // Отправляем значение perPage на сервер, чтобы можно было использовать его во view функции.
+        // Можно использовать AJAX-запрос или каким-либо другим способом передать значение на сервер.
+        // Здесь для примера используется cookie.
+        document.cookie = "per_page=" + perPage + "; path=/";
+    }
+
+    // Вызываем функцию при загрузке страницы
+    updatePerPage();
+
+    // Обновляем значение при изменении размера окна
+    window.addEventListener('resize', updatePerPage);
+</script>
 
 {% endblock %}

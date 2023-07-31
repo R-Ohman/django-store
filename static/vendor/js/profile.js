@@ -37,7 +37,7 @@ quantityInputs.forEach((input) => {
             const productSumWithoutDiscountElement = document.querySelector('#product-' + basketId);
             const productSumElement = document.querySelector('#product-discount-' + basketId);
 
-            if (totalQuantityElement && totalSumElement && productSumElement) {
+            if (totalQuantityElement && totalSumElement && productSumWithoutDiscountElement) {
                 totalQuantityElement.textContent = data.total_quantity.toLocaleString('en-EN');
                 totalSumElement.textContent = data.total_sum.toLocaleString('en-EN', { minimumFractionDigits: 2 });
                 if (productSumElement) {

@@ -56,6 +56,14 @@ class ProductCarouselInline(admin.StackedInline):
     classes = ('collapse',)
 
 
+class ProductFollowerInline(admin.TabularInline):
+    model = ProductFollower
+    extra = 0
+    fields = ('user', 'created')
+    readonly_fields = ('user', 'created')
+    classes = ('collapse',)
+
+
 @admin.register(Product)
 class ProductAdmin(TranslationAdmin):
     lang_codes = [lang[0] for lang in settings.LANGUAGES if lang[0] != 'en']
@@ -73,7 +81,7 @@ class ProductAdmin(TranslationAdmin):
             'fields': ('name_en', 'description_en'),
         }),
         ('Details', {
-            'fields': ('price', ('discount_percentage', 'discount_end_date'), 'quantity', 'category'),
+            'fields': ('price', ('discount_percentage', 'discount_end_date'), 'quantity', 'category', 'comments_number', 'followers_number'),
             'classes': ('wide',),
         }),
         ('Translations', {
@@ -81,7 +89,7 @@ class ProductAdmin(TranslationAdmin):
             'classes': ('collapse',),
         }),
     )
-
+    readonly_fields = ('comments_number', 'followers_number')
     ordering = ('name', 'price')
     search_fields = ('name',)
     form = ProductAdminForm
@@ -90,8 +98,17 @@ class ProductAdmin(TranslationAdmin):
         change_product_visibility(queryset)
     change_visibility.short_description = "Change visibility"
 
+    def comments_number(self, obj):
+        return obj.comments.count()
+    comments_number.short_description = 'Comments'
+
+    def followers_number(self, obj):
+        return obj.product_followers.count()
+    followers_number.short_description = 'Followers'
+
     actions = (change_visibility,)
-    inlines = (ProductCarouselInline, CommentInline,)
+    inlines = (ProductCarouselInline, CommentInline, ProductFollowerInline,)
+
 
 
 @admin.register(ProductCategory)
@@ -133,3 +150,4 @@ class ProductFollowerAdmin(admin.ModelAdmin):
     search_fields = ('product',)
     fields = ('user', 'product', 'created')
     readonly_fields = ('user', 'product', 'created')
+

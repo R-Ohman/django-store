@@ -121,7 +121,7 @@ def products(request, category_id=None):
 
     context = filter_products(request, category_products=products, category_id=category_id)
     page = request.GET.get('page', 1)
-    per_page = 3
+    per_page = int(request.COOKIES.get('per_page', 3))
     paginator = Paginator(context['products_with_converted_price'], per_page)
 
     try:

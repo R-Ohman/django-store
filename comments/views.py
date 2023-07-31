@@ -49,7 +49,7 @@ def product_view(request, product_id):
     comments = ProductComment.objects.filter(product=product).order_by('-created_at')
 
     # Pagination
-    per_page = 3
+    per_page = int(request.COOKIES.get('per_page', 3))
     page_number = request.GET.get('page', 1)
     paginator = Paginator(comments, per_page)
 
