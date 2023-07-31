@@ -1,8 +1,9 @@
 {% extends 'users/base.html' %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}
-    {% trans 'Payment' %}
+{% trans 'Payment' %}
 {% endblock %}
 
 {% block content %}
@@ -15,11 +16,11 @@
                  alert-warning {% endif %} alert-dismissible fade show" role="alert"
                      style="margin-top: 50px;">
                     {% if messages %}
-                        {% for message in messages %}
-                            <strong>{{ message }}</strong>
-                        {% endfor %}
+                    {% for message in messages %}
+                    <strong>{{ message }}</strong>
+                    {% endfor %}
                     {% else %}
-                        <strong>{{ form.non_field_errors }}</strong>
+                    <strong>{{ form.non_field_errors }}</strong>
                     {% endif %}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -38,7 +39,8 @@
                                 {% trans 'Pay to complete your order' %}
                             </p>
                             <p class="mb-4">
-                                {% trans 'You have 30 minutes to pay for the order' %}
+                                {% trans 'Time to pay for the order' %}:
+                                <span id="order-time-left" data-order-id="{{ order.id }}"></span>
                             </p>
                             {{ form.render }}
                         </div>
@@ -55,6 +57,12 @@
         </div>
     </div>
 </main>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="{% static '/vendor/js/message_notifications.js' %}"></script>
+<script src="{% static '/vendor/js/update-payment-expiration.js' %}"></script>
+
 {% endblock %}
 
 

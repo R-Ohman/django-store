@@ -179,7 +179,7 @@ Store
 {% endblock %}
 
 {% block links %}
-<a href="{{ domain }}{% url 'products:comments:view' product.id %}" style="text-decoration: none; color: white;">
+<a href="{{ domain }}{% url 'products:view' product.id %}" style="text-decoration: none; color: white;">
     {% trans 'View product' %}</a> &nbsp;
 |
 <a href="{{ domain }}{% url 'products:index' %}" style="text-decoration: none; color: white;">

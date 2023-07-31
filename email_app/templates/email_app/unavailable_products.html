@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+<body>
+
+<h4>
+    There is the list of unavailable products, order it if needed:
+</h4>
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Link</th>
+    </tr>
+    {% for product in products %}
+    <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ domain }}{% url 'products:view' product.id %}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</html>

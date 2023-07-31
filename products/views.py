@@ -1,9 +1,6 @@
 import json
 
 from django.contrib import messages
-from decimal import Decimal
-
-from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import F, Q
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -15,7 +12,7 @@ from payments.models import ExchangeRate
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from products.utils import round_number, number_to_float
+from products.utils import round_number
 from store.settings import LOGIN_URL
 from users.translator import translate_text_to_user_language
 
@@ -86,7 +83,6 @@ def filter_products(request, category_id=None, category_products=None):
 
 def products(request, category_id=None):
     sort_by = request.COOKIES.get('sort_by') if request.COOKIES.get('sort_by') else "none"
-    print(sort_by)
 
     ordered_products = Product.objects.filter(is_visible=True)
 
@@ -275,3 +271,17 @@ def follow_product_availability(request, product_id):
         message = translate_text_to_user_language('You are now following this product', request)
         success = True
     return JsonResponse({'success': success, 'message': message, 'product': product.name})
+
+
+@login_required(login_url=LOGIN_URL)
+def unfollow_product(request, product_id):
+    product = Product.objects.get(id=product_id)
+    follower = ProductFollower.objects.filter(user=request.user, product=product)
+    if follower.exists():
+        follower = follower.first()
+        follower.delete()
+        messages.success(request, translate_text_to_user_language('You are no longer following this product', request))
+    else:
+        messages.success(request, translate_text_to_user_language('You are not following this product', request))
+
+    return redirect(request.META.get('HTTP_REFERER', reverse('user:profile')))

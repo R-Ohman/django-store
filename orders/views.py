@@ -67,7 +67,6 @@ def place_order(request):
 
     for field, error in form.errors.items():
         context['errors'].append(error)
-        print(field, " - " ,error)
 
     return render(request, 'orders/order-create.html', context)
 
@@ -161,8 +160,6 @@ def request_refund(request, order_id):
                 EmailManager.refund_requested(refund)
 
             return redirect(reverse('user:orders:order_view', args=(order.id,)))
-        else:
-            print("errors: ", form.errors)
     else:
         form = RefundForm(request=request)
 

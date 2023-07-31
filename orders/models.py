@@ -90,9 +90,6 @@ class Order(models.Model):
     def can_refund(self):
         current_time = now()
         time_difference = current_time - self.created
-        print(time_difference < timedelta(days=REFUND_TIME)
-                and self.status in self.refund_friendly_statuses
-                and not self.refund_exists)
         return (
                 time_difference < timedelta(days=REFUND_TIME)
                 and self.status in self.refund_friendly_statuses

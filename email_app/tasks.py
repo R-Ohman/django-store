@@ -7,6 +7,7 @@ from django.utils.encoding import force_bytes
 
 from orders.models import Order, OrderItem, Refund
 from products.models import Product, ProductFollower
+from store import settings
 from store.settings import SITE_DOMAIN
 from users.models import User
 from users.translator import translate_text_to_language_by_currency, translate_text_to_language
@@ -172,3 +173,22 @@ def email_product_is_available_task(product_id):
             print(f'product_is_available not sent (product_id={product_id}), user_id={user.id})')
 
     product_followers.delete()
+
+
+@shared_task
+def email_unavailable_products_notification_task(products):
+    admin_email = settings.EMAIL_HOST_USER
+    subject = 'Unavailable products notification'
+
+    message = render_to_string('email_app/unavailable_products.html', {
+        'products': products,
+        'domain': SITE_DOMAIN,
+    })
+
+    email = EmailMultiAlternatives(subject, message, to=[admin_email])
+    email.attach_alternative(message, "text/html")
+
+    if email.send():
+        print('unavailable_products_notification sent')
+    else:
+        print('unavailable_products_notification not sent')

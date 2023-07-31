@@ -17,3 +17,5 @@ def number_to_float(num_str):
     num_str = num_str.replace(',', '')
     num_float = float(num_str)
     return num_float
+
+

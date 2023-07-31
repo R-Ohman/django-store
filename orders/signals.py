@@ -29,7 +29,6 @@ def update_product_quantity(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=OrderItem)
 def update_product_quantity_on_order_item_save(sender, instance, **kwargs):
-    print('update_product_quantity_on_order_item_save')
     if instance.pk:  # Check if the order item already exists
         try:
             original_order_item = OrderItem.objects.get(pk=instance.pk)

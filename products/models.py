@@ -22,9 +22,6 @@ class ProductCategory(models.Model):
 
 class UserProductsQuerySet(models.QuerySet):
     def total_sum(self):
-        for item in self:
-            print(item.sum)
-
         return round_number(sum(float(item.sum.replace(',', ''))
                             if isinstance(item.sum, str) else item.sum for item in self))
 

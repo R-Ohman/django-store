@@ -37,7 +37,7 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{% url 'products:comments:view' product.id %}"
+                        <form method="post" action="{% url 'products:view' product.id %}"
                               enctype="multipart/form-data">
                             {% csrf_token %}
 

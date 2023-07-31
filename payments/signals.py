@@ -10,10 +10,8 @@ from store.settings import PAYPAL_RECEIVER_EMAIL
 
 
 def process_payment(sender, **kwargs):
-    print('process_payment')
     ipn = sender
     if ipn.payment_status == ST_PP_COMPLETED:
-        print('ST_PP_COMPLETED')
         order = Order.objects.get(id=ipn.invoice)
 
         order_sum = order.sum
@@ -33,11 +31,9 @@ def process_payment(sender, **kwargs):
 
 @receiver(valid_ipn_received)
 def valid_ipn_signal(sender, **kwargs):
-    print('valid_ipn_signal')
     process_payment(sender, **kwargs)
 
 
 @receiver(invalid_ipn_received)
 def invalid_ipn_signal(sender, **kwargs):
-    print('invalid_ipn_signal')
     process_payment(sender, **kwargs)

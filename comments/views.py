@@ -36,9 +36,6 @@ def product_view(request, product_id):
                 )
             # use django messages framework
             messages.success(request, "Yeeew, check it out on the home page!")
-            # return HttpResponseRedirect("/")
-        else:
-            print(form.errors)
     else:
         form = CommentForm(request=request)
 

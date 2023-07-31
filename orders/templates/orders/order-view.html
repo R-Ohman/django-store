@@ -31,7 +31,7 @@
                             {% for product_basket in product_baskets %}
                             <tr>
                                 <th scope="row">
-                                    <a href="{% url 'products:comments:view' product_basket.product.id %}">
+                                    <a href="{% url 'products:view' product_basket.product.id %}">
                                         {{ product_basket.product.name }}
                                     </a>
                                 </th>

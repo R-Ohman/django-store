@@ -62,5 +62,4 @@ class ExchangeRate(models.Model):
         exchange_rate = ExchangeRate.objects.filter(base_currency=default_currency,
                                                     target_currency=user_currency).first()
         converted_price = round(2 * num * exchange_rate.rate) / 2
-        print(f'convert_to_user_currency {num} -> {converted_price}')
         return converted_price

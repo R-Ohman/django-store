@@ -50,3 +50,15 @@ def is_within_range(num, range_base, range_delta):
     return lower_limit <= num <= upper_limit
 
 
+def format_time_delta(delta):
+    delta = int(delta)
+    time_to_pay = 1800      # 30 minutes
+    if delta > time_to_pay:
+        return '00:00'
+
+    delta = time_to_pay - delta
+    minutes = delta // 60
+    seconds = delta % 60
+
+    return f"{int(minutes):02}:{int(seconds):02}"
+

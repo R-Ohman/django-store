@@ -128,7 +128,6 @@ def profile(request):
 
             messages.success(request, translate_text_to_user_language('The data has been successfully changed!', request))
         else:
-            print(form.errors)
             messages.error(request, translate_text_to_user_language('Something went wrong, maybe this username or email \
                                     is already in use!', request))
         return HttpResponseRedirect(reverse('user:profile'))

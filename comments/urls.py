@@ -1,11 +1,9 @@
 from django.urls import path
-from comments.views import product_view, like_comment, delete_comment, translate_comment, image_view
+from comments.views import like_comment, delete_comment, translate_comment
 
 app_name = 'comments'
 
 urlpatterns = [
-    path('<int:product_id>/', product_view, name='view'),
-    path('<int:product_id>/image/', image_view, name='image'),
     path('like/<int:comment_id>/<str:is_positive>/', like_comment, name='like'),
     path('delete/<int:comment_id>/', delete_comment, name='delete'),
     path('translate/<int:comment_id>/', translate_comment, name='translate'),

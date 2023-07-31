@@ -12,7 +12,7 @@
                 <div style="position: relative; display: inline-block;">
                     <div class="product-rating">
                         <a class="text-decoration-none"
-                           href="{% url 'products:comments:view' following_product.product.id %}#comments">
+                           href="{% url 'products:view' following_product.product.id %}#comments">
                             <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                                 <!-- Placeholder SVG path for the star icon. Replace this with the actual SVG path. -->
                                 <style>svg.star {
@@ -27,7 +27,7 @@
                             <span class="product-rating-text">{{ following_product.product.assessment }}/5</span>
                         </a>
                     </div>
-                    <a href="{% url 'products:comments:view' following_product.product.id %}">
+                    <a href="{% url 'products:view' following_product.product.id %}">
                         <img class="card-img-top"
                              src="{% if following_product.product.image %}{{ following_product.product.image.url }}
                             {% else %}{% static '/vendor/img/products/default-product-image.png' %}{% endif %}"
@@ -37,18 +37,18 @@
                 <div class="card-body">
                     <h5 class="card-title">
                         <a class="text-decoration-none text-dark"
-                           href="{% url 'products:comments:view' following_product.product.id %}">
+                           href="{% url 'products:view' following_product.product.id %}">
                             {{ following_product.product.name }}
                         </a>
                     </h5>
                     <h6>{{ following_product.product.discounted_price_str }}</h6>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{% url 'products:comments:view' following_product.product.id %}"
+                    <a href="{% url 'products:view' following_product.product.id %}"
                        class="btn btn-outline-primary unfollow-product col-12">
                         {% trans 'View' %}
                     </a>
-                    <a href="#" class="col-12" data-product-id="{{ following_product.product.id }}">
+                    <a href="{% url 'products:unfollow' following_product.product.id %}">
                         {% trans 'Unfollow' %}
                     </a>
                 </div>
