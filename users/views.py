@@ -90,7 +90,10 @@ def registration(request):
         form = UserRegistrationForm(data=request.POST, request=request)
         if form.is_valid():
             user = form.save()
-            EmailManager.activate_account(request, user, form.cleaned_data.get('email'))
+            EmailManager.activate_account(user)
+            messages.success(request, translate_text_to_user_language(f'Please go to your \
+                                                        email {user.email} inbox and click on received activation link to confirm \
+                                                        and complete the registration. Note: Check your spam folder.', request))
 
             messages.success(request, translate_text_to_user_language('You have been successfully registered!', request))
             return HttpResponseRedirect(reverse('user:login'))
@@ -118,7 +121,10 @@ def profile(request):
 
             user = form.save()
             if form.cleaned_data.get('email') and not user.is_confirmed:
-                EmailManager.activate_account(request, user, form.cleaned_data.get('email'))
+                EmailManager.activate_account(user)
+                messages.success(request, translate_text_to_user_language(f'Please go to your \
+                                                            email {user.email} inbox and click on received activation link to confirm \
+                                                            your email. Note: Check your spam folder.', request))
 
             messages.success(request, translate_text_to_user_language('The data has been successfully changed!', request))
         else:
@@ -200,7 +206,7 @@ def reset_password(request):
                 'form': form,
             }
             if user:
-                EmailManager.reset_password(request, user)
+                EmailManager.reset_password(user)
                 context['email'] = form.cleaned_data.get('email')
                 messages.add_message(request, messages.SUCCESS, translate_text_to_user_language(
                     'An email has been sent to your email address with a link to reset your password!', request))

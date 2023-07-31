@@ -156,7 +156,7 @@ def request_refund(request, order_id):
                     return redirect(request.META.get('HTTP_REFERER', reverse('user:orders:orders_history')))
 
             if refund:
-                EmailManager.refund_requested(request, refund)
+                EmailManager.refund_requested(refund)
 
             return redirect(reverse('user:orders:order_view', args=(order.id,)))
         else:
