@@ -21,6 +21,32 @@ function addToFollow(productId) {
         });
 }
 
+function deleteComment(commentId) {
+    const currentPage = $('.pagination').find('.active > a').data('page'); // Получаем текущую активную страницу
+    const url = '/products/comments/delete/' + commentId + '/?page=' + currentPage; // Добавляем параметр page к URL
+    fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Error when deleting comment');
+            }
+        })
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message);
+                $('#comments').html(data.comments_html);
+            } else {
+                showNotification(data.message, success = false);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            showNotification('Authorization required', success = false);
+            window.location.href = '/user/login/';
+        });
+}
+
 $(document).ready(function () {
 
     $("[data-fancybox='carousel-gallery']").fancybox({
@@ -43,6 +69,12 @@ $(document).ready(function () {
         e.preventDefault();
         var productId = $(this).data('product-id');
         addToFollow(productId);
+    });
+
+    $(document).on('click', '.delete-comment', function (e) {
+        e.preventDefault();
+        var commentId = $(this).data('comment-id');
+        deleteComment(commentId);
     });
 
     function addToBasket(productId) {

@@ -34,8 +34,18 @@ def product_view(request, product_id):
                     comment=comment,
                     file=file
                 )
-            # use django messages framework
-            messages.success(request, "Yeeew, check it out on the home page!")
+            message = translate_text_to_user_language('Comment added successfully!', request)
+            success = True
+        else:
+            message = translate_text_to_user_language('Comment not added!', request)
+            success = False
+
+        response = product_comments(request, product_id)
+        return JsonResponse({
+            'success': success,
+            'message': message,
+            'comments_html': response['comments_html'],
+        })
     else:
         form = CommentForm(request=request)
 
@@ -113,18 +123,18 @@ def like_comment(request, comment_id, is_positive):
     return JsonResponse({'success': True, 'rating': comment.rating})
 
 
-@login_required
-def delete_comment(request, comment_id):
-    try:
-        comment = ProductComment.objects.get(id=comment_id)
-        if comment.user == request.user or request.user.is_staff:
-            comment.delete()
-            messages.success(request, translate_text_to_user_language("Comment deleted successfully!", request))
-        else:
-            messages.error(request, translate_text_to_user_language("You can't delete this comment!", request))
-    except ProductComment.DoesNotExist:
-        messages.error(request, translate_text_to_user_language("Comment does not exist!", request))
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+# @login_required
+# def delete_comment(request, comment_id):
+#     try:
+#         comment = ProductComment.objects.get(id=comment_id)
+#         if comment.user == request.user or request.user.is_staff:
+#             comment.delete()
+#             messages.success(request, translate_text_to_user_language("Comment deleted successfully!", request))
+#         else:
+#             messages.error(request, translate_text_to_user_language("You can't delete this comment!", request))
+#     except ProductComment.DoesNotExist:
+#         messages.error(request, translate_text_to_user_language("Comment does not exist!", request))
+#     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def translate_comment(request, comment_id):
@@ -133,15 +143,15 @@ def translate_comment(request, comment_id):
         translated_text = translate_text_to_user_language(comment.text, request)
 
         return JsonResponse({
-                'success': True,
-                'translated_text': translated_text,
-                'original_text': comment.text,
-                'message_translate': translate_text_to_user_language("Show translation", request),
-                'message_original': translate_text_to_user_language("Show original", request)
-             })
+            'success': True,
+            'translated_text': translated_text,
+            'original_text': comment.text,
+            'message_translate': translate_text_to_user_language("Show translation", request),
+            'message_original': translate_text_to_user_language("Show original", request)
+        })
     except ProductComment.DoesNotExist:
         messages.error(request, translate_text_to_user_language("Comment does not exist!", request))
-    return JsonResponse({ 'success': False })
+    return JsonResponse({'success': False})
 
 
 def contact(request):
@@ -175,3 +185,49 @@ def image_view(request, product_id):
     image = product.image
     image_html = f'<img src="{image.url}"/>'
     return HttpResponse(image_html)
+
+
+def product_comments(request, product_id):
+    product = Product.objects.get(id=product_id)
+    page = request.GET.get('page', 1)
+    print(page)
+    print(request.GET.get('page'))
+    product_comments = product.comments.all().order_by('-created_at')
+
+    per_page = int(request.COOKIES.get('per_page', 3))
+    paginator = Paginator(product_comments, per_page)
+
+    try:
+        comments_page = paginator.page(page)
+    except EmptyPage:
+        comments_page = paginator.page(1)
+
+    context = {
+        'comments': comments_page,
+        'page': page,
+        'request': request,
+        'can_comment': user_received_product(request, product) and \
+                       ProductComment.objects.filter(user=request.user,
+                                                     product=product).count() < 5,
+        'form': CommentForm(request=request),
+        'product': product,
+    }
+    comments_html = render_to_string('comments/comments.html', context, request=request)
+
+    return {
+        'success': True,
+        'message': translate_text_to_user_language("Comment deleted successfully!", request),
+        'comments_html': comments_html,
+    }
+
+def delete_comment(request, comment_id):
+    comment = ProductComment.objects.filter(id=comment_id).first()
+    if not comment:
+        return JsonResponse({
+            'success': False,
+            'message': translate_text_to_user_language("Comment does not exist!", request)
+        })
+
+    product = comment.product
+    comment.delete()
+    return JsonResponse(product_comments(request, product.id))

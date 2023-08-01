@@ -146,3 +146,29 @@ function addListenersToInputs() {
 }
 
 document.addEventListener('DOMContentLoaded', addListenersToInputs);
+
+function submitComment() {
+    const form = document.getElementById('comment-form');
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message);
+                $('#comments').html(data.comments_html);
+            } else {
+                showNotification(data.message);
+            }
+        })
+        .catch(error => {
+            // Обработка ошибки (если нужно)
+            console.error(error);
+        });
+}

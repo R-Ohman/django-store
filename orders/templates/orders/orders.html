@@ -11,24 +11,25 @@
 {% endblock %}
 
 {% block content %}
+
 <section>
-    <div class="container justify-content-center">
-        <div class="mt-3 d-flex justify-content-between col-8 mx-auto">
+    <div class="container justify-content-center p-0">
+        <div class="mt-3 d-flex justify-content-between col-md-8 mx-auto text-center px-sm-2">
             {% if current_orders and past_orders or current_orders and refunds %}
-                <a href="#current_orders">{% trans 'Current orders' %}</a> |
+                <a href="#current_orders" class="menu-link">{% trans 'Current orders' %}</a>
             {% endif %}
             {% if refunds %}
-                <a href="#refunds">{% trans 'Refunds' %}</a> |
+                <a href="#refunds" class="menu-link">{% trans 'Refunds' %}</a>
             {% endif %}
             {% if past_orders and current_orders or past_orders and refunds %}
-                <a href="#past_orders">{% trans 'Past orders' %}</a>
-            {% endif%}
+                <a href="#past_orders" class="menu-link">{% trans 'Past orders' %}</a>
+            {% endif %}
         </div>
     </div>
 
+
     <div class="container pb-5">
         <div class="text-center mt-5">
-            <h1>{{ title }}</h1>
             <div class="orders">
                 <table class="table mb-4" id="current_orders">
                     <thead>

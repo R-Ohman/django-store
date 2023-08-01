@@ -1,13 +1,5 @@
 {% load static %}
 {% load i18n %}
-<!-- Add Fancybox CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-<!-- Add jQuery (required by Fancybox) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Add Fancybox JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 
 <div id="comments">
@@ -36,9 +28,8 @@
                             {% trans 'Add a comment' %}
                         </h3>
                     </div>
-                    <div class="card-body">
-                        <form method="post" action="{% url 'products:view' product.id %}"
-                              enctype="multipart/form-data">
+                    <div class="card-body pb-sm-1 pb-md-4">
+                        <form id="comment-form" method="post" action="{% url 'products:view' product.id %}" enctype="multipart/form-data">
                             {% csrf_token %}
 
                             <div class="form-group">
@@ -64,9 +55,10 @@
                                     </label>
                                 </div>
                             </div>
-
                             {{ form.captcha }}
-                            <input class="btn btn-primary" type="submit" name="submit" value="{% trans 'Add the comment' %}"/>
+                            <div class="d-flex justify-content-center">
+                                <input class="btn btn-primary" type="button" name="submit" value="{% trans 'Add the comment' %}" onclick="submitComment()"/>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -84,5 +76,3 @@
     </div>
 
 </div>
-
-<script src="{% static '/vendor/js/comments.js' %}"></script>
