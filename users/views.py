@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from email_app.models import EmailManager
@@ -11,7 +12,7 @@ from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, Us
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import auth, messages
-from products.models import Basket
+from products.models import Basket, WishProduct, Product
 from payments.models import ExchangeRate
 
 # Email
@@ -221,3 +222,31 @@ def reset_password(request):
         'form': form,
     }
     return render(request, 'users/reset_password_email_form.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def add_to_wishlist(request, product_id):
+    product = Product.objects.get(id=product_id)
+    if WishProduct.objects.filter(user=request.user, product_id=product_id).exists():
+        message = translate_text_to_user_language('This product is already in your wishlist', request)
+        success = False
+    else:
+        WishProduct.objects.create(user=request.user, product_id=product_id)
+        message = product.name + translate_text_to_user_language(' has been successfully added to your wishlist', request)
+        success = True
+
+    response = {
+        'success': success,
+        'message': message,
+    }
+    return JsonResponse(response)
+
+
+@login_required(login_url=LOGIN_URL)
+def delete_from_wishlist(request, product_id):
+    wish_product = WishProduct.objects.filter(user=request.user, product_id=product_id).first()
+    success = True if wish_product else False
+    if wish_product:
+        wish_product.delete()
+
+    return JsonResponse({'success': success})

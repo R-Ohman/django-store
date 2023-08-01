@@ -46,6 +46,7 @@ class Product(models.Model):
     discount_end_date = models.DateTimeField(blank=True, null=True)
 
     _original_quantity = None
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.category.name} | {self.name}'
@@ -131,7 +132,7 @@ class Product(models.Model):
 
 class Basket(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='baskets')
     currency = models.ForeignKey('payments.Currency', on_delete=models.CASCADE, default=1)
 
     quantity = models.PositiveIntegerField(default=0)
@@ -198,3 +199,14 @@ class ProductFollower(models.Model):
     def __str__(self):
         return f'{self.user.username} | {self.product.name}'
 
+
+class WishProduct(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='wish_products')
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='wish_products')
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} | {self.product.name}'
+
+    class Meta:
+        unique_together = ('user', 'product')

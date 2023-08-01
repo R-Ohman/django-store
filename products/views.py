@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlparse
 
 from django.contrib import messages
 from django.db.models import F, Q
@@ -155,27 +156,37 @@ def products(request, category_id=None):
 
 
 @login_required(login_url=LOGIN_URL)
-def add_product(request, product_id):
-    basket = Basket.objects.filter(user=request.user, product_id=product_id).first()
+def add_to_basket(request, product_id):
+    product = Product.objects.get(id=product_id)
+    basket = Basket.objects.filter(user=request.user, product=product).first()
 
-    response = {
-        'success': True,
-        'product_name': Product.objects.get(id=product_id).name,
-        'message': translate_text_to_user_language('has been successfully added to your cart', request),
-    }
+    message = product.name + translate_text_to_user_language(' has been successfully added to your cart', request)
+    success = True
 
     if basket and basket.quantity < basket.product.quantity:
         basket.quantity += 1
         basket.save()
-    elif not basket and Product.objects.get(id=product_id).quantity > 0:
+    elif not basket and product.quantity > 0:
         Basket.objects.create(user=request.user, product_id=product_id, quantity=1)
     else:
-        response = {
-            'success': False,
-            'message': translate_text_to_user_language('Not enough goods in stock =(', request),
-        }
+        message = translate_text_to_user_language('Not enough goods in stock =(', request)
+        success = False
+
+    response = {
+        'success': success,
+        'message': message,
+    }
+
+    if urlparse(request.META.get('HTTP_REFERER')).path == reverse('user:profile'):
+        baskets = Basket.objects.filter(user=request.user)
+        for basket in baskets:
+            basket.currency, basket.price = ExchangeRate.get_user_currency_and_converted_product_price(request, basket.product)
+            basket.save()
+        basket_html = render_to_string('products/basket.html', {'baskets': baskets})
+        response.update({'basket_list_html': basket_html})
 
     return JsonResponse(response)
+
 
 
 @login_required
@@ -280,8 +291,13 @@ def unfollow_product(request, product_id):
     if follower.exists():
         follower = follower.first()
         follower.delete()
-        messages.success(request, translate_text_to_user_language('You are no longer following this product', request))
+        success = True
+        message = translate_text_to_user_language('You are no longer following this product', request)
     else:
-        messages.success(request, translate_text_to_user_language('You are not following this product', request))
+        success = False
+        message = translate_text_to_user_language('You are not following this product', request)
 
-    return redirect(request.META.get('HTTP_REFERER', reverse('user:profile')))
+    return JsonResponse({
+        'success': success,
+        'message': message,
+    })

@@ -95,7 +95,12 @@ class ProductAdmin(TranslationAdmin):
     form = ProductAdminForm
 
     def change_visibility(modeladmin, request, queryset):
-        change_product_visibility(queryset)
+        invisible_products = change_product_visibility(queryset)
+        for product in invisible_products:
+            product.product_followers.all().delete()
+            product.baskets.all().delete()
+            product.wish_products.all().delete()
+
     change_visibility.short_description = "Change visibility"
 
     def comments_number(self, obj):

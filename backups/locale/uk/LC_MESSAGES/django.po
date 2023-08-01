@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-23 20:19+0200\n"
+"POT-Creation-Date: 2023-07-31 23:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,17 +21,21 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
+#: .\comments\templates\comments\comments.html:16
+msgid "Comments"
+msgstr "Коментарі"
+
 #: .\comments\templates\comments\comments.html:36
 msgid "Add a comment"
 msgstr "Залишити відгук"
 
 #: .\comments\templates\comments\comments.html:46
-#: .\comments\templates\comments\comments_cards.html:38
+#: .\comments\templates\comments\comments_cards.html:46
 msgid "Assessment"
 msgstr "Оцінка"
 
 #: .\comments\templates\comments\comments.html:53
-#: .\comments\templates\comments\comments_cards.html:47
+#: .\comments\templates\comments\comments_cards.html:55
 msgid "Text"
 msgstr "Коментар"
 
@@ -44,44 +48,243 @@ msgstr "Додаток"
 msgid "Add the comment"
 msgstr "Опублікувати"
 
-#: .\comments\templates\comments\comments_cards.html:55
+#: .\comments\templates\comments\comments_cards.html:63
 msgid "Show translation"
 msgstr "Показати переклад"
 
-#: .\comments\templates\comments\comments_cards.html:63
+#: .\comments\templates\comments\comments_cards.html:71
 msgid "Attachments"
 msgstr "Додатки"
 
-#: .\comments\templates\comments\comments_cards.html:80
+#: .\comments\templates\comments\comments_cards.html:88
 msgid "No photos"
 msgstr "Фото відсутні"
 
+#: .\comments\templates\comments\contact.html:6
+#: .\products\templates\products\base.html:56
+#: .\products\templates\products\base.html:89
+msgid "About us"
+msgstr "Про нас"
+
+#: .\comments\templates\comments\contact.html:20
+msgid "About Us"
+msgstr "Про нас"
+
+#: .\comments\templates\comments\contact.html:21
+msgid ""
+"Welcome to our store! We are a dedicated team that strives to provide high-"
+"quality products and excellent customer service. Our goal is to make your "
+"shopping experience enjoyable and hassle-free. Feel free to explore our wide "
+"range of products and find the perfect items for yourself or your loved ones."
+msgstr ""
+"Ласкаво просимо до нашого магазину! Ми присвячена команда, яка прагне "
+"надавати високоякісні продукти і відмінний сервіс. Наша мета - зробити ваше "
+"придбання приємним і безпроблемним. Відчуйте себе вільно, щоб досліджувати "
+"наш широкий асортимент продуктів і знайти ідеальні речі для себе або своїх "
+"рідних."
+
+#: .\comments\templates\comments\contact.html:22
+msgid ""
+"If you have any questions or need assistance, please don't hesitate to "
+"contact us. We are here to help!"
+msgstr ""
+"Якщо у вас є які-небудь питання або потребує допомоги, будь ласка, не "
+"соромтеся зв'язатися з нами. Ми тут, щоб допомогти!"
+
+#: .\comments\templates\comments\contact.html:38
+msgid "Contact Us"
+msgstr "Контакт"
+
+#: .\comments\templates\comments\contact.html:47
+#: .\email_app\templates\email_app\invite_and_recommendations.html:24
+#: .\orders\templates\orders\order-create.html:37
+#: .\users\templates\users\profile.html:35
+#: .\users\templates\users\registration.html:36
+msgid "Name"
+msgstr "Ім'я"
+
+#: .\comments\templates\comments\contact.html:53
+#: .\users\templates\users\reset_password_email_form.html:47
+msgid "Email"
+msgstr "Електронна пошта"
+
+#: .\comments\templates\comments\contact.html:59
+msgid "Topic"
+msgstr "Тема"
+
+#: .\comments\templates\comments\contact.html:65
+#: .\orders\templates\orders\order-view.html:108
+#: .\orders\templates\orders\refund.html:73
+msgid "Message"
+msgstr "Повідомлення"
+
+#: .\comments\templates\comments\contact.html:70
+msgid "Send Message"
+msgstr "Відправити повідомлення"
+
 #: .\comments\templates\comments\pagination.html:7
 #: .\products\templates\products\pagination.html:8
-#: .\products\templates\products\product-view.html:88
+#: .\products\templates\products\product-view.html:89
 msgid "Previous"
 msgstr "Попередня"
 
 #: .\comments\templates\comments\pagination.html:20
 #: .\products\templates\products\pagination.html:22
-#: .\products\templates\products\product-view.html:92
+#: .\products\templates\products\product-view.html:93
 msgid "Next"
 msgstr "Наступна"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:483
+#: .\email_app\templates\email_app\cancel_order.html:7
+msgid "Order Cancel"
+msgstr "Скасувати замовлення"
+
+#: .\email_app\templates\email_app\cancel_order.html:15
+msgid "Date"
+msgstr "Дата"
+
+#: .\email_app\templates\email_app\cancel_order.html:21
+msgid "Order canceled because we have not received payment for it."
+msgstr "Замовлення скасовано, тому що ми не отримали оплату за нього."
+
+#: .\email_app\templates\email_app\cancel_order.html:22
+msgid ""
+"If you believe there has been an error, please contact us through our "
+"website."
+msgstr ""
+"Якщо ви вважаєте, що сталася помилка, будь ласка, зв'яжіться з нами через "
+"наш веб-сайт."
+
+#: .\email_app\templates\email_app\cancel_order.html:28
+#: .\email_app\templates\email_app\purchase_receipt.html:239
+msgid "View orders"
+msgstr "Переглянути замовлення"
+
+#: .\email_app\templates\email_app\cancel_order.html:31
+#: .\email_app\templates\email_app\invite_and_recommendations.html:176
+#: .\email_app\templates\email_app\product_is_available.html:186
+#: .\email_app\templates\email_app\purchase_receipt.html:242
+#: .\email_app\templates\email_app\refund_products.html:282
+msgid "View in browser"
+msgstr "Відкрити в браузері"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:6
+msgid "Special Offer"
+msgstr "Спеціальна пропозиція"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:45
+msgid "Old price"
+msgstr "Стара ціна"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:66
+msgid "New price"
+msgstr "Нова ціна"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:160
+msgid "Special offer"
+msgstr "Спеціальна пропозиція"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:161
+msgid "You can get a discount on your next purchase"
+msgstr "Ви можете отримати знижку на наступну покупку"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:162
+msgid "Welcome to our store again"
+msgstr "Ласкаво просимо до нашого магазину знову"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:167
+msgid ""
+"This is automatically generated letter. Please do not reply to it. If you "
+"have any questions, please contact us via our website."
+msgstr ""
+"Це автоматично згенерований лист. Будь ласка, не відповідайте на нього. Якщо "
+"ви маєте які-небудь питання, будь ласка, зв'яжіться з нами через наш веб-"
+"сайт."
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:172
+msgid "View products"
+msgstr "Переглянути товари"
+
+#: .\email_app\templates\email_app\product_is_available.html:39
+#: .\products\templates\products\product-view.html:6
+msgid "Product"
+msgstr "Перегляд товару"
+
+#: .\email_app\templates\email_app\product_is_available.html:70
+#: .\orders\templates\orders\order-view.html:26
+msgid "Price"
+msgstr "Ціна"
+
+#: .\email_app\templates\email_app\product_is_available.html:172
+msgid "Product you are following is on sale now! Hurry up and buy it!"
+msgstr "Товар, за яким ви слідкуєте, зараз у продажу! Поспішіть і купіть його!"
+
+#: .\email_app\templates\email_app\product_is_available.html:178
+msgid ""
+"This is automatically generated letter. Please do not reply to it. If you "
+"have any questions or want to change some information in your order, please "
+"contact us via our website."
+msgstr ""
+"Це письмо є згенеровано автоматично. Будь ласка, не відповідайте на нього. "
+"Якщо у вас є які-небудь питання або ви хочете змінити деяку інформацію в "
+"вашому замовленні, будь ласка, зв'яжіться з нами через наш веб-сайт."
+
+#: .\email_app\templates\email_app\product_is_available.html:183
+msgid "View product"
+msgstr "Переглянути товар"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:6
+msgid "Order Receipt"
+msgstr "Квитанція про замовлення"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:14
+msgid "Invoice Date"
+msgstr "Дата рахунку"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:18
+#: .\email_app\templates\email_app\purchase_receipt.html:79
+#: .\email_app\templates\email_app\refund_products.html:18
+#: .\email_app\templates\email_app\refund_products.html:98
+#: .\orders\templates\orders\order-view.html:46
+#: .\orders\templates\orders\order-view.html:148
+#: .\orders\templates\orders\orders.html:46
+#: .\orders\templates\orders\orders.html:92
+#: .\orders\templates\orders\orders.html:126
+#: .\products\templates\products\basket.html:58
+msgid "Total"
+msgstr "Всьго"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:37
+#: .\email_app\templates\email_app\refund_products.html:36
+msgid "Description"
+msgstr "Опис"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:58
+#: .\email_app\templates\email_app\refund_products.html:57
+#: .\orders\templates\orders\order-view.html:25
+#: .\orders\templates\orders\order-view.html:131
+#: .\orders\templates\orders\refund.html:53
+msgid "Quantity"
+msgstr "Кількість"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:187
+#: .\email_app\templates\email_app\refund_products.html:226
+msgid "TOTAL"
+msgstr "ВСЬОГО"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:227
 msgid "The receiver is"
 msgstr "Отримувач"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:484
+#: .\email_app\templates\email_app\purchase_receipt.html:228
 msgid "Your delivery address is"
 msgstr "Адрес достави"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:485
+#: .\email_app\templates\email_app\purchase_receipt.html:229
 msgid "Thank you for your order! We are very happy that you use our services!"
 msgstr ""
 "Дякуємо за замовлення! Ми дуже раді, що ви користуєтесь нашими послугами!"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:563
+#: .\email_app\templates\email_app\purchase_receipt.html:234
 msgid ""
 "This letter is a confirmation of payment for the order. Please do not reply "
 "to it. If you have any questions or want to change some information in your "
@@ -92,16 +295,52 @@ msgstr ""
 "інформацію в вашому замовленні, будь ласка, зв'яжіться з нами через наш веб-"
 "сайт."
 
-#: .\orders\templates\orders\email_purchase_receipt.html:604
-msgid "View orders"
-msgstr "Переглянути замовлення"
+#: .\email_app\templates\email_app\refund_products.html:6
+#: .\orders\templates\orders\order-view.html:97
+msgid "Refund information"
+msgstr "Інформація про повернення"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:604
-msgid "View in browser"
-msgstr "Відкрити в браузері"
+#: .\email_app\templates\email_app\refund_products.html:10
+msgid "Refund NO"
+msgstr "Повернення №"
+
+#: .\email_app\templates\email_app\refund_products.html:14
+msgid "Refund Date"
+msgstr "Дата повернення"
+
+#: .\email_app\templates\email_app\refund_products.html:77
+#: .\orders\templates\orders\order-view.html:134
+#: .\orders\templates\orders\refund.html:60
+msgid "Reason"
+msgstr "Причина"
+
+#: .\email_app\templates\email_app\refund_products.html:266
+msgid "The requester is"
+msgstr "Заявник"
+
+#: .\email_app\templates\email_app\refund_products.html:267
+msgid "Actual refund status"
+msgstr "Статус повернення"
+
+#: .\email_app\templates\email_app\refund_products.html:268
+msgid "Your message"
+msgstr "Твоє повідомлення"
+
+#: .\email_app\templates\email_app\refund_products.html:273
+msgid ""
+"This letter is a confirmation of your refund request. Please do not reply to "
+"it. If you have any questions or want to change some information in your "
+"request, please contact us via our website."
+msgstr ""
+"Це письмо є підтвердженням запиту на повернення. Будь ласка, не відповідайте "
+"на нього. Якщо у вас є які-небудь питання або ви хочете змінити деяку "
+"інформацію в вашому запиті, будь ласка, зв'яжіться з нами через наш веб-сайт."
+
+#: .\email_app\templates\email_app\refund_products.html:278
+msgid "View refunds"
+msgstr "Переглянути повернення"
 
 #: .\orders\templates\orders\order-create.html:6
-#| msgid "Place an order"
 msgid "Place order"
 msgstr "Зробити замовлення"
 
@@ -109,20 +348,14 @@ msgstr "Зробити замовлення"
 msgid "Shipping address"
 msgstr "Адреса доставки"
 
-#: .\orders\templates\orders\order-create.html:37
-#: .\users\templates\users\profile.html:33
-#: .\users\templates\users\registration.html:36
-msgid "Name"
-msgstr "Ім'я"
-
 #: .\orders\templates\orders\order-create.html:44
-#: .\users\templates\users\profile.html:41
+#: .\users\templates\users\profile.html:43
 #: .\users\templates\users\registration.html:45
 msgid "Surname"
 msgstr "Прізвище"
 
 #: .\orders\templates\orders\order-create.html:51
-#: .\users\templates\users\profile.html:69
+#: .\users\templates\users\profile.html:71
 #: .\users\templates\users\registration.html:60
 msgid "E-mail address"
 msgstr "Адреса електронної пошти"
@@ -131,16 +364,16 @@ msgstr "Адреса електронної пошти"
 msgid "Country"
 msgstr "Країна"
 
-#: .\orders\templates\orders\order-create.html:65
+#: .\orders\templates\orders\order-create.html:66
 msgid "Postal code"
 msgstr "Поштовий індекс"
 
-#: .\orders\templates\orders\order-create.html:72
+#: .\orders\templates\orders\order-create.html:73
 #: .\orders\templates\orders\order-view.html:70
 msgid "Address"
 msgstr "Адреса доставки"
 
-#: .\orders\templates\orders\order-create.html:79
+#: .\orders\templates\orders\order-create.html:80
 msgid "Phone number"
 msgstr "Номер телефону"
 
@@ -162,7 +395,7 @@ msgstr "Сума до сплати"
 
 #: .\orders\templates\orders\order-view.html:6
 #: .\orders\templates\orders\order-view.html:17
-#: .\payments\templates\payments\payment.html:32
+#: .\payments\templates\payments\payment.html:33
 msgid "Order"
 msgstr "Замовлення"
 
@@ -170,26 +403,9 @@ msgstr "Замовлення"
 msgid "Title"
 msgstr "Назва"
 
-#: .\orders\templates\orders\order-view.html:25
-#: .\orders\templates\orders\order-view.html:131
-#: .\orders\templates\orders\refund.html:53
-msgid "Quantity"
-msgstr "Кількість"
-
-#: .\orders\templates\orders\order-view.html:26
-msgid "Price"
-msgstr "Ціна"
-
 #: .\orders\templates\orders\order-view.html:27
 msgid "Sum"
 msgstr "Сума"
-
-#: .\orders\templates\orders\order-view.html:46
-#: .\orders\templates\orders\order-view.html:148
-#: .\orders\templates\orders\orders.html:25
-#: .\products\templates\products\basket.html:58
-msgid "Total"
-msgstr "Всьго"
 
 #: .\orders\templates\orders\order-view.html:50
 msgid "Shipping information"
@@ -209,7 +425,9 @@ msgstr "Статус замовлення"
 
 #: .\orders\templates\orders\order-view.html:84
 #: .\orders\templates\orders\order-view.html:114
-#: .\orders\templates\orders\orders.html:24
+#: .\orders\templates\orders\orders.html:45
+#: .\orders\templates\orders\orders.html:91
+#: .\orders\templates\orders\orders.html:125
 msgid "Created"
 msgstr "Створено"
 
@@ -217,18 +435,9 @@ msgstr "Створено"
 msgid "Last order update"
 msgstr "Останнє оновлення замовлення"
 
-#: .\orders\templates\orders\order-view.html:97
-msgid "Refund information"
-msgstr "Інформація про повернення"
-
 #: .\orders\templates\orders\order-view.html:102
 msgid "Refund status"
 msgstr "Статус повернення"
-
-#: .\orders\templates\orders\order-view.html:108
-#: .\orders\templates\orders\refund.html:73
-msgid "Message"
-msgstr "Повідомлення"
 
 #: .\orders\templates\orders\order-view.html:120
 msgid "Last status update"
@@ -238,14 +447,9 @@ msgstr "Останнє оновлення статусу"
 msgid "Product name"
 msgstr "Назва товару"
 
-#: .\orders\templates\orders\order-view.html:134
-#: .\orders\templates\orders\refund.html:60
-msgid "Reason"
-msgstr "Причина"
-
 #: .\orders\templates\orders\order-view.html:157
 #: .\orders\templates\orders\refund.html:88
-#: .\products\templates\products\product-view.html:115
+#: .\products\templates\products\product-view.html:129
 msgid "Back"
 msgstr "Назад"
 
@@ -254,32 +458,53 @@ msgid "Request a refund"
 msgstr "Запит на повернення"
 
 #: .\orders\templates\orders\orders.html:6
-#: .\products\templates\products\base.html:66
+#: .\products\templates\products\base.html:77
 msgid "Orders"
 msgstr "Замовлення"
 
-#: .\orders\templates\orders\orders.html:23
+#: .\orders\templates\orders\orders.html:18
+#: .\orders\templates\orders\orders.html:38
+msgid "Current orders"
+msgstr "Поточні замовлення"
+
+#: .\orders\templates\orders\orders.html:21
+#: .\orders\templates\orders\orders.html:84
+msgid "Refunds"
+msgstr "Повернення"
+
+#: .\orders\templates\orders\orders.html:24
+#: .\orders\templates\orders\orders.html:118
+msgid "Past orders"
+msgstr "Минулі замовлення"
+
+#: .\orders\templates\orders\orders.html:44
+#: .\orders\templates\orders\orders.html:90
+#: .\orders\templates\orders\orders.html:124
 msgid "Status"
 msgstr "Статус"
 
-#: .\orders\templates\orders\orders.html:26
+#: .\orders\templates\orders\orders.html:47
+#: .\orders\templates\orders\orders.html:93
+#: .\orders\templates\orders\orders.html:127
 msgid "Action"
 msgstr "Дія"
 
-#: .\orders\templates\orders\orders.html:34
+#: .\orders\templates\orders\orders.html:55
 #: .\products\templates\products\basket.html:76
 msgid "There's nothing here yet"
 msgstr "Тут поки що нічого немає"
 
-#: .\orders\templates\orders\orders.html:46
+#: .\orders\templates\orders\orders.html:67
+#: .\orders\templates\orders\orders.html:104
+#: .\orders\templates\orders\orders.html:138
 msgid "view"
 msgstr "огляд"
 
-#: .\orders\templates\orders\orders.html:50
+#: .\orders\templates\orders\orders.html:69
 msgid "pay"
 msgstr "оплатити"
 
-#: .\orders\templates\orders\orders.html:51
+#: .\orders\templates\orders\orders.html:70
 msgid "cancel"
 msgstr "відмінити"
 
@@ -299,44 +524,56 @@ msgstr "Виберіть товари, які ви хочете повернут
 msgid "Request refund"
 msgstr "Запит на повернення"
 
-#: .\payments\templates\payments\payment.html:5
+#: .\payments\templates\payments\payment.html:6
 msgid "Payment"
 msgstr "Оплата"
 
-#: .\payments\templates\payments\payment.html:38
+#: .\payments\templates\payments\payment.html:39
 msgid "Pay to complete your order"
 msgstr "Оплатіть, щоб завершити замовлення"
 
-#: .\payments\templates\payments\payment.html:46
+#: .\payments\templates\payments\payment.html:42
+msgid "Time to pay for the order"
+msgstr "Час на оплату замовлення"
+
+#: .\payments\templates\payments\payment.html:51
 msgid "Pay later"
 msgstr "Оплатити пізніше"
 
-#: .\products\templates\products\base.html:36
+#: .\products\templates\products\base.html:34
+msgid ""
+"This website uses cookies to ensure you get the best experience on our "
+"website."
+msgstr ""
+"Цей веб-сайт використовує файли cookie, щоб забезпечити вам найкращий "
+"досвід на нашому веб-сайті."
+
+#: .\products\templates\products\base.html:41
 #: .\products\templates\products\index.html:6
 msgid "Home"
 msgstr "Головна"
 
-#: .\products\templates\products\base.html:44
+#: .\products\templates\products\base.html:50
 #: .\products\templates\products\products.html:6
 msgid "Catalog"
 msgstr "Каталог"
 
-#: .\products\templates\products\base.html:49
-#: .\users\templates\users\login.html:62
+#: .\products\templates\products\base.html:60
+#: .\users\templates\users\login.html:73
 msgid "Log in"
 msgstr "Вхід"
 
-#: .\products\templates\products\base.html:61
+#: .\products\templates\products\base.html:72
 #: .\users\templates\users\profile.html:6
-#: .\users\templates\users\profile.html:18
+#: .\users\templates\users\profile.html:19
 msgid "Profile"
 msgstr "Профіль"
 
-#: .\products\templates\products\base.html:72
+#: .\products\templates\products\base.html:83
 msgid "Admin panel"
 msgstr "Панель адміністратора"
 
-#: .\products\templates\products\base.html:82
+#: .\products\templates\products\base.html:98
 msgid "Log out"
 msgstr "Вихід"
 
@@ -347,7 +584,6 @@ msgstr "Кошик"
 #: .\products\templates\products\basket.html:68
 msgid "Place an order"
 msgstr "Зробити замовлення"
-
 
 #: .\products\templates\products\index.html:23
 msgid "New looks and top brands in "
@@ -366,21 +602,70 @@ msgstr "Аутлет: до -70%% Власний бренд. Новим кліє�
 msgid "Start shopping"
 msgstr "Почати покупки"
 
-#: .\products\templates\products\product-view.html:6
-msgid "Product"
-msgstr "Перегляд товару"
+#: .\products\templates\products\product-view.html:120
+#: .\products\templates\products\product_cards.html:88
+msgid "Follow it"
+msgstr "Слідкувати"
 
-#: .\products\templates\products\product-view.html:112
-#: .\products\templates\products\product_cards.html:47
+#: .\products\templates\products\product-view.html:125
+#: .\products\templates\products\product_cards.html:93
 msgid "Add to cart"
 msgstr "Додати до кошика"
 
-#: .\users\templates\users\login.html:6 .\users\templates\users\login.html:33
+#: .\products\templates\products\products.html:34
+msgid "All"
+msgstr "Всі"
+
+#: .\products\templates\products\products.html:48
+msgid "Novelties"
+msgstr "Новинки"
+
+#: .\products\templates\products\products.html:51
+msgid "Price: Low to High"
+msgstr "Ціна: за зростанням"
+
+#: .\products\templates\products\products.html:54
+msgid "Price: High to Low"
+msgstr "Ціна: за спаданням"
+
+#: .\products\templates\products\products.html:57
+msgid "By popularity"
+msgstr "За популярністю"
+
+#: .\products\templates\products\products.html:60
+msgid "By rating"
+msgstr "За рейтингом"
+
+#: .\products\templates\products\products.html:80
+msgid "OK"
+msgstr "ОК"
+
+#: .\products\templates\products\products.html:94
+msgid "Search by product name"
+msgstr "Пошук за назвою"
+
+#: .\products\templates\products\products.html:134
+msgid "No products found"
+msgstr "Товари не знайдено"
+
+#: .\users\templates\users\following_products.html:6
+msgid "Following"
+msgstr "Слідкування"
+
+#: .\users\templates\users\following_products.html:49
+msgid "View"
+msgstr "Переглянути"
+
+#: .\users\templates\users\following_products.html:52
+msgid "Unfollow"
+msgstr "Відписатися"
+
+#: .\users\templates\users\login.html:7 .\users\templates\users\login.html:34
 msgid "Authorization"
 msgstr "Авторизація"
 
-#: .\users\templates\users\login.html:41
-#: .\users\templates\users\profile.html:60
+#: .\users\templates\users\login.html:43
+#: .\users\templates\users\profile.html:62
 #: .\users\templates\users\registration.html:54
 msgid "Username"
 msgstr "Ім'я користувача"
@@ -391,23 +676,23 @@ msgstr "Ім'я користувача"
 msgid "Password"
 msgstr "Пароль"
 
-#: .\users\templates\users\login.html:60
+#: .\users\templates\users\login.html:71
 msgid "Forgot password"
 msgstr "Забули пароль"
 
-#: .\users\templates\users\login.html:83
+#: .\users\templates\users\login.html:94
 msgid "Need an account? Sign up!"
 msgstr "Потрібен акаунт? Зареєструйся!"
 
-#: .\users\templates\users\profile.html:52
+#: .\users\templates\users\profile.html:54
 msgid "Select an image"
 msgstr "Виберіть зображення"
 
-#: .\users\templates\users\profile.html:80
+#: .\users\templates\users\profile.html:82
 msgid "Save"
 msgstr "Зберігти"
 
-#: .\users\templates\users\profile.html:80
+#: .\users\templates\users\profile.html:82
 msgid "and confirm email"
 msgstr "і підтвердити електронну пошту"
 
@@ -434,7 +719,7 @@ msgid "Password reset"
 msgstr "Зміна паролю"
 
 #: .\users\templates\users\reset_password.html:72
-#: .\users\templates\users\reset_password_email_form.html:49
+#: .\users\templates\users\reset_password_email_form.html:61
 msgid "Remember your password? Log in!"
 msgstr "Пам'ятаєте свій пароль? Увійдіть!"
 
@@ -443,20 +728,17 @@ msgid "Set new password"
 msgstr "Встановити новий пароль"
 
 #: .\users\templates\users\reset_password_email_form.html:5
+#: .\users\templates\users\reset_password_email_form.html:38
 msgid "Password Reset"
 msgstr "Зміна паролю"
 
-#: .\users\templates\users\reset_password_email_form.html:35
-msgid "Email"
-msgstr "Електронна пошта"
-
-#: .\users\templates\users\reset_password_email_form.html:40
+#: .\users\templates\users\reset_password_email_form.html:52
 msgid "The reset code has been sent to your email. It may take a few minutes."
 msgstr ""
 "Код відновлення відправлений на вашу електронну пошту протягом декількох "
 "хвилин."
 
-#: .\users\templates\users\reset_password_email_form.html:51
+#: .\users\templates\users\reset_password_email_form.html:63
 msgid "Reset password"
 msgstr "Скинути пароль"
 
@@ -493,9 +775,6 @@ msgstr "Завершено"
 msgid "Refund requested"
 msgstr "Запит на повернення"
 
-msgid "Refunded"
-msgstr "Повернуто"
-
 msgid "Defective Product"
 msgstr "Товар пошкоджено"
 
@@ -506,4 +785,19 @@ msgid "Received Damaged"
 msgstr "Товар пошкоджено"
 
 msgid "Other"
+msgstr "Інша причина"
+
+msgid "Wadliwy produkt"
+msgstr "Товар пошкоджено"
+
+msgid "Otrzymane uszkodzone"
+msgstr "Товар пошкоджено"
+
+msgid "Zły produkt"
+msgstr "Невірний товар"
+
+msgid "Uszkodzony produkt"
+msgstr "Товар пошкоджено"
+
+msgid "Inne"
 msgstr "Інша причина"

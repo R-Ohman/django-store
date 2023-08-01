@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-23 20:19+0200\n"
+"POT-Creation-Date: 2023-07-31 23:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,17 +20,21 @@ msgstr ""
 "%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
 "%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
+#: .\comments\templates\comments\comments.html:16
+msgid "Comments"
+msgstr "Komentarze"
+
 #: .\comments\templates\comments\comments.html:36
 msgid "Add a comment"
 msgstr "Dodać komentarz"
 
 #: .\comments\templates\comments\comments.html:46
-#: .\comments\templates\comments\comments_cards.html:38
+#: .\comments\templates\comments\comments_cards.html:46
 msgid "Assessment"
 msgstr "Ocena"
 
 #: .\comments\templates\comments\comments.html:53
-#: .\comments\templates\comments\comments_cards.html:47
+#: .\comments\templates\comments\comments_cards.html:55
 msgid "Text"
 msgstr "Opinia"
 
@@ -43,44 +47,244 @@ msgstr "Załącznik"
 msgid "Add the comment"
 msgstr "Dodać komentarz"
 
-#: .\comments\templates\comments\comments_cards.html:55
+#: .\comments\templates\comments\comments_cards.html:63
 msgid "Show translation"
 msgstr "Pokaż tłumaczenie"
 
-#: .\comments\templates\comments\comments_cards.html:63
+#: .\comments\templates\comments\comments_cards.html:71
 msgid "Attachments"
 msgstr "Załączniki"
 
-#: .\comments\templates\comments\comments_cards.html:80
+#: .\comments\templates\comments\comments_cards.html:88
 msgid "No photos"
 msgstr "Brak zdjęć"
 
+#: .\comments\templates\comments\contact.html:6
+#: .\products\templates\products\base.html:56
+#: .\products\templates\products\base.html:89
+msgid "About us"
+msgstr "O nas"
+
+#: .\comments\templates\comments\contact.html:20
+msgid "About Us"
+msgstr "O nas"
+
+#: .\comments\templates\comments\contact.html:21
+msgid ""
+"Welcome to our store! We are a dedicated team that strives to provide high-"
+"quality products and excellent customer service. Our goal is to make your "
+"shopping experience enjoyable and hassle-free. Feel free to explore our wide "
+"range of products and find the perfect items for yourself or your loved ones."
+msgstr ""
+"Witamy w naszym sklepie! Jesteśmy zespołem, który stara się zapewnić "
+"wysokiej jakości produkty i doskonałą obsługę klienta. Naszym celem jest "
+"sprawienie, aby Twoje doświadczenie zakupowe było przyjemne i bezproblemowe. "
+"Zapraszamy do zapoznania się z naszą szeroką gamą produktów i znalezienia "
+"idealnych produktów dla siebie lub swoich bliskich."
+
+#: .\comments\templates\comments\contact.html:22
+msgid ""
+"If you have any questions or need assistance, please don't hesitate to "
+"contact us. We are here to help!"
+msgstr ""
+"Jeśli masz jakieś pytania lub potrzebujesz pomocy, nie wahaj się "
+"skontaktować z nami. Jesteśmy tu, aby pomóc!"
+
+#: .\comments\templates\comments\contact.html:38
+msgid "Contact Us"
+msgstr "Skontaktuj się z nami"
+
+#: .\comments\templates\comments\contact.html:47
+#: .\email_app\templates\email_app\invite_and_recommendations.html:24
+#: .\orders\templates\orders\order-create.html:37
+#: .\users\templates\users\profile.html:35
+#: .\users\templates\users\registration.html:36
+msgid "Name"
+msgstr "Imię"
+
+#: .\comments\templates\comments\contact.html:53
+#: .\users\templates\users\reset_password_email_form.html:47
+msgid "Email"
+msgstr "Email"
+
+#: .\comments\templates\comments\contact.html:59
+msgid "Topic"
+msgstr "Temat"
+
+#: .\comments\templates\comments\contact.html:65
+#: .\orders\templates\orders\order-view.html:108
+#: .\orders\templates\orders\refund.html:73
+msgid "Message"
+msgstr "Wiadomość"
+
+#: .\comments\templates\comments\contact.html:70
+msgid "Send Message"
+msgstr "Wyślij wiadomość"
+
 #: .\comments\templates\comments\pagination.html:7
 #: .\products\templates\products\pagination.html:8
-#: .\products\templates\products\product-view.html:88
+#: .\products\templates\products\product-view.html:89
 msgid "Previous"
 msgstr "Poprzednia"
 
 #: .\comments\templates\comments\pagination.html:20
 #: .\products\templates\products\pagination.html:22
-#: .\products\templates\products\product-view.html:92
+#: .\products\templates\products\product-view.html:93
 msgid "Next"
 msgstr "Następna"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:483
+#: .\email_app\templates\email_app\cancel_order.html:7
+msgid "Order Cancel"
+msgstr "Anuluj zamówienie"
+
+#: .\email_app\templates\email_app\cancel_order.html:15
+msgid "Date"
+msgstr "Data"
+
+#: .\email_app\templates\email_app\cancel_order.html:21
+msgid "Order canceled because we have not received payment for it."
+msgstr "Zamówienie anulowane, ponieważ nie otrzymaliśmy za nie zapłaty."
+
+#: .\email_app\templates\email_app\cancel_order.html:22
+msgid ""
+"If you believe there has been an error, please contact us through our "
+"website."
+msgstr ""
+"Jeśli uważasz, że wystąpił błąd, skontaktuj się z nami za pośrednictwem "
+"naszej strony internetowej."
+
+#: .\email_app\templates\email_app\cancel_order.html:28
+#: .\email_app\templates\email_app\purchase_receipt.html:239
+msgid "View orders"
+msgstr "Wyświetl zamówienia"
+
+#: .\email_app\templates\email_app\cancel_order.html:31
+#: .\email_app\templates\email_app\invite_and_recommendations.html:176
+#: .\email_app\templates\email_app\product_is_available.html:186
+#: .\email_app\templates\email_app\purchase_receipt.html:242
+#: .\email_app\templates\email_app\refund_products.html:282
+msgid "View in browser"
+msgstr "Wyświetl w przeglądarce"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:6
+msgid "Special Offer"
+msgstr "Oferta specjalna"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:45
+msgid "Old price"
+msgstr "Stara cena"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:66
+msgid "New price"
+msgstr "Nowa cena"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:160
+msgid "Special offer"
+msgstr "Oferta specjalna"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:161
+msgid "You can get a discount on your next purchase"
+msgstr "Możesz otrzymać rabat na następne zakupy"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:162
+msgid "Welcome to our store again"
+msgstr "Witamy ponownie w naszym sklepie"
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:167
+msgid ""
+"This is automatically generated letter. Please do not reply to it. If you "
+"have any questions, please contact us via our website."
+msgstr ""
+"To automatycznie generowany list. Prosimy nie odpowiadać na niego. Jeśli "
+"masz jakieś pytania, skontaktuj się z nami za pośrednictwem naszej strony "
+"internetowej."
+
+#: .\email_app\templates\email_app\invite_and_recommendations.html:172
+msgid "View products"
+msgstr "Wyświetl produkty"
+
+#: .\email_app\templates\email_app\product_is_available.html:39
+#: .\products\templates\products\product-view.html:6
+msgid "Product"
+msgstr "Produkt"
+
+#: .\email_app\templates\email_app\product_is_available.html:70
+#: .\orders\templates\orders\order-view.html:26
+msgid "Price"
+msgstr "Cena"
+
+#: .\email_app\templates\email_app\product_is_available.html:172
+msgid "Product you are following is on sale now! Hurry up and buy it!"
+msgstr "Produkt, który obserwujesz, jest teraz w sprzedaży! Pospiesz się i "
+
+#: .\email_app\templates\email_app\product_is_available.html:178
+msgid ""
+"This is automatically generated letter. Please do not reply to it. If you "
+"have any questions or want to change some information in your order, please "
+"contact us via our website."
+msgstr ""
+"To automatycznie generowany list. Prosimy nie odpowiadać na niego. Jeśli "
+"masz jakieś pytania lub chcesz zmienić niektóre informacje w swoim zamówieniu, "
+"skontaktuj się z nami za pośrednictwem naszej strony internetowej."
+
+
+#: .\email_app\templates\email_app\product_is_available.html:183
+msgid "View product"
+msgstr "Wyświetl produkt"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:6
+msgid "Order Receipt"
+msgstr "Paragon"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:14
+msgid "Invoice Date"
+msgstr "Data faktury"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:18
+#: .\email_app\templates\email_app\purchase_receipt.html:79
+#: .\email_app\templates\email_app\refund_products.html:18
+#: .\email_app\templates\email_app\refund_products.html:98
+#: .\orders\templates\orders\order-view.html:46
+#: .\orders\templates\orders\order-view.html:148
+#: .\orders\templates\orders\orders.html:46
+#: .\orders\templates\orders\orders.html:92
+#: .\orders\templates\orders\orders.html:126
+#: .\products\templates\products\basket.html:58
+msgid "Total"
+msgstr "Razem"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:37
+#: .\email_app\templates\email_app\refund_products.html:36
+msgid "Description"
+msgstr "Opis"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:58
+#: .\email_app\templates\email_app\refund_products.html:57
+#: .\orders\templates\orders\order-view.html:25
+#: .\orders\templates\orders\order-view.html:131
+#: .\orders\templates\orders\refund.html:53
+msgid "Quantity"
+msgstr "Liczba"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:187
+#: .\email_app\templates\email_app\refund_products.html:226
+msgid "TOTAL"
+msgstr "RAZEM"
+
+#: .\email_app\templates\email_app\purchase_receipt.html:227
 msgid "The receiver is"
 msgstr "Odbiorca to"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:484
+#: .\email_app\templates\email_app\purchase_receipt.html:228
 msgid "Your delivery address is"
 msgstr "Twój adres dostawy to"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:485
+#: .\email_app\templates\email_app\purchase_receipt.html:229
 msgid "Thank you for your order! We are very happy that you use our services!"
 msgstr ""
 "Dziękujemy za zamówienie! Bardzo się cieszymy, że korzystasz z naszych usług!"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:563
+#: .\email_app\templates\email_app\purchase_receipt.html:234
 msgid ""
 "This letter is a confirmation of payment for the order. Please do not reply "
 "to it. If you have any questions or want to change some information in your "
@@ -91,17 +295,53 @@ msgstr ""
 "zamówieniu, skontaktuj się z nami za pośrednictwem naszej strony "
 "internetowej."
 
-#: .\orders\templates\orders\email_purchase_receipt.html:604
-msgid "View orders"
-msgstr "Wyświetl zamówienia"
+#: .\email_app\templates\email_app\refund_products.html:6
+#: .\orders\templates\orders\order-view.html:97
+msgid "Refund information"
+msgstr "Informacje o wysyłce"
 
-#: .\orders\templates\orders\email_purchase_receipt.html:604
-msgid "View in browser"
-msgstr "Wyświetl w przeglądarce"
+#: .\email_app\templates\email_app\refund_products.html:10
+msgid "Refund NO"
+msgstr "Zwrot nr"
+
+#: .\email_app\templates\email_app\refund_products.html:14
+msgid "Refund Date"
+msgstr "Data zwrotu"
+
+#: .\email_app\templates\email_app\refund_products.html:77
+#: .\orders\templates\orders\order-view.html:134
+#: .\orders\templates\orders\refund.html:60
+msgid "Reason"
+msgstr "Przyczyna"
+
+#: .\email_app\templates\email_app\refund_products.html:266
+msgid "The requester is"
+msgstr "Wnioskodawca to"
+
+#: .\email_app\templates\email_app\refund_products.html:267
+msgid "Actual refund status"
+msgstr "Status zwrotu"
+
+#: .\email_app\templates\email_app\refund_products.html:268
+msgid "Your message"
+msgstr "Twoja wiadomość"
+
+#: .\email_app\templates\email_app\refund_products.html:273
+msgid ""
+"This letter is a confirmation of your refund request. Please do not reply to "
+"it. If you have any questions or want to change some information in your "
+"request, please contact us via our website."
+msgstr ""
+"Ten list jest potwierdzeniem Twojego wniosku o zwrot. Prosimy nie odpowiadać "
+"na niego. Jeśli masz jakieś pytania lub chcesz zmienić niektóre informacje w "
+"swoim wniosku, skontaktuj się z nami za pośrednictwem naszej strony "
+"internetowej."
+
+#: .\email_app\templates\email_app\refund_products.html:278
+msgid "View refunds"
+msgstr "Wyświetl zwroty"
 
 #: .\orders\templates\orders\order-create.html:6
-#, fuzzy
-#| msgid "Place an order"
 msgid "Place order"
 msgstr "Złóż zamówienie"
 
@@ -109,20 +349,14 @@ msgstr "Złóż zamówienie"
 msgid "Shipping address"
 msgstr "Adres dostawy"
 
-#: .\orders\templates\orders\order-create.html:37
-#: .\users\templates\users\profile.html:33
-#: .\users\templates\users\registration.html:36
-msgid "Name"
-msgstr "Imię"
-
 #: .\orders\templates\orders\order-create.html:44
-#: .\users\templates\users\profile.html:41
+#: .\users\templates\users\profile.html:43
 #: .\users\templates\users\registration.html:45
 msgid "Surname"
 msgstr "Nazwisko"
 
 #: .\orders\templates\orders\order-create.html:51
-#: .\users\templates\users\profile.html:69
+#: .\users\templates\users\profile.html:71
 #: .\users\templates\users\registration.html:60
 msgid "E-mail address"
 msgstr "Adres e-mail"
@@ -131,16 +365,16 @@ msgstr "Adres e-mail"
 msgid "Country"
 msgstr "Kraj"
 
-#: .\orders\templates\orders\order-create.html:65
+#: .\orders\templates\orders\order-create.html:66
 msgid "Postal code"
 msgstr "Kod pocztowy"
 
-#: .\orders\templates\orders\order-create.html:72
+#: .\orders\templates\orders\order-create.html:73
 #: .\orders\templates\orders\order-view.html:70
 msgid "Address"
 msgstr "Adres"
 
-#: .\orders\templates\orders\order-create.html:79
+#: .\orders\templates\orders\order-create.html:80
 msgid "Phone number"
 msgstr "Numer telefonu"
 
@@ -162,7 +396,7 @@ msgstr "Do zapłaty"
 
 #: .\orders\templates\orders\order-view.html:6
 #: .\orders\templates\orders\order-view.html:17
-#: .\payments\templates\payments\payment.html:32
+#: .\payments\templates\payments\payment.html:33
 msgid "Order"
 msgstr "Zamówienie"
 
@@ -170,26 +404,9 @@ msgstr "Zamówienie"
 msgid "Title"
 msgstr "Tytuł"
 
-#: .\orders\templates\orders\order-view.html:25
-#: .\orders\templates\orders\order-view.html:131
-#: .\orders\templates\orders\refund.html:53
-msgid "Quantity"
-msgstr "Liczba"
-
-#: .\orders\templates\orders\order-view.html:26
-msgid "Price"
-msgstr "Cena"
-
 #: .\orders\templates\orders\order-view.html:27
 msgid "Sum"
 msgstr "Suma"
-
-#: .\orders\templates\orders\order-view.html:46
-#: .\orders\templates\orders\order-view.html:148
-#: .\orders\templates\orders\orders.html:25
-#: .\products\templates\products\basket.html:58
-msgid "Total"
-msgstr "Razem"
 
 #: .\orders\templates\orders\order-view.html:50
 msgid "Shipping information"
@@ -209,7 +426,9 @@ msgstr "Status zamówienia"
 
 #: .\orders\templates\orders\order-view.html:84
 #: .\orders\templates\orders\order-view.html:114
-#: .\orders\templates\orders\orders.html:24
+#: .\orders\templates\orders\orders.html:45
+#: .\orders\templates\orders\orders.html:91
+#: .\orders\templates\orders\orders.html:125
 msgid "Created"
 msgstr "Utworzono"
 
@@ -217,18 +436,9 @@ msgstr "Utworzono"
 msgid "Last order update"
 msgstr "Ostatnia aktualizacja zamówienia"
 
-#: .\orders\templates\orders\order-view.html:97
-msgid "Refund information"
-msgstr "Informacje o wysyłce"
-
 #: .\orders\templates\orders\order-view.html:102
 msgid "Refund status"
 msgstr "Status zwrotu"
-
-#: .\orders\templates\orders\order-view.html:108
-#: .\orders\templates\orders\refund.html:73
-msgid "Message"
-msgstr "Wiadomość"
 
 #: .\orders\templates\orders\order-view.html:120
 msgid "Last status update"
@@ -238,14 +448,9 @@ msgstr "Ostatnia aktualizacja zamówienia"
 msgid "Product name"
 msgstr "Nazwa produktu"
 
-#: .\orders\templates\orders\order-view.html:134
-#: .\orders\templates\orders\refund.html:60
-msgid "Reason"
-msgstr "Przyczyna"
-
 #: .\orders\templates\orders\order-view.html:157
 #: .\orders\templates\orders\refund.html:88
-#: .\products\templates\products\product-view.html:115
+#: .\products\templates\products\product-view.html:129
 msgid "Back"
 msgstr "Powrót"
 
@@ -254,97 +459,122 @@ msgid "Request a refund"
 msgstr "Poproś o zwrot"
 
 #: .\orders\templates\orders\orders.html:6
-#: .\products\templates\products\base.html:66
+#: .\products\templates\products\base.html:77
 msgid "Orders"
 msgstr "Zamówienia"
 
-#: .\orders\templates\orders\orders.html:23
+#: .\orders\templates\orders\orders.html:18
+#: .\orders\templates\orders\orders.html:38
+msgid "Current orders"
+msgstr "Aktualne zamówienia"
+
+#: .\orders\templates\orders\orders.html:21
+#: .\orders\templates\orders\orders.html:84
+msgid "Refunds"
+msgstr "Zwroty"
+
+#: .\orders\templates\orders\orders.html:24
+#: .\orders\templates\orders\orders.html:118
+msgid "Past orders"
+msgstr "Poprzednie zamówienia"
+
+#: .\orders\templates\orders\orders.html:44
+#: .\orders\templates\orders\orders.html:90
+#: .\orders\templates\orders\orders.html:124
 msgid "Status"
 msgstr "Status"
 
-#: .\orders\templates\orders\orders.html:26
+#: .\orders\templates\orders\orders.html:47
+#: .\orders\templates\orders\orders.html:93
+#: .\orders\templates\orders\orders.html:127
 msgid "Action"
 msgstr "Akcja"
 
-#: .\orders\templates\orders\orders.html:34
+#: .\orders\templates\orders\orders.html:55
 #: .\products\templates\products\basket.html:76
 msgid "There's nothing here yet"
 msgstr "Na razie nic tu nie ma"
 
-#: .\orders\templates\orders\orders.html:46
+#: .\orders\templates\orders\orders.html:67
+#: .\orders\templates\orders\orders.html:104
+#: .\orders\templates\orders\orders.html:138
 msgid "view"
 msgstr "przegląd "
 
-#: .\orders\templates\orders\orders.html:50
+#: .\orders\templates\orders\orders.html:69
 msgid "pay"
 msgstr "zapłać"
 
-#: .\orders\templates\orders\orders.html:51
+#: .\orders\templates\orders\orders.html:70
 msgid "cancel"
 msgstr "anuluj"
 
 #: .\orders\templates\orders\refund.html:6
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Refund request"
-msgstr "Zażądano zwrotu"
+msgstr "Prośba o zwrot"
 
 #: .\orders\templates\orders\refund.html:34
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Refund products"
-msgstr "Zażądano zwrotu"
+msgstr "Zwrot produktów"
 
 #: .\orders\templates\orders\refund.html:42
 msgid "Choose products you would like to refund"
 msgstr "Wybierz produkty, które chcesz zwrócić"
 
 #: .\orders\templates\orders\refund.html:90
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Request refund"
-msgstr "Zażądano zwrotu"
+msgstr "Poproś o zwrot"
 
-#: .\payments\templates\payments\payment.html:5
-#, fuzzy
-#| msgid "Go to payment"
+#: .\payments\templates\payments\payment.html:6
 msgid "Payment"
-msgstr "Idź do płatności"
+msgstr "Płatność"
 
-#: .\payments\templates\payments\payment.html:38
+#: .\payments\templates\payments\payment.html:39
 msgid "Pay to complete your order"
 msgstr "Zapłać, aby dokończyć zamówienie"
 
-#: .\payments\templates\payments\payment.html:46
+#: .\payments\templates\payments\payment.html:42
+msgid "Time to pay for the order"
+msgstr "Czas na zapłacenie za zamówienie"
+
+#: .\payments\templates\payments\payment.html:51
 msgid "Pay later"
 msgstr "Zapłać później"
 
-#: .\products\templates\products\base.html:36
+#: .\products\templates\products\base.html:34
+msgid ""
+"This website uses cookies to ensure you get the best experience on our "
+"website."
+msgstr ""
+"Ta strona używa plików cookies, aby zapewnić Ci najlepsze wrażenia z "
+"korzystania z niej."
+
+#: .\products\templates\products\base.html:41
 #: .\products\templates\products\index.html:6
 msgid "Home"
 msgstr "Strona główna"
 
-#: .\products\templates\products\base.html:44
+#: .\products\templates\products\base.html:50
 #: .\products\templates\products\products.html:6
 msgid "Catalog"
 msgstr "Katalog"
 
-#: .\products\templates\products\base.html:49
-#: .\users\templates\users\login.html:62
+#: .\products\templates\products\base.html:60
+#: .\users\templates\users\login.html:73
 msgid "Log in"
 msgstr "Zaloguj się"
 
-#: .\products\templates\products\base.html:61
+#: .\products\templates\products\base.html:72
 #: .\users\templates\users\profile.html:6
-#: .\users\templates\users\profile.html:18
+#: .\users\templates\users\profile.html:19
 msgid "Profile"
 msgstr "Profil"
 
-#: .\products\templates\products\base.html:72
+#: .\products\templates\products\base.html:83
 msgid "Admin panel"
 msgstr "Panel administracyjny"
 
-#: .\products\templates\products\base.html:82
+#: .\products\templates\products\base.html:98
 msgid "Log out"
 msgstr "Wyloguj się"
 
@@ -373,22 +603,70 @@ msgstr "Outlet: do -70%% Marka własna. -20%% dla nowych klientów."
 msgid "Start shopping"
 msgstr "Rozpocznij zakupy"
 
-#: .\products\templates\products\product-view.html:6
-msgid "Product"
-msgstr "Produkt"
+#: .\products\templates\products\product-view.html:120
+#: .\products\templates\products\product_cards.html:88
+msgid "Follow it"
+msgstr "Obserwuj"
 
-#: .\products\templates\products\product-view.html:112
-#: .\products\templates\products\product_cards.html:47
+#: .\products\templates\products\product-view.html:125
+#: .\products\templates\products\product_cards.html:93
 msgid "Add to cart"
 msgstr "Dodać do koszyka"
 
+#: .\products\templates\products\products.html:34
+msgid "All"
+msgstr "Wszystkie"
 
-#: .\users\templates\users\login.html:6 .\users\templates\users\login.html:33
+#: .\products\templates\products\products.html:48
+msgid "Novelties"
+msgstr "Nowości"
+
+#: .\products\templates\products\products.html:51
+msgid "Price: Low to High"
+msgstr "Cena: od najniższej"
+
+#: .\products\templates\products\products.html:54
+msgid "Price: High to Low"
+msgstr "Cena: od najwyższej"
+
+#: .\products\templates\products\products.html:57
+msgid "By popularity"
+msgstr "Według popularności"
+
+#: .\products\templates\products\products.html:60
+msgid "By rating"
+msgstr "Według oceny"
+
+#: .\products\templates\products\products.html:80
+msgid "OK"
+msgstr "OK"
+
+#: .\products\templates\products\products.html:94
+msgid "Search by product name"
+msgstr "Nazwa produktu"
+
+#: .\products\templates\products\products.html:134
+msgid "No products found"
+msgstr "Nie znaleziono produktów"
+
+#: .\users\templates\users\following_products.html:6
+msgid "Following"
+msgstr "Obserwowane"
+
+#: .\users\templates\users\following_products.html:49
+msgid "View"
+msgstr "Zobacz"
+
+#: .\users\templates\users\following_products.html:52
+msgid "Unfollow"
+msgstr "Przestań obserwować"
+
+#: .\users\templates\users\login.html:7 .\users\templates\users\login.html:34
 msgid "Authorization"
 msgstr "Autoryzacja"
 
-#: .\users\templates\users\login.html:41
-#: .\users\templates\users\profile.html:60
+#: .\users\templates\users\login.html:43
+#: .\users\templates\users\profile.html:62
 #: .\users\templates\users\registration.html:54
 msgid "Username"
 msgstr "Nazwa użytkownika"
@@ -399,23 +677,23 @@ msgstr "Nazwa użytkownika"
 msgid "Password"
 msgstr "Hasło"
 
-#: .\users\templates\users\login.html:60
+#: .\users\templates\users\login.html:71
 msgid "Forgot password"
 msgstr "Nie pamiętam hasła"
 
-#: .\users\templates\users\login.html:83
+#: .\users\templates\users\login.html:94
 msgid "Need an account? Sign up!"
 msgstr "Potrzebujesz konta? Zarejestruj się!"
 
-#: .\users\templates\users\profile.html:52
+#: .\users\templates\users\profile.html:54
 msgid "Select an image"
 msgstr "Wybierz obraz"
 
-#: .\users\templates\users\profile.html:80
+#: .\users\templates\users\profile.html:82
 msgid "Save"
 msgstr "Zapisz"
 
-#: .\users\templates\users\profile.html:80
+#: .\users\templates\users\profile.html:82
 msgid "and confirm email"
 msgstr "i potwierdź email"
 
@@ -438,13 +716,11 @@ msgid "Already have an account? Log in"
 msgstr "Masz już konto? Zaloguj się"
 
 #: .\users\templates\users\reset_password.html:6
-#, fuzzy
-#| msgid "Password"
 msgid "Password reset"
-msgstr "Hasło"
+msgstr "Resetowanie hasła"
 
 #: .\users\templates\users\reset_password.html:72
-#: .\users\templates\users\reset_password_email_form.html:49
+#: .\users\templates\users\reset_password_email_form.html:61
 msgid "Remember your password? Log in!"
 msgstr "Pamiętasz swoje hasło? Zaloguj się!"
 
@@ -453,22 +729,17 @@ msgid "Set new password"
 msgstr "Ustaw nowe hasło"
 
 #: .\users\templates\users\reset_password_email_form.html:5
-#, fuzzy
-#| msgid "Password"
+#: .\users\templates\users\reset_password_email_form.html:38
 msgid "Password Reset"
-msgstr "Hasło"
+msgstr "Resetowanie hasła"
 
-#: .\users\templates\users\reset_password_email_form.html:35
-msgid "Email"
-msgstr "Email"
-
-#: .\users\templates\users\reset_password_email_form.html:40
+#: .\users\templates\users\reset_password_email_form.html:52
 msgid "The reset code has been sent to your email. It may take a few minutes."
 msgstr ""
 "Kod resetowania wkrótce zostanie wysłany na Twój adres e-mail. Może to zająć "
 "kilka minut."
 
-#: .\users\templates\users\reset_password_email_form.html:51
+#: .\users\templates\users\reset_password_email_form.html:63
 msgid "Reset password"
 msgstr "Zresetuj hasło"
 
@@ -505,9 +776,6 @@ msgstr "Zakończono"
 msgid "Refund requested"
 msgstr "Zażądano zwrotu"
 
-msgid "Refunded"
-msgstr "Zwrócono"
-
 msgid "Defective Product"
 msgstr "Wadliwy produkt"
 
@@ -518,4 +786,13 @@ msgid "Received Damaged"
 msgstr "Uszkodzony produkt"
 
 msgid "Other"
+msgstr "Inne"
+
+msgid "Невірний товар"
+msgstr "Zły produkt"
+
+msgid "Товар пошкоджено"
+msgstr "Uszkodzony produkt"
+
+msgid "Інша причина"
 msgstr "Inne"

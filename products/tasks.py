@@ -10,7 +10,13 @@ from products.models import Product
 @shared_task
 def check_products_availability():
     unavailable_products = Product.objects.filter(visible=True, quantity=0)
-    EmailManager.unavailable_products_notification(unavailable_products)
+    new_unavailable_products = []
+    for product in unavailable_products:
+        time_delta = timezone.now() - product.updated_at
+        if time_delta.seconds > 12 * 3600:
+            new_unavailable_products.append(product)
+    if new_unavailable_products:
+        EmailManager.unavailable_products_notification(new_unavailable_products)
     return 'Unavailable products checked.'
 
 

@@ -180,6 +180,12 @@ $(document).ready(function () {
         addToFollow(productId);
     });
 
+    $(document).on('click', '.add-to-wishlist', function (e) {
+        e.preventDefault();
+        var productId = $(this).data('product-id');
+        addToWishlist(productId);
+    });
+
 
     function addToBasket(productId) {
         fetch('/products/basket/add/' + productId + '/')
@@ -191,11 +197,26 @@ $(document).ready(function () {
                 }
             })
             .then(data => {
-                if (data.success) {
-                    showNotification(data.product_name + data.message);
+                showNotification(data.message, data.success);
+            })
+            .catch(error => {
+                console.error(error);
+                showNotification('Authorization required', success = false);
+                window.location.href = '/user/login/';
+            });
+    }
+
+    function addToWishlist(productId) {
+        fetch('/user/wishlist/add/' + productId + '/')
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
                 } else {
-                    showNotification(data.message, success = false);
+                    throw new Error('Error when adding an item to cart');
                 }
+            })
+            .then(data => {
+                showNotification(data.message, data.success);
             })
             .catch(error => {
                 console.error(error);

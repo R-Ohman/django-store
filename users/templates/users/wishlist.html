@@ -1,0 +1,41 @@
+{% load static %}
+{% load i18n %}
+
+<div class="col">
+    <h4 class="mt-3 mb-3">
+        {% trans 'Wishlist' %}
+    </h4>
+    <div class="row">
+        {% for wist_product in user.wish_products.all %}
+        <div class="col-lg-3 col-md-4 col-6 mb-4 px-1" id="product-wishlist-{{ wist_product.product.id }}">
+            <div class="card h-100">
+                <div style="position: relative; display: inline-block;">
+                    <a href="{% url 'products:view' wist_product.product.id %}">
+                        <img class="card-img-top"
+                             src="{% if wist_product.product.image %}{{ wist_product.product.image.url }}
+                            {% else %}{% static '/vendor/img/products/default-product-image.png' %}{% endif %}"
+                             alt="">
+                    </a>
+                </div>
+                <div class="card-body p-2">
+                    <h6 class="card-title">
+                        <a class="text-decoration-none text-dark"
+                           href="{% url 'products:view' wist_product.product.id %}">
+                            {{ wist_product.product.name }}
+                        </a>
+                    </h6>
+                    <h6>{{ wist_product.product.discounted_price_str }}</h6>
+                </div>
+                <div class="card-footer text-center px-2 small">
+                    <a href="#" class="btn btn-outline-success add-to-basket mr-1" data-product-id="{{ wist_product.product.id }}">
+                        <span class="text-wrap">{% trans 'Add to cart' %}</span>
+                    </a>
+                    <a href="#" class="delete-from-wishlist mr-1" data-product-id="{{ wist_product.product.id }}">
+                        {% trans 'Delete' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

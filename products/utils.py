@@ -1,9 +1,12 @@
 
 def change_product_visibility(queryset):
+    invisible_products = []
     for obj in queryset:
         obj.is_visible = not obj.is_visible
+        if not obj.is_visible:
+            invisible_products.append(obj)
         obj.save()
-    return
+    return invisible_products
 
 
 def round_number(num):
