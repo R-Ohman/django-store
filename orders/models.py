@@ -220,7 +220,6 @@ class RefundProduct(models.Model):
         return self.quantity * self.ordered_product.price
 
 
-
 class RefundAttachment(models.Model):
     refund = models.ForeignKey('orders.Refund', on_delete=models.CASCADE, related_name='attachments')
     file = models.FileField(upload_to='refunds/', null=False, blank=False)

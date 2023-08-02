@@ -21,7 +21,7 @@ app.conf.beat_schedule = {
     },
     'send-admin-unavailable-products-2-times-a-day': {
         'task': 'products.tasks.check_products_availability',
-        'schedule': crontab(day_of_week='*', hour=7, minute=0),
+        'schedule': crontab(day_of_week='*', hour='*/12'),
     },
     'update-discounts-every-6-hours': {
         'task': 'products.tasks.check_expired_discounts',

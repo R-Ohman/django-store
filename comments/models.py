@@ -51,7 +51,7 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user.username} | {self.comment}'
+        return self.user.username + ' | Comment: ' + str(self.comment)
 
     class Meta:
         verbose_name = 'like'
@@ -68,7 +68,7 @@ class Like(models.Model):
 
 
 class UserReport(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='comment_reports', null=True, blank=True)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='reports', null=True, blank=True)
     name = models.CharField(max_length=255, null=False, blank=False)
     email = models.EmailField(null=False, blank=False)
     topic = models.CharField(max_length=255, null=False, blank=False)
@@ -77,10 +77,8 @@ class UserReport(models.Model):
     is_resolved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.name} | {self.topic}'
+        return f'{self.email} | {self.topic}'
 
     class Meta:
         verbose_name = 'user report'
         verbose_name_plural = 'user reports'
-
-

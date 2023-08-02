@@ -33,7 +33,7 @@ class UserProductsQuerySet(models.QuerySet):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=256, unique=True, blank=True)
+    name = models.CharField(max_length=128, unique=True, blank=True)
     image = models.ImageField(upload_to='products_images', blank=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)  # price in default currency (USD)
@@ -85,8 +85,8 @@ class Product(models.Model):
 
     @property
     def discount_is_active(self):
-        return (self.discount_percentage and self.discount_end_date and timezone.now() <= self.discount_end_date or
-                self.discount_percentage and not self.discount_end_date)
+        return ((self.discount_percentage and self.discount_end_date and timezone.now() <= self.discount_end_date) or
+                (self.discount_percentage and not self.discount_end_date))
 
     def discount_multiply(self, num):
 
@@ -127,7 +127,6 @@ class Product(models.Model):
             self.save()
             return True
         return False
-
 
 
 class Basket(models.Model):
@@ -184,7 +183,7 @@ class ProductCarousel(Carousel):
         super(ProductCarousel, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.name + ' | ' + self.product.name
+        return 'Carousel ' + self.product.name
 
     class Meta:
         verbose_name = 'product carousel'
