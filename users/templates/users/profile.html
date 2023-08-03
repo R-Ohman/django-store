@@ -93,7 +93,7 @@
                 {% include 'users/wishlist.html' %}
             {% endif %}
         </div>
-        <div class="{% if user.wish_products.all %}col-lg-6{% else %}col-12{% endif %}">
+        <div class="{% if user.wish_products.all %}col-lg-6{% else %}col-12{% endif %}" id="following-list">
             {% if user.product_followers.all %}
                 {% include 'users/following_products.html' %}
             {% endif %}

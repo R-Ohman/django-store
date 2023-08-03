@@ -10,6 +10,11 @@
     height: 100%;
 }
 
+.user-avatar img {
+    width: 50px;
+    height: 50px;
+}
+
 .product-rating {
     position: absolute;
     top: 10px;
@@ -79,5 +84,24 @@
     h3 {
         font-size: 1.2rem;
     }
+
+    #comment-container .card-body {
+        padding: 0 16px;
+        padding-top: 4px;
+    }
+
+    #comment-container .card-header {
+        padding: 0 16px;
+    }
+
+    #comment-container h3 {
+        font-size: 1rem;
+    }
+
+    .user-avatar img {
+        width: 40px;
+        height: 40px;
+    }
+
 
 }

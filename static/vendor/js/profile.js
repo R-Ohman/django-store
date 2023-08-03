@@ -20,11 +20,41 @@ function addToBasket(productId) {
         });
 }
 
+function followProduct(productId) {
+    var csrfToken = document.querySelector('[data-csrf-token]').dataset.csrfToken;
+    fetch('/products/follow/' + productId + '/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                $('#following-list').html(data.following_products_html);
+                showNotification(data.message, data.success);
+            } else {
+                showNotification(data.message, data.success);
+            }
+        })
+        .catch(error => {
+            console.error('Error when following product:', error);
+        });
+}
+
 function bindAddToBasketEvent() {
     $('.add-to-basket').click(function (e) {
         e.preventDefault();
         var productId = $(this).data('product-id');
         addToBasket(productId);
+        addListenersToInputs();
+    });
+    $('.follow-product-availability').click(function (e) {
+        e.preventDefault();
+        var productId = $(this).data('product-id');
+        followProduct(productId);
         addListenersToInputs();
     });
 }
@@ -38,10 +68,9 @@ function addListenersToInputs() {
         label.textContent = fileName;
     });
 
-
-    const quantityInputs = document.querySelectorAll('.basket-quantity');
-    quantityInputs.forEach((input) => {
-        input.addEventListener('change', (event) => {
+    const parentElement = document.querySelector('#basket-list');
+    parentElement.addEventListener('change', (event) => {
+        if (event.target.classList.contains('basket-quantity')) {
             const quantity = event.target.value;
             const basketId = parseInt(event.target.dataset.basketId, 10);
             const inputElement = event.target; // Сохраняем ссылку на входной элемент
@@ -77,8 +106,9 @@ function addListenersToInputs() {
                     console.error('Error when updating the quantity in the cart: ', error);
                     inputElement.value = inputElement.defaultValue; // Используем сохраненную ссылку для изменения значения
                 });
-        });
+        }
     });
+
 }
 
 function unfollowProduct(productId) {
@@ -129,6 +159,7 @@ function deleteFromWishlist(productId) {
 $(document).ready(function () {
     document.addEventListener('DOMContentLoaded', addListenersToInputs);
 
+    addListenersToInputs();
     bindAddToBasketEvent();
 });
 

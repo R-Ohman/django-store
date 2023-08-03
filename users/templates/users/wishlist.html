@@ -27,12 +27,21 @@
                     <h6>{{ wist_product.product.discounted_price_str }}</h6>
                 </div>
                 <div class="card-footer text-center px-2 small">
-                    <a href="#" class="btn btn-outline-success add-to-basket mr-1" data-product-id="{{ wist_product.product.id }}">
-                        <span class="text-wrap">{% trans 'Add to cart' %}</span>
-                    </a>
-                    <a href="#" class="delete-from-wishlist mr-1" data-product-id="{{ wist_product.product.id }}">
-                        {% trans 'Delete' %}
-                    </a>
+                    {% if wist_product.product.quantity == 0 %}
+                        <a href="#" class="btn btn-outline-primary follow-product-availability"
+                           data-product-id="{{ wist_product.product.id }}">
+                            {% trans 'Follow it' %}
+                        </a>
+                    {% else %}
+                        <a href="#" class="btn btn-outline-success add-to-basket mr-1" data-product-id="{{ wist_product.product.id }}">
+                            <span class="text-wrap">{% trans 'Add to cart' %}</span>
+                        </a>
+                    {% endif %}
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="delete-from-wishlist mr-1" data-product-id="{{ wist_product.product.id }}">
+                            {% trans 'Delete' %}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

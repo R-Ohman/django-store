@@ -281,7 +281,17 @@ def follow_product_availability(request, product_id):
         follower = ProductFollower.objects.create(user=request.user, product=product)
         message = translate_text_to_user_language('You are now following this product', request)
         success = True
-    return JsonResponse({'success': success, 'message': message, 'product': product.name})
+
+    response = {
+        'success': success,
+        'message': message,
+        'product': product.name}
+
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        following_products_html = render_to_string('users/following_products.html', {'user': request.user })
+        response.update({'following_products_html': following_products_html})
+
+    return JsonResponse(response)
 
 
 @login_required(login_url=LOGIN_URL)
