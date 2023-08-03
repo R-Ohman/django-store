@@ -123,17 +123,17 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-            {% if products_with_converted_price %}
-            <div id="product-list" class="row">
-                {% include 'products/product_cards.html' %}
-            </div>
-            {% include 'products/pagination.html' %}
+            {% if products %}
+                <div id="product-list" class="row">
+                    {% include 'products/product_cards.html' %}
+                </div>
+                {% include 'products/pagination.html' %}
             {% else %}
-            <div class="text-center my-3">
-                <h4>
-                    {% trans 'No products found' %}
-                </h4>
-            </div>
+                <div class="text-center my-3">
+                    <h4>
+                        {% trans 'No products found' %}
+                    </h4>
+                </div>
             {% endif %}
         </div>
     </div>

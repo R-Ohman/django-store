@@ -30,6 +30,19 @@
 </head>
 
 <body>
+<script>
+    function updatePerPage() {
+        var productsPerPage = window.innerWidth >= 768 ? 6 : 4;
+        var commentsPerPage = window.innerWidth >= 992 ? 3 : 4;
+        document.cookie = "products_per_page=" + productsPerPage + "; path=/";
+        document.cookie = "comments_per_page=" + commentsPerPage + "; path=/";
+    }
+
+    updatePerPage();
+
+    window.addEventListener('resize', updatePerPage);
+</script>
+
 <div class="cookie-banner" id="cookieBanner" style="display: none;">
     <p>{% trans 'This website uses cookies to ensure you get the best experience on our website.' %}</p>
     <button onclick="acceptCookies()" class="btn btn-success">I agree</button>

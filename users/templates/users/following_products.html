@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load custom_converter %}
 
 <div class="col">
     <h4 class="mt-3 mb-3">
@@ -24,7 +25,7 @@
                             {{ following_product.product.name }}
                         </a>
                     </h6>
-                    <h6>{{ following_product.product.discounted_price_str }}</h6>
+                    <h6>{{ following_product.product|converted_discounted_price_with_currency_symbol:request }}</h6>
                 </div>
                 <div class="card-footer text-center px-2 small">
                     <a href="{% url 'products:view' following_product.product.id %}"

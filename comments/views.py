@@ -51,12 +51,11 @@ def product_view(request, product_id):
 
     product = Product.objects.get(id=product_id)
     prev_page = request.META.get('HTTP_REFERER') if request.META.get('HTTP_REFERER') else '/'
-    currency, converted_price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
     max_user_comments_per_product = 5
     comments = ProductComment.objects.filter(product=product).order_by('-created_at')
 
     # Pagination
-    per_page = int(request.COOKIES.get('per_page', 3))
+    per_page = int(request.COOKIES.get('comments_per_page', 3))
     page_number = request.GET.get('page', 1)
     paginator = Paginator(comments, per_page)
 
@@ -82,11 +81,9 @@ def product_view(request, product_id):
     context = {
         'product': product,
         'previous_page': prev_page,
-        'currency': currency,
-        'converted_price': round_number(converted_price),
-        'discounted_price': round_number(product.discount_multiply(converted_price)),
         'form': form,
         'comments': comments_page,
+        'request': request,
         'can_comment': user_received_product(request, product) and \
                        ProductComment.objects.filter(user=request.user,
                                                      product=product).count() < max_user_comments_per_product
@@ -194,7 +191,8 @@ def product_comments(request, product_id):
     print(request.GET.get('page'))
     product_comments = product.comments.all().order_by('-created_at')
 
-    per_page = int(request.COOKIES.get('per_page', 3))
+    per_page = int(request.COOKIES.get('comments_per_page', 3))
+    print('per_page', per_page)
     paginator = Paginator(product_comments, per_page)
 
     try:

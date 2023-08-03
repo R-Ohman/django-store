@@ -44,7 +44,7 @@ class ProductCarouselInline(admin.StackedInline):
     model = ProductCarousel
     extra = 0
     readonly_fields = ('get_images',)
-    fields = ('name', 'description', 'product', 'get_images')
+    fields = ('name', 'get_images', 'product')
 
     def get_images(self, obj):
         images = obj.carousel_images.all()

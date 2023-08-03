@@ -54,30 +54,19 @@ def filter_products(request, category_id=None, category_products=None):
         max_price_base = ExchangeRate.convert_from_user_to_base(request, max_price)
         products = list(filter(lambda product: min_price_base <= product.discounted_price <= max_price_base, category_products))
 
-        currency, products_with_converted_price = None, []
-        for product in products:
-            currency, converted_price = ExchangeRate.get_user_currency_and_converted_product_price(request, product)
-            products_with_converted_price.append({
-                'product': product,
-                'price': round_number(converted_price),
-                'discounted_price': round_number(product.discount_multiply(converted_price)),
-            })
-
         return {
             'category_products': category_products,
-            'products_with_converted_price': products_with_converted_price,
+            'products': products,
             'lowest_price': str(lowest_price),
             'highest_price': str(highest_price),
             'min_price': str(min_price),
             'max_price': str(max_price),
             'category': ProductCategory.objects.get(id=category_id) if category_id else None,
-            'currency': currency,
         }
     return {
-        'products_with_converted_price': [],
+        'products': [],
         'min_price': None,
         'max_price': None,
-        'currency': None,
         'category': ProductCategory.objects.get(id=category_id) if category_id else None,
     }
 
@@ -85,7 +74,7 @@ def filter_products(request, category_id=None, category_products=None):
 def products(request, category_id=None):
     sort_by = request.COOKIES.get('sort_by') if request.COOKIES.get('sort_by') else "none"
 
-    ordered_products = Product.objects.filter(is_visible=True)
+    ordered_products = Product.objects.filter(is_visible=True).order_by('-id')
 
     if request.GET.get('cat'):
         category_id = int(request.GET.get('cat'))
@@ -118,8 +107,9 @@ def products(request, category_id=None):
 
     context = filter_products(request, category_products=products, category_id=category_id)
     page = request.GET.get('page', 1)
-    per_page = int(request.COOKIES.get('per_page', 3))
-    paginator = Paginator(context['products_with_converted_price'], per_page)
+    per_page = int(request.COOKIES.get('products_per_page', 3))
+    print('per_page', per_page)
+    paginator = Paginator(context['products'], per_page)
 
     try:
         page_number = int(page)
@@ -129,11 +119,11 @@ def products(request, category_id=None):
 
     if request.is_ajax():
         context = {
-            'products_with_converted_price': page_products,
-            'currency': context['currency'],
+            'products': page_products,
             'current_page': int(page),
             'sort_by': sort_by,
             'search_text': search_text,
+            'request': request,
         }
         product_list_html = render_to_string('products/product_cards.html', context)
         page_list_html = render_to_string('products/pagination.html', context)
@@ -145,7 +135,7 @@ def products(request, category_id=None):
     context.update(
         {
             'sort_by': sort_by,
-            'products_with_converted_price': page_products,
+            'products': page_products,
             'categories': ProductCategory.objects.all(),
             'current_page': int(page),
             'carousel_images': CarouselImage.objects.filter(carousel=Carousel.objects.get(name="products_main_page")),
@@ -285,10 +275,11 @@ def follow_product_availability(request, product_id):
     response = {
         'success': success,
         'message': message,
-        'product': product.name}
+        'product': product.name
+    }
 
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-        following_products_html = render_to_string('users/following_products.html', {'user': request.user })
+        following_products_html = render_to_string('users/following_products.html', {'user': request.user, 'request':request })
         response.update({'following_products_html': following_products_html})
 
     return JsonResponse(response)

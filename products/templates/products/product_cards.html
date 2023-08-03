@@ -1,5 +1,8 @@
 {% load static %}
 {% load i18n %}
+{% load custom_converter %}
+
+
 <style>
     @media (max-width: 768px) {
         h4 {
@@ -16,11 +19,13 @@
 
         .card-body {
             margin-bottom: 0;
-            padding-bottom: 0;
+            padding: 10px 10px 0 10px;
         }
 
         .add-to-basket,
-        .add-to-wishlist {
+        .add-to-wishlist,
+        .follow-product-availability
+        {
             font-size: 0.7rem;
         }
 
@@ -28,7 +33,8 @@
 
     @media (max-width: 576px) {
         .add-to-basket,
-        .add-to-wishlist
+        .add-to-wishlist,
+        .follow-product-availability
         {
             font-size: 0.5rem;
             padding: 0.25rem 0.7rem;
@@ -38,35 +44,35 @@
 </style>
 
 <div id="product-list" class="row">
-    {% for product_with_converted_price in products_with_converted_price %}
+    {% for product in products %}
     <div class="col-md-4 col-6 mb-4">
-        <div class="card h-100 {% if product_with_converted_price.product.quantity == 0 %}text-muted{% endif %}">
+        <div class="card h-100 {% if product.quantity == 0 %}text-muted{% endif %}">
             <div style="position: relative; display: inline-block;">
-                {% if product_with_converted_price.product.discount %}
+                {% if product.discount_is_active %}
                 <strong class="product-discount-on-image bg-danger text-light">
-                    {{ product_with_converted_price.product.discount}}
+                    {{ product.discount}}
                 </strong>
                 {% endif %}
                 <div class="product-rating">
                     <a class="text-decoration-none"
-                       href="{% url 'products:view' product_with_converted_price.product.id %}#comments">
+                       href="{% url 'products:view' product.id %}#comments">
                         <svg class="star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <!-- Placeholder SVG path for the star icon. Replace this with the actual SVG path. -->
                             <style>svg.star {
                                 fill: #f5b938
                             }</style>
-                            {% if product_with_converted_price.product.assessment >= 2 %}
+                            {% if product.assessment >= 2 %}
                             <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
                             {% else %}
                             <path d="M287.9 0c9.2 0 17.6 5.2 21.6 13.5l68.6 141.3 153.2 22.6c9 1.3 16.5 7.6 19.3 16.3s.5 18.1-5.9 24.5L433.6 328.4l26.2 155.6c1.5 9-2.2 18.1-9.6 23.5s-17.3 6-25.3 1.7l-137-73.2L151 509.1c-8.1 4.3-17.9 3.7-25.3-1.7s-11.2-14.5-9.7-23.5l26.2-155.6L31.1 218.2c-6.5-6.4-8.7-15.9-5.9-24.5s10.3-14.9 19.3-16.3l153.2-22.6L266.3 13.5C270.4 5.2 278.7 0 287.9 0zm0 79L235.4 187.2c-3.5 7.1-10.2 12.1-18.1 13.3L99 217.9 184.9 303c5.5 5.5 8.1 13.3 6.8 21L171.4 443.7l105.2-56.2c7.1-3.8 15.6-3.8 22.6 0l105.2 56.2L384.2 324.1c-1.3-7.7 1.2-15.5 6.8-21l85.9-85.1L358.6 200.5c-7.8-1.2-14.6-6.1-18.1-13.3L287.9 79z"/>
                             {% endif %}
                         </svg>
-                        <span class="product-rating-text">{{ product_with_converted_price.product.assessment }}/5</span>
+                        <span class="product-rating-text">{{ product.assessment }}/5</span>
                     </a>
                 </div>
-                <a href="{% url 'products:view' product_with_converted_price.product.id %}">
-                    <img class="card-img-top {% if product_with_converted_price.product.quantity == 0 %}opacity-75{% endif %}"
-                         src="{% if product_with_converted_price.product.image %}{{ product_with_converted_price.product.image.url }}
+                <a href="{% url 'products:view' product.id %}">
+                    <img class="card-img-top {% if product.quantity == 0 %}opacity-75{% endif %}"
+                         src="{% if product.image %}{{ product.image.url }}
                             {% else %}{% static '/vendor/img/products/default-product-image.png' %}{% endif %}"
                          alt="">
                 </a>
@@ -74,43 +80,43 @@
             <div class="card-body">
                 <h4 class="card-title">
                     <a class="text-decoration-none text-dark"
-                       href="{% url 'products:view' product_with_converted_price.product.id %}">
-                        {{ product_with_converted_price.product.name }}
+                       href="{% url 'products:view' product.id %}">
+                        {{ product.name }}
                     </a>
                 </h4>
-                {% if product_with_converted_price.discounted_price != product_with_converted_price.price %}
+                {% if product.discount_is_active %}
                 <h5>
-                    <s>{{ product_with_converted_price.price }}</s>
+                    <s>{{ product|converted_price:request }}</s>
                     <strong class="text-danger">
-                        {{ product_with_converted_price.discounted_price }} {{ currency.symbol }}
+                        {{ product|converted_discounted_price_with_currency_symbol:request }}
                     </strong>
-                    {% if product_with_converted_price.product.time_to_discount_expiration %}
+                    {% if product.time_to_discount_expiration %}
                     <br/>
                     <span class="product-discount-time-to-expiration"
-                          data-product-id="{{ product_with_converted_price.product.id }}">
-                        {{ product_with_converted_price.product.time_to_discount_expiration }}
+                          data-product-id="{{ product.id }}">
+                        {{ product.time_to_discount_expiration }}
                     </span>
                     {% endif %}
                 </h5>
                 {% else %}
-                <h5>{{ product_with_converted_price.price }} {{ currency.symbol }}</h5>
+                <h5>{{ product|converted_price_with_currency_symbol:request }}</h5>
                 {% endif %}
-                <p class="card-text description">{{ product_with_converted_price.product.description }}</p>
+                <p class="card-text description">{{ product|get_limited_description_length }}</p>
             </div>
             <div class="card-footer text-center px-3">
                 <div class="row px-md-1">
                     <div class="col-12 d-flex align-items-center justify-content-between">
-                        {% if product_with_converted_price.product.quantity == 0 %}
+                        {% if product.quantity == 0 %}
                         <a href="#" class="btn btn-outline-primary follow-product-availability"
-                           data-product-id="{{ product_with_converted_price.product.id }}">
+                           data-product-id="{{ product.id }}">
                             {% trans 'Follow it' %}
                         </a>
                         {% else %}
-                        <a href="#" class="btn btn-outline-success add-to-basket mr-1" data-product-id="{{ product_with_converted_price.product.id }}">
+                        <a href="#" class="btn btn-outline-success add-to-basket mr-1" data-product-id="{{ product.id }}">
                             <span class="text-wrap">{% trans 'Add to cart' %}</span>
                         </a>
                         {% endif %}
-                        <a href="#" class="btn btn-outline-warning add-to-wishlist h-100 d-flex align-items-center ml-1" data-product-id="{{ product_with_converted_price.product.id }}">
+                        <a href="#" class="btn btn-outline-warning add-to-wishlist h-100 d-flex align-items-center ml-1" data-product-id="{{ product.id }}">
                             <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
                                 <!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                                 <style>.add-to-wishlist svg{fill:#f5b938}</style>
@@ -125,19 +131,4 @@
     {% endfor %}
 </div>
 
-<script>
-    function updatePerPage() {
-        var perPage = window.innerWidth >= 768 ? 3 : 4;
-        // Отправляем значение perPage на сервер, чтобы можно было использовать его во view функции.
-        // Можно использовать AJAX-запрос или каким-либо другим способом передать значение на сервер.
-        // Здесь для примера используется cookie.
-        document.cookie = "per_page=" + perPage + "; path=/";
-    }
-
-    // Вызываем функцию при загрузке страницы
-    updatePerPage();
-
-    // Обновляем значение при изменении размера окна
-    window.addEventListener('resize', updatePerPage);
-</script>
 

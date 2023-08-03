@@ -170,6 +170,7 @@ class CarouselImage(models.Model):
     image = models.ImageField(upload_to='carousel_images/')
     caption = models.CharField(max_length=200, blank=True)
 
+
     def __str__(self):
         return self.carousel.name + ' | ' + str(self.id)
 
@@ -178,7 +179,7 @@ class ProductCarousel(Carousel):
     product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='product_carousel')
 
     def save(self, *args, **kwargs):
-        if not self.name:
+        if not self.name and self.product:
             self.name = self.product.name
         super(ProductCarousel, self).save(*args, **kwargs)
 
