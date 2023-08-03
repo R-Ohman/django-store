@@ -141,7 +141,7 @@ $(document).ready(function () {
         var cat = getUrlParameter('cat');
         var price = getUrlParameter('price');
         const selectedSort = $(this).val();
-        var search = $('#searchInput').val();
+        var search = getUrlParameter('search');
         saveSortByToCookies(selectedSort);
         loadProducts(page, cat, price, search);
     });

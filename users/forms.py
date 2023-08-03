@@ -59,7 +59,7 @@ class UserRegistrationForm(UserCreationForm):
                 'last_name': translate_text_to_user_language('Enter your last name', request),
                 'username': translate_text_to_user_language('Enter your user name', request),
                 'password1': translate_text_to_user_language('Enter your password', request),
-                'password2': translate_text_to_user_language('Enter your password', request),
+                'password2': translate_text_to_user_language('Repeat your password', request),
                 'email': translate_text_to_user_language('Enter your e-mail address', request),
             }
             for field, label in dict.items():
@@ -118,15 +118,13 @@ class UserProfileForm(UserChangeForm):
             self.fields['email'].widget.attrs['disabled'] = True
             self.fields['email'].required = False
         else:
-            self.fields['email'].help_text = translate_text_to_user_language('You will be required to confirm your email to access all site features. \
-                                                            Viewing your email will be inaccessible to other users.', request)
+            self.fields['email'].help_text = translate_text_to_user_language('You will be required to confirm your email to access all site features. Viewing your email will be inaccessible to other users.', request)
 
         if not self.instance.number_of_available_username_changes:
             self.fields['username'].widget.attrs['disabled'] = True
             self.fields['username'].required = False
         else:
-            self.fields['username'].help_text = translate_text_to_user_language('Username is used to log in to the account.\
-                                                                                Note: You can change it once!', request)
+            self.fields['username'].help_text = translate_text_to_user_language('Username is used to log in to the account. Note: You can change it once!', request)
 
 
     def clean_email(self):
