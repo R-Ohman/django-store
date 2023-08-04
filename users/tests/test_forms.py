@@ -1,11 +1,12 @@
+from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, RequestFactory
 
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserResetPasswordEmailForm, UserResetPasswordForm
+from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserResetPasswordEmailForm, \
+    UserResetPasswordForm
 from users.models import User
 from unittest.mock import patch
 from users.translator import translate_text_to_user_language
-from captcha.client import RecaptchaResponse
 from PIL import Image
 import io
 
@@ -152,7 +153,8 @@ class UserRegistrationFormTest(TestCase):
         expected_password2_placeholder = translate_text_to_user_language('Repeat your password', request)
         expected_first_name_placeholder = translate_text_to_user_language('Enter your name', request)
         expected_last_name_placeholder = translate_text_to_user_language('Enter your last name', request)
-        expected_help_text = translate_text_to_user_language('Your password must contain at least 8 characters, including both letters and numbers.', request)
+        expected_help_text = translate_text_to_user_language(
+            'Your password must contain at least 8 characters, including both letters and numbers.', request)
 
         self.assertEqual(form.fields['username'].widget.attrs['placeholder'], expected_username_placeholder)
         self.assertEqual(form.fields['email'].widget.attrs['placeholder'], expected_email_placeholder)
@@ -320,7 +322,6 @@ class UserProfileFormTest(TestCase):
         self.assertEqual(form.fields['username'].help_text,
                          'Username is used to log in to the account. Note: You can change it once!')
 
-
         self.user.is_confirmed = True
         self.user.number_of_available_username_changes = 0
         form = UserProfileForm(instance=self.user, request=request)
@@ -419,4 +420,122 @@ class UserProfileFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('image', form.errors)
         self.assertIn('Upload a valid image. The file you uploaded was either not an image or a corrupted image.',
-                        form.errors['image'])
+                      form.errors['image'])
+
+
+class UserResetPasswordEmailFormTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='test',
+            password='test_password',
+            email='test@email.com'
+        )
+
+    def test_form_fields(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+        form = UserResetPasswordEmailForm(request=request)
+
+        self.assertEqual(form.fields['email'].widget.attrs['placeholder'], 'Enter your e-mail address')
+        self.assertTrue(form.fields['email'].required)
+        self.assertTrue(form.fields['captcha'].required)
+
+    @patch('captcha.fields.ReCaptchaField.clean')
+    def test_form_save(self, mock_clean):
+        mock_clean.return_value = True
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+
+        form = UserResetPasswordEmailForm(request=request,
+                                          data={'email': self.user.email})
+        self.assertTrue(form.is_valid())
+
+    def test_captcha_is_not_valid(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+
+        form = UserResetPasswordEmailForm(request=request,
+                                          data={'email': self.user.email})
+        self.assertFalse(form.is_valid())
+        self.assertIn('captcha', form.errors)
+        self.assertIn('This field is required.', form.errors['captcha'])
+
+        form = UserResetPasswordEmailForm(request=request,
+                                          data={'email': self.user.email,
+                                                'captcha': 'wrong'})
+        self.assertFalse(form.is_valid())
+        self.assertIn('captcha', form.errors)
+        self.assertIn('Error verifying reCAPTCHA, please try again.', form.errors['captcha'])
+
+
+class UserResetPasswordFormTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='test',
+            password='test_password',
+            email='test@email.com'
+        )
+
+    def test_form_fields(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+        form = UserResetPasswordForm(request=request)
+
+        self.assertEqual(form.fields['password1'].widget.attrs['placeholder'], 'Enter a new password')
+        self.assertEqual(form.fields['password2'].widget.attrs['placeholder'], 'Confirm the new password')
+        self.assertEqual(form.fields['password1'].help_text, 'Your password must contain at least 8 characters, including both letters and numbers.')
+        self.assertTrue(form.fields['password1'].required)
+        self.assertTrue(form.fields['password2'].required)
+
+    def test_form_meta(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+        form = UserResetPasswordForm(request=request)
+
+        self.assertEqual(form.Meta.model, User)
+        self.assertEqual(form.Meta.fields, ('password1', 'password2'))
+
+    def test_form_save(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+        form = UserResetPasswordForm(request=request, data={
+            'password1': 'new_password',
+            'password2': 'new_password'
+        })
+        self.assertTrue(form.is_valid())
+        self.user = form.save()
+        self.assertTrue(self.user.check_password('new_password'))
+
+    def test_form_save_the_same_password(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+        form = UserResetPasswordForm(instance=self.user, request=request, data={
+            'password1': 'test_password',
+            'password2': 'test_password'
+        })
+        self.assertTrue(form.is_valid())
+        self.user = form.save()
+        self.assertTrue(self.user.check_password('test_password'))
+
+
+    def test_form_save_different_passwords(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+        form = UserResetPasswordForm(request=request, data={
+            'password1': 'new_password',
+            'password2': 'new_password2'
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn('password2', form.errors)
+        self.assertIn('The two password fields didn’t match.', form.errors['password2'])
+
+    def test_form_save_password_too_short(self):
+        request = RequestFactory().get('/')
+        request.LANGUAGE_CODE = 'en'
+        form = UserResetPasswordForm(request=request, data={
+            'password1': 'new',
+            'password2': 'new'
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn('password2', form.errors)
+        self.assertIn('This password is too short. It must contain at least 8 characters.', form.errors['password2'])
