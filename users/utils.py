@@ -7,18 +7,19 @@ def get_user_country(request):
     user_ip = request.META.get('REMOTE_ADDR', None)
     if user_ip:
         reader = geoip2.database.Reader(geoip_database)
-
         try:
             response = reader.country(user_ip)
             country_code = response.country.iso_code
             return country_code
         except geoip2.errors.AddressNotFoundError:
             pass
-
     return 'en'
 
 
 def check_referer_no_keywords(request):
+    """
+    Function created to avoid redirecting to login/logout pages after authorization.
+    """
     referer = request.META.get('HTTP_REFERER')
     keywords = [
         reverse('user:registration'),
