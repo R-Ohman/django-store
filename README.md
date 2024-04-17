@@ -5,6 +5,7 @@
 - [Technologies Used](#technologies-used)
 - [Project Functionality](#project-functionality)
 - [Acknowledgments](#acknowledgments)
+- [Overview](#overview)
 
 ## General info
 
@@ -98,3 +99,7 @@ The Django admin panel provides convenient access for site administration.
 Special thanks to the [@stefanfoulis](https://github.com/stefanfoulis/django-phonenumber-field), author of the `phonenumber_field` application, for his contribution to this project.
 
 Feel free to explore the code and contribute to this open-source project!
+
+## Overview
+
+[![Django Store overview](https://img.youtube.com/vi/PM2S0VJkfxg/maxresdefault.jpg)](https://www.youtube.com/watch?v=PM2S0VJkfxg)
