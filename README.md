@@ -102,4 +102,4 @@ Feel free to explore the code and contribute to this open-source project!
 
 ## Overview
 
-[![Django Store overview](https://img.youtube.com/vi/PM2S0VJkfxg/maxresdefault.jpg)](https://www.youtube.com/watch?v=PM2S0VJkfxg)
+[![Django Store overview](https://img.youtube.com/vi/v7ViFPbdSRk/maxresdefault.jpg)](https://www.youtube.com/watch?v=v7ViFPbdSRk)
